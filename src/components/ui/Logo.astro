@@ -7,7 +7,7 @@ interface Props {
 const { class: className, srSuffix } = Astro.props;
 ---
 
-<span class:list={['inline-flex items-center gap-2.5', className]}>
+<span class:list={['inline-flex items-center gap-2.5 whitespace-nowrap', className]}>
   <span
     class="grid size-8 place-items-center rounded-lg bg-linear-135 from-accent-hi to-accent-lo font-sans text-sm font-extrabold text-[#0b1220] before:content-['B']"
     aria-hidden="true"

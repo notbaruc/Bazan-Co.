@@ -1,26 +1,34 @@
 ---
+/** 404 única para todo el sitio (Netlify sirve /404.html): bilingüe, en español primero. */
 import Button from '@/components/ui/Button.astro';
-import { getDictionary } from '@/i18n';
+import { getDictionary, routes } from '@/i18n';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
-const lang = 'es';
-const t = getDictionary(lang).notFound;
+const es = getDictionary('es').notFound;
+const en = getDictionary('en').notFound;
 ---
 
 <BaseLayout
-  title={`${t.title} — Bazan & Co.`}
-  description={t.text}
-  lang={lang}
-  homeHref="/"
-  privacyHref="/privacidad"
+  title={`${es.title} · ${en.title} — Bazan & Co.`}
+  description={es.text}
+  lang="es"
   noindex
 >
   <section class="container-page grid min-h-[70vh] place-content-center pt-(--nav-height) text-center">
     <p class="font-mono text-eyebrow text-accent uppercase">404</p>
-    <h1 class="mt-4 font-display text-h2 font-normal">{t.title}</h1>
-    <p class="mx-auto mt-4 max-w-md">{t.text}</p>
+    <h1 class="mt-4 font-display text-h2 font-normal">{es.title}</h1>
+    <p class="mx-auto mt-4 max-w-md">{es.text}</p>
     <div class="mt-8">
-      <Button href="/">{t.cta}</Button>
+      <Button href={routes.home.es}>{es.cta}</Button>
+    </div>
+    <div lang="en" class="mt-14 border-t border-line pt-10">
+      <h2 class="font-display text-3xl font-normal">{en.title}</h2>
+      <p class="mx-auto mt-3 max-w-md">{en.text}</p>
+      <div class="mt-6">
+        <Button href={routes.home.en} variant="secondary">
+          {en.cta}
+        </Button>
+      </div>
     </div>
   </section>
 </BaseLayout>

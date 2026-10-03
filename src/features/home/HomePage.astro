@@ -1,0 +1,36 @@
+---
+import Contact from '@/features/contact/Contact.astro';
+import FinalCta from '@/features/cta/FinalCta.astro';
+import Faq from '@/features/faq/Faq.astro';
+import Hero from '@/features/hero/Hero.astro';
+import Portfolio from '@/features/portfolio/Portfolio.astro';
+import ProblemSolution from '@/features/problem/ProblemSolution.astro';
+import Process from '@/features/process/Process.astro';
+import Services from '@/features/services/Services.astro';
+import TechMarquee from '@/features/tech/TechMarquee.astro';
+import TrustBar from '@/features/trust/TrustBar.astro';
+import WhyUs from '@/features/why/WhyUs.astro';
+import { getDictionary, type Locale } from '@/i18n';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+---
+
+<BaseLayout title={t.meta.title} description={t.meta.description} lang={lang} route="home">
+  <Hero lang={lang} />
+  <TrustBar lang={lang} />
+  <ProblemSolution lang={lang} />
+  <Services lang={lang} />
+  <TechMarquee lang={lang} />
+  <Process lang={lang} />
+  <Portfolio lang={lang} />
+  <WhyUs lang={lang} />
+  <Faq lang={lang} />
+  <FinalCta lang={lang} />
+  <Contact lang={lang} />
+</BaseLayout>

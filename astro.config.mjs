@@ -5,6 +5,8 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
   site: 'https://bazanconsultoria.netlify.app',
   output: 'static',
+  // URLs con barra final, igual que las sirve Netlify para carpetas (evita redirecciones 301).
+  trailingSlash: 'always',
   build: {
     // El CSS completo es pequeño: inline evita una petición que bloquea el render.
     inlineStylesheets: 'always',

@@ -11,6 +11,15 @@ const es = {
     description:
       'Ingeniería web en Chihuahua, México. Sitios rápidos, bilingües y a la medida para negocios locales y PYMEs que quieren más clientes. Servicio remoto global.',
   },
+  language: {
+    name: 'Español',
+    short: 'ES',
+    switchTo: 'Ver el sitio en español',
+    suggestion: 'Este sitio también está disponible en español.',
+    suggestionCta: 'Ver en español',
+    dismiss: 'No, gracias',
+    suggestionLabel: 'Sugerencia de idioma',
+  },
   a11y: {
     skipToContent: 'Saltar al contenido',
     homeSuffix: ', inicio',
@@ -370,6 +379,8 @@ const es = {
     title: 'Aviso de privacidad',
     updated: 'Última actualización: 3 de octubre de 2026',
     back: 'Volver al inicio',
+    /** Solo la traducción lleva nota (la versión en español es la que prevalece). */
+    translationNote: null as string | null,
     sections: [
       {
         title: 'Responsable',
@@ -404,7 +415,7 @@ const es = {
       {
         title: 'Cookies y almacenamiento local',
         paragraphs: [
-          'Al entrar te preguntamos si aceptas cookies de analítica. Si aceptas, Google Analytics usa cookies propias (por ejemplo, _ga). El sitio guarda tu elección en el almacenamiento local de tu navegador para no volver a preguntarte.',
+          'Al entrar te preguntamos si aceptas cookies de analítica. Si aceptas, Google Analytics usa cookies propias (por ejemplo, _ga). El sitio guarda tu elección (y tu idioma preferido, si lo cambias) en el almacenamiento local de tu navegador para no volver a preguntarte.',
           'Puedes cambiar tu decisión cuando quieras desde «Preferencias de cookies» en el pie de página, o borrar las cookies desde la configuración de tu navegador.',
         ],
       },

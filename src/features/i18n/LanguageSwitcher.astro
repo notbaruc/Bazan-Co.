@@ -1,0 +1,36 @@
+---
+import { getDictionary, otherLocale, type Locale } from '@/i18n';
+
+interface Props {
+  lang: Locale;
+  /** Ruta equivalente de la página actual en el otro idioma. */
+  href: string;
+  class?: string;
+}
+
+const { lang, href, class: className } = Astro.props;
+const current = getDictionary(lang).language;
+const target = otherLocale(lang);
+const targetCopy = getDictionary(target).language;
+---
+
+<span
+  class:list={[
+    'inline-flex items-center rounded-full border border-line-strong p-0.5 font-mono text-xs',
+    className,
+  ]}
+>
+  <span class="rounded-full bg-white/10 px-2.5 py-1.5 text-ink" aria-hidden="true">
+    {current.short}
+  </span>
+  <a
+    href={href}
+    hreflang={target}
+    lang={target}
+    class="rounded-full px-2.5 py-1.5 text-ink-secondary transition-colors duration-(--dur-fast) hover:text-ink"
+    data-lang-switch={target}
+  >
+    {targetCopy.short}
+    <span class="sr-only"> — {targetCopy.switchTo}</span>
+  </a>
+</span>

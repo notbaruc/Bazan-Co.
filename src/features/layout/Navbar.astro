@@ -2,15 +2,18 @@
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import Logo from '@/components/ui/Logo.astro';
+import LanguageSwitcher from '@/features/i18n/LanguageSwitcher.astro';
 import { getDictionary, type Locale } from '@/i18n';
 
 interface Props {
   lang: Locale;
   /** En páginas secundarias los enlaces de sección apuntan a la home (p. ej. "/"). */
   homeHref?: string;
+  /** Página equivalente en el otro idioma. */
+  switchHref: string;
 }
 
-const { lang, homeHref = '' } = Astro.props;
+const { lang, homeHref = '', switchHref } = Astro.props;
 const t = getDictionary(lang);
 ---
 
@@ -45,29 +48,31 @@ const t = getDictionary(lang);
       ))}
     </ul>
 
-    <div class="hidden md:block">
-      <Button href={`${homeHref}#contacto`} size="sm">
-        {t.nav.cta}
-      </Button>
+    <div class="flex items-center gap-3">
+      <LanguageSwitcher lang={lang} href={switchHref} />
+      <div class="hidden md:block">
+        <Button href={`${homeHref}#contacto`} size="sm">
+          {t.nav.cta}
+        </Button>
+      </div>
+      <button
+        type="button"
+        class="-mr-2 grid size-11 place-items-center rounded-lg text-ink md:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label={t.a11y.openMenu}
+        data-label-open={t.a11y.openMenu}
+        data-label-close={t.a11y.closeMenu}
+        data-menu-toggle
+      >
+        <span data-icon-open>
+          <Icon name="menu" class="size-6" />
+        </span>
+        <span data-icon-close hidden>
+          <Icon name="close" class="size-6" />
+        </span>
+      </button>
     </div>
-
-    <button
-      type="button"
-      class="-mr-2 grid size-11 place-items-center rounded-lg text-ink md:hidden"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-      aria-label={t.a11y.openMenu}
-      data-label-open={t.a11y.openMenu}
-      data-label-close={t.a11y.closeMenu}
-      data-menu-toggle
-    >
-      <span data-icon-open>
-        <Icon name="menu" class="size-6" />
-      </span>
-      <span data-icon-close hidden>
-        <Icon name="close" class="size-6" />
-      </span>
-    </button>
   </nav>
 
   <div

@@ -1,0 +1,71 @@
+---
+/**
+ * Detección inicial por navegador: si el idioma del navegador es el otro y el visitante no eligió
+ * idioma antes, se sugiere (sin redirigir: una redirección automática ocultaría una versión a Google).
+ * El texto va en el idioma sugerido.
+ */
+import { getDictionary, otherLocale, type Locale } from '@/i18n';
+
+interface Props {
+  lang: Locale;
+  href: string;
+}
+
+const { lang, href } = Astro.props;
+const target = otherLocale(lang);
+const t = getDictionary(target).language;
+---
+
+<aside
+  id="language-suggestion"
+  aria-label={t.suggestionLabel}
+  lang={target}
+  data-current={lang}
+  data-target={target}
+  class="fixed top-[calc(var(--nav-height)+0.75rem)] right-3 left-3 z-40 rounded-2xl border border-line-strong bg-elevated/95 p-4 shadow-card backdrop-blur-md sm:left-auto sm:max-w-xs"
+  hidden
+>
+  <p class="text-sm text-ink">{t.suggestion}</p>
+  <div class="mt-3 flex gap-2">
+    <a
+      href={href}
+      hreflang={target}
+      class="inline-flex min-h-11 flex-1 items-center justify-center rounded-full bg-accent px-4 text-sm font-medium text-ink-inverse hover:bg-accent-hi"
+      data-lang-switch={target}
+    >
+      {t.suggestionCta}
+    </a>
+    <button
+      type="button"
+      class="min-h-11 flex-1 cursor-pointer rounded-full border border-line-strong px-4 text-sm text-ink-secondary hover:text-ink"
+      data-dismiss
+    >
+      {t.dismiss}
+    </button>
+  </div>
+</aside>
+
+<script>
+  import { getLanguagePreference, saveLanguagePreference } from './language';
+
+  // Cualquier enlace de cambio de idioma guarda la elección y conserva la sección actual (#hash).
+  document.querySelectorAll<HTMLAnchorElement>('[data-lang-switch]').forEach((link) => {
+    link.addEventListener('click', () => {
+      saveLanguagePreference(link.dataset['langSwitch'] ?? '');
+      if (location.hash) link.hash = location.hash;
+    });
+  });
+
+  const box = document.getElementById('language-suggestion');
+  const current = box?.dataset['current'];
+  const target = box?.dataset['target'];
+  const browserLanguage = (navigator.languages[0] ?? navigator.language).slice(0, 2).toLowerCase();
+
+  if (box && current && target && getLanguagePreference() === null && browserLanguage === target) {
+    box.hidden = false;
+    box.querySelector('[data-dismiss]')?.addEventListener('click', () => {
+      saveLanguagePreference(current);
+      box.hidden = true;
+    });
+  }
+</script>

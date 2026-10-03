@@ -1,24 +1,42 @@
 ---
 import { Font } from 'astro:assets';
 import CookieBanner from '@/features/consent/CookieBanner.astro';
+import LanguageSuggestion from '@/features/i18n/LanguageSuggestion.astro';
 import Footer from '@/features/layout/Footer.astro';
 import Navbar from '@/features/layout/Navbar.astro';
 import WhatsAppFab from '@/features/whatsapp/WhatsAppFab.astro';
-import { getDictionary, type Locale } from '@/i18n';
+import {
+  defaultLocale,
+  getDictionary,
+  locales,
+  otherLocale,
+  routes,
+  type Locale,
+  type RouteName,
+} from '@/i18n';
 import '@/styles/global.css';
 
 interface Props {
   title: string;
   description: string;
   lang: Locale;
-  /** Prefijo para los enlaces de sección: '' en la home, '/' en páginas secundarias. */
-  homeHref?: string;
-  privacyHref: string;
+  /** Página actual; sin ruta (404) no se emiten alternos de idioma. */
+  route?: RouteName;
   noindex?: boolean;
 }
 
-const { title, description, lang, homeHref = '', privacyHref, noindex = false } = Astro.props;
+const { title, description, lang, route, noindex = false } = Astro.props;
 const t = getDictionary(lang);
+const site = Astro.site ?? new URL(Astro.url.origin);
+
+const homeHref = route === 'home' ? '' : routes.home[lang];
+const privacyHref = routes.privacy[lang];
+const switchHref = route ? routes[route][otherLocale(lang)] : routes.home[otherLocale(lang)];
+const canonical = route ? new URL(routes[route][lang], site).href : undefined;
+const alternates = route
+  ? locales.map((locale) => ({ locale, href: new URL(routes[route][locale], site).href }))
+  : [];
+const xDefault = route ? new URL(routes[route][defaultLocale], site).href : undefined;
 ---
 
 <!doctype html>
@@ -29,15 +47,39 @@ const t = getDictionary(lang);
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta name="theme-color" content="#07090f" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {alternates.map(({ locale, href }) => (
+      <link rel="alternate" hreflang={locale} href={href} />
+    ))}
+    {xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
     <script is:inline>
-      // Antes del primer render: marca que hay JS y activa las animaciones solo si el usuario
-      // no pidió reducir movimiento.
-      document.documentElement.classList.add('js');
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.classList.add('motion');
-      }
+      // Antes del primer render:
+      // 1) Si el visitante eligió antes otro idioma, va directo a esa versión (sin parpadeo).
+      // 2) Marca que hay JS y activa las animaciones solo si no pidió reducir movimiento.
+      (function () {
+        const root = document.documentElement;
+        try {
+          const preferred = localStorage.getItem('bazan-lang');
+          if (preferred && preferred !== root.lang) {
+            const alt = document.querySelector(
+              'link[rel="alternate"][hreflang="' + preferred + '"]',
+            );
+            if (alt) {
+              // Solo la ruta: así funciona igual en localhost y en los deploy previews.
+              location.replace(new URL(alt.href).pathname + location.hash);
+              return;
+            }
+          }
+        } catch {
+          // Almacenamiento bloqueado: se queda en esta versión.
+        }
+        root.classList.add('js');
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          root.classList.add('motion');
+        }
+      })();
     </script>
+    <meta name="theme-color" content="#07090f" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon-32.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -52,13 +94,14 @@ const t = getDictionary(lang);
     >
       {t.a11y.skipToContent}
     </a>
-    <Navbar lang={lang} homeHref={homeHref} />
+    <Navbar lang={lang} homeHref={homeHref} switchHref={switchHref} />
     <main id="contenido" tabindex="-1" class="outline-none">
       <slot />
     </main>
     <Footer lang={lang} homeHref={homeHref} privacyHref={privacyHref} />
     <WhatsAppFab lang={lang} />
     <CookieBanner lang={lang} privacyHref={privacyHref} />
+    <LanguageSuggestion lang={lang} href={switchHref} />
     <script>
       import { initMotion } from '@/lib/motion';
       initMotion();

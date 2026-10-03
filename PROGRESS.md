@@ -3,13 +3,13 @@
 > Se lee al iniciar cada sesión junto con `PLAN.md`. Se actualiza al cerrar cada fase.
 > Rama de trabajo: `redesign/premium` (nunca merge a `main` sin aprobación del usuario).
 
-**Estado actual:** ejecución autónoma en curso (2026-10-03). Fases 1–3 cerradas.
+**Estado actual:** ejecución autónoma en curso (2026-10-03). Fases 1–4 cerradas.
 
 ## Checklist de fases
 - [x] **Fase 1 — Base:** scaffold, design tokens, estructura de carpetas, linting, reporte de tamaño.
 - [x] **Fase 2 — Layout y secciones estáticas** con correcciones de contenido.
 - [x] **Fase 3 — Animaciones y micro-interacciones.**
-- [ ] **Fase 4 — i18n ES/EN.**
+- [x] **Fase 4 — i18n ES/EN.**
 - [ ] **Fase 5 — SEO, analítica, formulario y WhatsApp.**
 - [ ] **Fase 6 — Optimización final y auditoría de calidad.**
 
@@ -19,6 +19,7 @@
 | Sitio actual en producción (referencia) | 9.5 KB sin minificar + GA | 28.9 KB sin minificar | 35.7 KB sin minificar | Google Fonts, 12 pesos | **78 / 96 / 100 / 100** | 3.88 s | 0 | 225 ms |
 | Fase 1 (página de tokens) | 0 KB | incluido en HTML | 4.3 KB | 4 woff2 · 80.5 KB total, 1 precargada (20.5 KB) | n/a (página temporal) | — | — | — |
 | Fase 2 (landing estática) | 0 KB al cargar · 46.9 KB diferidos (isla del formulario, `client:visible`) | incluido en HTML | 23.8 KB | 2 precargadas (42.1 KB) | **100 / 100 / 100 / 100** | 1.51 s | 0 | 16 ms |
+| Fase 4 (i18n, `/` y `/en/`) | igual que Fase 3 (+ script de idioma inline, <1 KB) | incluido en HTML | 27 KB por idioma | 2 precargadas (42.1 KB) | **ES 100/100/100/100 · EN 100/100/100/100** | 1.59 s | 0 | 26–40 ms |
 | Fase 3 (animaciones) | 1.6 KB al cargar (todos) · +6.5 KB solo escritorio en idle (Lenis 5.5 + efectos de puntero 1.0) · isla del formulario diferida | incluido en HTML | 26.6 KB | 2 precargadas (42.1 KB) | **100 / 100 / 100 / 100** · escritorio 100/100/100/100 | 1.58 s | 0 | 0 ms |
 
 > **Prueba de estrés con CPU ×4 real** (Lighthouse `throttlingMethod: devtools`, mediana de 5): Fase 2 = 94 / LCP 2.10 s / TBT 228 ms; Fase 3 = 93 / LCP 1.79 s / TBT 275 ms (rango 92–95; la máquina de pruebas introduce bastante varianza).
@@ -94,6 +95,16 @@ Presupuesto de la fase: ≤ 8 KB gz de JS nuevo en escritorio, ≤ 2 KB en móvi
 - **`mix-blend-mode` en el grano:** eliminado (obligaba a recomponer la capa en cada frame de la aurora).
 - **Contador en "<2 s":** no se anima; contar de 0 a 2 mostraría valores falsos ("<0 s").
 
+## Fase 4 — hecho
+- **Rutas por idioma:** español en `/` y `/privacidad/` (se conserva la URL actual), inglés en `/en/` y `/en/privacy/`. URLs con barra final (`trailingSlash: 'always'`) como las sirve Netlify. 404 única y bilingüe.
+- **Todo el copy en archivos de traducción:** `src/i18n/es.ts` y `src/i18n/en.ts`. `en.ts` está tipado con el tipo de `es.ts`: si falta una clave o sobra una, el build falla. Cero texto fijo en componentes (verificado con búsqueda).
+- **Inglés natural y orientado a conversión** (no literal), con las mismas reglas de contenido: "Advanced English", sin C1, mismos placeholders `[PENDIENTE USUARIO]`.
+- **Selector de idioma** en la navbar (escritorio y móvil): enlace real a la página equivalente, con `hreflang`/`lang`, que conserva la sección actual (`#hash`).
+- **Persistencia:** al elegir idioma se guarda en `localStorage`; en visitas siguientes un script inline en el `<head>` redirige a esa versión **antes del primer render** (sin parpadeo ni layout shift). Solo hay redirección si el visitante eligió explícitamente.
+- **Detección inicial por navegador:** si el idioma del navegador es el otro y no hay preferencia guardada, aparece una sugerencia discreta ("This site is also available in English" / "Ver en español") con "No, gracias".
+- **SEO de idiomas:** `<html lang>`, `canonical` y `hreflang` (`es`, `en`, `x-default` → español) en cada página. Aviso de privacidad en inglés marcado como traducción de cortesía (prevalece el español) y actualizado para mencionar que se guarda el idioma preferido.
+- Cambio de idioma sin CLS: son páginas estáticas separadas. CLS medido = 0 en ambas.
+
 ## Decisiones tomadas
 - Deploy en Netlify con build estático. *(usuario)*
 - Paleta **A1 "Tinta y Oro"** y tipografía **B2 (Instrument Serif + Geist)**. *(usuario)*
@@ -117,6 +128,10 @@ Presupuesto de la fase: ≤ 8 KB gz de JS nuevo en escritorio, ≤ 2 KB en móvi
 - `[REVISAR]` **Framer Motion no se usa** (está en el stack de `CLAUDE.md`): los efectos de la Fase 3 se lograron con CSS/vanilla con menos peso. Se puede añadir más adelante si aparece un caso que lo justifique.
 - `[REVISAR]` **Cursor personalizado** implementado como anillo decorativo que acompaña al cursor nativo (ocultar el cursor del sistema perjudica la accesibilidad y la precisión).
 - `[REVISAR]` **Compuerta de rendimiento:** se evalúa con Lighthouse móvil estándar (simulación, igual que PageSpeed Insights). La prueba de estrés con CPU ×4 real se usa como control de regresión, no como compuerta: en esta máquina varía ±4 puntos.
+- `[REVISAR]` **No se usa `react-i18next`** (lo pedía la Fase 4): con Astro cada idioma es una página estática generada en el build, así que una librería de traducción en el navegador solo agregaría ~20 KB gz de JS sin beneficio. En su lugar, diccionarios TypeScript tipados (mismo concepto de "archivos de traducción", con verificación en compilación). Si prefieres i18next por el formato JSON, la migración es directa.
+- `[REVISAR]` **Detección por navegador = sugerencia, no redirección automática.** Googlebot rastrea con idioma inglés: una redirección automática por idioma del navegador le ocultaría la versión en español. La redirección solo ocurre con una preferencia elegida por el visitante.
+- `[REVISAR]` Los `id` de las secciones (`#servicios`, `#portafolio`…) son los mismos en ambos idiomas para que el cambio de idioma conserve la sección.
+- `[REVISAR]` Variantes de idioma genéricas (`es`, `en`) en `lang` y `hreflang`; `x-default` apunta al español.
 - `[REVISAR]` Botón de WhatsApp: ícono blanco sobre el verde oficial (#25D366) por reconocimiento de marca; el contraste del ícono es 2:1 (es un logotipo, el botón tiene nombre accesible).
 
 ## Pendientes del usuario
@@ -138,7 +153,7 @@ Presupuesto de la fase: ≤ 8 KB gz de JS nuevo en escritorio, ≤ 2 KB en móvi
 ### Para fases posteriores
 - [ ] ¿Dominio propio (p. ej. `bazanco.com`)?
 - [ ] Datos del aviso de privacidad: nombre del responsable, domicilio o medio de contacto, medio para ejercer derechos ARCO. Recomendado: revisión legal.
-- [ ] Revisión del copy en inglés (Fase 4).
+- [ ] **Revisión del copy en inglés** (`src/i18n/en.ts`): lo redacté yo; valida tono y términos.
 
 ## Ideas para después
 - Probar `content-visibility` también en la página de privacidad si crece.

@@ -1,0 +1,16 @@
+---
+import { getDictionary, routes, type Locale } from '@/i18n';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PrivacyNotice from './PrivacyNotice.astro';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang).privacy;
+---
+
+<BaseLayout title={t.metaTitle} description={t.metaDescription} lang={lang} route="privacy">
+  <PrivacyNotice lang={lang} homeHref={routes.home[lang]} />
+</BaseLayout>
