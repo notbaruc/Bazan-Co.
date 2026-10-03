@@ -1,0 +1,75 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import RichText from '@/components/ui/RichText.astro';
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon.astro';
+import { buildWhatsAppUrl } from '@/features/whatsapp/whatsapp';
+import { getDictionary, type Locale } from '@/i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const t = getDictionary(Astro.props.lang);
+---
+
+<section
+  id="inicio"
+  aria-labelledby="inicio-title"
+  class="relative isolate overflow-hidden pt-[calc(var(--nav-height)+3.5rem)] pb-16 md:pt-[calc(var(--nav-height)+6rem)] md:pb-24"
+>
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="hero-grid absolute inset-0"></div>
+    <div class="hero-glow absolute inset-0"></div>
+  </div>
+
+  <div class="container-page">
+    <p class="mb-6 flex items-center gap-3 font-mono text-eyebrow text-accent uppercase">
+      <span class="h-px w-8 bg-accent/60" aria-hidden="true"></span>
+      {t.hero.eyebrow}
+    </p>
+
+    <h1
+      id="inicio-title"
+      class="max-w-[15ch] font-display text-display font-normal tracking-[-0.02em] md:max-w-[18ch]"
+    >
+      <RichText text={t.hero.title} accentClass="block italic text-accent" />
+    </h1>
+
+    <p class="mt-7 max-w-(--container-prose) text-lead text-ink-secondary">{t.hero.lead}</p>
+
+    <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <Button
+        href={buildWhatsAppUrl(t.whatsapp.defaultMessage)}
+        variant="whatsapp"
+        external
+        data-wa-source="hero"
+      >
+        <WhatsAppIcon class="size-5" />
+        {t.hero.primaryCta}
+      </Button>
+      <Button href="#contacto" variant="secondary">
+        {t.hero.secondaryCta}
+        <Icon name="arrow-right" class="size-4" strokeWidth={2} />
+      </Button>
+    </div>
+
+    <p class="mt-5 text-sm text-ink-muted">{t.hero.note}</p>
+  </div>
+</section>
+
+<style>
+  .hero-grid {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 75%);
+  }
+
+  .hero-glow {
+    background:
+      radial-gradient(60% 50% at 85% 10%, rgb(217 180 90 / 0.14), transparent 70%),
+      radial-gradient(50% 45% at 10% 40%, rgb(91 123 181 / 0.14), transparent 70%);
+  }
+</style>

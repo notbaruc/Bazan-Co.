@@ -1,0 +1,33 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { getDictionary, type Locale } from '@/i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const t = getDictionary(Astro.props.lang).process;
+---
+
+<Section id="proceso" class="bg-surface/40">
+  <SectionHeader id="proceso" eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
+
+  <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+    {t.steps.map((step, index) => (
+      <li class="relative rounded-2xl border border-line bg-bg/60 p-6" data-reveal>
+        <div class="flex items-center justify-between">
+          <span class="grid size-11 place-items-center rounded-xl bg-accent/10 text-accent">
+            <Icon name={step.icon} class="size-5" />
+          </span>
+          <span class="font-mono text-sm text-ink-muted" aria-hidden="true">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+        </div>
+        <h3 class="mt-6 text-h3 font-medium">{step.title}</h3>
+        <p class="mt-2 text-[0.9375rem]">{step.text}</p>
+      </li>
+    ))}
+  </ol>
+</Section>

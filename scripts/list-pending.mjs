@@ -19,7 +19,9 @@ const hits = walk('src')
     readFileSync(file, 'utf8')
       .split('\n')
       .map((line, i) => ({ file, line: i + 1, text: line.trim() }))
-      .filter(({ text }) => text.includes(MARK)),
+      // Solo literales de texto que empiezan con la marca (ignora comentarios y la definición).
+      .filter(({ text }) => /['"`]\[PENDIENTE USUARIO\]/.test(text))
+      .filter(({ text }) => !/^(\*|\/\/)/.test(text) && !text.includes('PENDING_MARK')),
   );
 
 for (const { file, line, text } of hits) console.log(`${file}:${line}  ${text}`);

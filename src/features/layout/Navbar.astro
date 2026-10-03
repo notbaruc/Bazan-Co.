@@ -1,0 +1,102 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Logo from '@/components/ui/Logo.astro';
+import { getDictionary, type Locale } from '@/i18n';
+
+interface Props {
+  lang: Locale;
+  /** En páginas secundarias los enlaces de sección apuntan a la home (p. ej. "/"). */
+  homeHref?: string;
+}
+
+const { lang, homeHref = '' } = Astro.props;
+const t = getDictionary(lang);
+---
+
+<header id="site-header" class="fixed inset-x-0 top-0 z-50">
+  <div
+    class="absolute inset-0 border-b border-line bg-bg/85 backdrop-blur-md"
+    aria-hidden="true"
+  ></div>
+  <nav
+    aria-label={t.a11y.mainNav}
+    class="relative container-page flex h-(--nav-height) items-center justify-between gap-6"
+  >
+    <a href={`${homeHref}#inicio`} class="-m-2 rounded-lg p-2">
+      <Logo srSuffix={t.a11y.homeSuffix} />
+    </a>
+
+    <ul class="hidden items-center gap-1 md:flex">
+      {t.nav.links.map((link) => (
+        <li>
+          <a
+            href={`${homeHref}${link.href}`}
+            data-nav-link
+            class="group relative rounded-full px-3 py-2 text-sm text-ink-secondary transition-colors duration-(--dur-fast) hover:text-ink aria-[current=true]:text-ink"
+          >
+            {link.label}
+            <span
+              class="absolute inset-x-3 -bottom-0.5 h-px origin-left scale-x-0 bg-accent transition-transform duration-(--dur-base) ease-out-expo group-aria-[current=true]:scale-x-100"
+              aria-hidden="true"
+            />
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="hidden md:block">
+      <Button href={`${homeHref}#contacto`} size="sm">
+        {t.nav.cta}
+      </Button>
+    </div>
+
+    <button
+      type="button"
+      class="-mr-2 grid size-11 place-items-center rounded-lg text-ink md:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-label={t.a11y.openMenu}
+      data-label-open={t.a11y.openMenu}
+      data-label-close={t.a11y.closeMenu}
+      data-menu-toggle
+    >
+      <span data-icon-open>
+        <Icon name="menu" class="size-6" />
+      </span>
+      <span data-icon-close hidden>
+        <Icon name="close" class="size-6" />
+      </span>
+    </button>
+  </nav>
+
+  <div
+    id="mobile-menu"
+    class="relative border-b border-line bg-bg/95 backdrop-blur-md md:hidden"
+    hidden
+  >
+    <ul class="container-page flex flex-col py-4">
+      {t.nav.links.map((link) => (
+        <li>
+          <a
+            href={`${homeHref}${link.href}`}
+            data-nav-link
+            class="flex min-h-12 items-center border-b border-line text-base text-ink-secondary aria-[current=true]:text-accent"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li class="pt-4">
+        <Button href={`${homeHref}#contacto`} class="w-full">
+          {t.nav.cta}
+        </Button>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  import { initNavbar } from './navbar';
+  initNavbar();
+</script>

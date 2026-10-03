@@ -1,0 +1,84 @@
+---
+import { getDictionary, type Locale } from '@/i18n';
+
+interface Props {
+  lang: Locale;
+  privacyHref: string;
+}
+
+const { lang, privacyHref } = Astro.props;
+const t = getDictionary(lang).cookies;
+---
+
+<section
+  id="cookie-banner"
+  aria-label={t.label}
+  class="fixed inset-x-3 bottom-3 z-50 rounded-2xl border border-line-strong bg-elevated/95 p-4 shadow-card backdrop-blur-md sm:right-auto sm:left-4 sm:max-w-sm md:bottom-6 md:left-6"
+  hidden
+>
+  <p class="text-sm text-ink-secondary">
+    {t.text}{' '}
+    <a href={privacyHref} class="text-accent underline underline-offset-2 hover:text-accent-hi">
+      {t.more}
+    </a>
+    .
+  </p>
+  <div class="mt-3 flex gap-2">
+    <button
+      type="button"
+      class="min-h-11 flex-1 cursor-pointer rounded-full border border-line-strong px-4 text-sm font-medium text-ink hover:border-accent/50"
+      data-consent="denied"
+    >
+      {t.reject}
+    </button>
+    <button
+      type="button"
+      class="min-h-11 flex-1 cursor-pointer rounded-full border border-line-strong px-4 text-sm font-medium text-ink hover:border-accent/50"
+      data-consent="granted"
+    >
+      {t.accept}
+    </button>
+  </div>
+</section>
+
+<script>
+  import { getConsent, setConsent, type ConsentValue } from './consent';
+
+  const banner = document.getElementById('cookie-banner');
+  const root = document.documentElement;
+
+  const show = (visible: boolean) => {
+    if (!banner) return;
+    banner.hidden = !visible;
+    if (visible) {
+      // En móvil el banner ocupa el ancho: el botón de WhatsApp sube lo necesario.
+      const overlapsFab = window.matchMedia('(max-width: 39.999rem)').matches;
+      root.style.setProperty(
+        '--cookie-banner-height',
+        overlapsFab ? `${banner.offsetHeight + 8}px` : '0px',
+      );
+      root.dataset['cookieBanner'] = 'open';
+    } else {
+      delete root.dataset['cookieBanner'];
+    }
+  };
+
+  banner?.addEventListener('click', (event) => {
+    const button = event.target instanceof Element ? event.target.closest('[data-consent]') : null;
+    const value = button?.getAttribute('data-consent');
+    if (value === 'granted' || value === 'denied') {
+      setConsent(value satisfies ConsentValue);
+      show(false);
+    }
+  });
+
+  document.querySelectorAll('[data-cookie-settings]').forEach((button) => {
+    button.addEventListener('click', () => {
+      show(true);
+      banner?.querySelector<HTMLButtonElement>('[data-consent]')?.focus();
+    });
+  });
+
+  // Se muestra cuando las fuentes ya cargaron: así el cambio de fuente no desplaza su texto (CLS).
+  if (getConsent() === null) void document.fonts.ready.then(() => show(true));
+</script>

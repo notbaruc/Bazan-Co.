@@ -1,0 +1,19 @@
+---
+interface Props {
+  class?: string;
+  /** Texto solo para lectores de pantalla que completa el nombre del enlace (p. ej. ", inicio"). */
+  srSuffix?: string;
+}
+const { class: className, srSuffix } = Astro.props;
+---
+
+<span class:list={['inline-flex items-center gap-2.5', className]}>
+  <span
+    class="grid size-8 place-items-center rounded-lg bg-linear-135 from-accent-hi to-accent-lo font-sans text-sm font-extrabold text-[#0b1220] before:content-['B']"
+    aria-hidden="true"
+  ></span>
+  <span class="font-sans text-lg font-semibold tracking-tight text-ink">
+    Bazan <span class="text-accent">&amp;</span> Co.
+    {srSuffix && <span class="sr-only">{srSuffix}</span>}
+  </span>
+</span>

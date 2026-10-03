@@ -1,0 +1,49 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { getDictionary, type Locale } from '@/i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const t = getDictionary(Astro.props.lang).problem;
+---
+
+<Section id="problema">
+  <SectionHeader id="problema" eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
+
+  <div class="grid gap-4 md:grid-cols-2 md:gap-6">
+    <article class="rounded-2xl border border-line bg-surface/60 p-6 md:p-8" data-reveal>
+      <h3 class="text-h3 font-medium">{t.problemsTitle}</h3>
+      <ul class="mt-6 space-y-4">
+        {t.problems.map((item) => (
+          <li class="flex gap-3">
+            <Icon name="x-circle" class="mt-0.5 size-5 shrink-0 text-danger" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </article>
+
+    <article
+      class="relative overflow-hidden rounded-2xl border border-accent/30 bg-elevated p-6 shadow-card md:p-8"
+      data-reveal
+    >
+      <div
+        class="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent to-transparent"
+        aria-hidden="true"
+      ></div>
+      <h3 class="text-h3 font-medium">{t.solutionTitle}</h3>
+      <ul class="mt-6 space-y-4">
+        {t.solutions.map((item) => (
+          <li class="flex gap-3 text-ink">
+            <Icon name="check-circle" class="mt-0.5 size-5 shrink-0 text-accent" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </article>
+  </div>
+</Section>

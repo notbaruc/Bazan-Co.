@@ -1,0 +1,21 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'section'> & {
+  id: string;
+  class?: string;
+};
+
+const { id, class: className, ...rest } = Astro.props;
+---
+
+<section
+  id={id}
+  aria-labelledby={`${id}-title`}
+  class:list={['relative scroll-mt-(--nav-height) py-(--spacing-section)', className]}
+  {...rest}
+>
+  <div class="container-page">
+    <slot />
+  </div>
+</section>

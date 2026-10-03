@@ -10,11 +10,13 @@ export default defineConfig(
   { ignores: ['dist/', '.astro/', '.netlify/', 'legacy/', 'node_modules/', 'lighthouse/'] },
   js.configs.recommended,
   tseslint.configs.strict,
+  // eslint-plugin-astro referencia el fork compatible con ESLint 10 por este nombre.
+  { plugins: { 'jsx-a11y-x': jsxA11y } },
   astro.configs['flat/recommended'],
   astro.configs['flat/jsx-a11y-strict'],
   {
     files: ['**/*.tsx'],
-    plugins: { 'jsx-a11y': jsxA11y, 'react-hooks': reactHooks },
+    plugins: { 'react-hooks': reactHooks },
     rules: {
       ...jsxA11y.configs.strict.rules,
       ...reactHooks.configs.recommended.rules,

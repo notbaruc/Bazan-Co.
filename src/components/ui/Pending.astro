@@ -1,0 +1,23 @@
+---
+/** Placeholder visible para datos que debe proporcionar el dueño del negocio. */
+import { stripPending } from '@/i18n';
+
+interface Props {
+  text: string;
+  label: string;
+  class?: string;
+}
+
+const { text, label, class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    'inline-flex items-start gap-2 rounded-md border border-dashed border-accent/40 bg-accent/5 px-2.5 py-1.5 font-mono text-xs leading-snug text-accent-hi',
+    className,
+  ]}
+  data-pending
+>
+  <span class="shrink-0 font-medium uppercase">{label}:</span>
+  <span>{stripPending(text)}</span>
+</span>

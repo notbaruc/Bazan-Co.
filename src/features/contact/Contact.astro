@@ -1,0 +1,79 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon.astro';
+import { buildWhatsAppUrl } from '@/features/whatsapp/whatsapp';
+import { getDictionary, type Locale } from '@/i18n';
+import { site } from '@/lib/site';
+import ContactForm from './ContactForm';
+
+interface Props {
+  lang: Locale;
+}
+
+const dict = getDictionary(Astro.props.lang);
+const t = dict.contact;
+---
+
+<Section id="contacto">
+  <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+    <div>
+      <SectionHeader
+        id="contacto"
+        eyebrow={t.eyebrow}
+        title={t.title}
+        lead={t.lead}
+        class="mb-10"
+      />
+
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={buildWhatsAppUrl(dict.whatsapp.defaultMessage)}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex items-center gap-4 rounded-2xl border border-line bg-surface/60 p-4 transition-colors duration-(--dur-base) hover:border-whatsapp/50"
+            data-wa-source="contact"
+          >
+            <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-whatsapp/15 text-whatsapp">
+              <WhatsAppIcon class="size-5" />
+            </span>
+            <span>
+              <span class="block text-sm text-ink-muted">{t.channels.whatsapp}</span>
+              <span class="block text-ink">{site.whatsappDisplay}</span>
+            </span>
+            <span class="sr-only">{dict.a11y.externalLink}</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href={`mailto:${site.email}`}
+            class="flex items-center gap-4 rounded-2xl border border-line bg-surface/60 p-4 transition-colors duration-(--dur-base) hover:border-accent/50"
+          >
+            <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-accent/10 text-accent">
+              <Icon name="mail" class="size-5" />
+            </span>
+            <span>
+              <span class="block text-sm text-ink-muted">{t.channels.email}</span>
+              <span class="block text-ink">{site.email}</span>
+            </span>
+          </a>
+        </li>
+        <li class="flex items-center gap-4 rounded-2xl border border-line p-4">
+          <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-accent/10 text-accent">
+            <Icon name="map-pin" class="size-5" />
+          </span>
+          <span>
+            <span class="block text-sm text-ink-muted">{t.channels.location}</span>
+            <span class="block text-ink">{t.channels.locationValue}</span>
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <div data-reveal>
+      <ContactForm client:visible copy={t.form} />
+    </div>
+  </div>
+</Section>

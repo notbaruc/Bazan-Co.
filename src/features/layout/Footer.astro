@@ -1,0 +1,86 @@
+---
+import Logo from '@/components/ui/Logo.astro';
+import { getDictionary, type Locale } from '@/i18n';
+import { site } from '@/lib/site';
+import { buildWhatsAppUrl } from '@/features/whatsapp/whatsapp';
+
+interface Props {
+  lang: Locale;
+  privacyHref: string;
+  /** En páginas secundarias los enlaces de sección apuntan a la home. */
+  homeHref?: string;
+}
+
+const { lang, privacyHref, homeHref = '' } = Astro.props;
+const t = getDictionary(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-line bg-surface/40">
+  <div class="container-page grid gap-10 py-14 md:grid-cols-[2fr_1fr_1fr]">
+    <div>
+      <a href={`${homeHref}#inicio`} class="-m-2 inline-block rounded-lg p-2">
+        <Logo srSuffix={t.a11y.homeSuffix} />
+      </a>
+      <p class="mt-4 max-w-xs text-sm">{t.footer.tagline}</p>
+    </div>
+
+    <nav aria-label={t.a11y.footerNav}>
+      <h2 class="font-mono text-eyebrow text-ink-muted uppercase">{t.footer.navTitle}</h2>
+      <ul class="mt-4 space-y-1 text-sm">
+        {t.nav.links.map((link) => (
+          <li>
+            <a
+              href={`${homeHref}${link.href}`}
+              class="inline-flex min-h-10 items-center hover:text-ink"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a href={privacyHref} class="inline-flex min-h-10 items-center hover:text-ink">
+            {t.footer.privacy}
+          </a>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="inline-flex min-h-10 cursor-pointer items-center hover:text-ink"
+            data-cookie-settings
+          >
+            {t.footer.cookies}
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="font-mono text-eyebrow text-ink-muted uppercase">{t.footer.contactTitle}</h2>
+      <ul class="mt-4 space-y-1 text-sm">
+        <li>
+          <a
+            href={buildWhatsAppUrl(t.whatsapp.defaultMessage)}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex min-h-10 items-center hover:text-ink"
+            data-wa-source="footer"
+          >
+            {t.contact.channels.whatsapp} {site.whatsappDisplay}
+          </a>
+        </li>
+        <li>
+          <a href={`mailto:${site.email}`} class="inline-flex min-h-10 items-center hover:text-ink">
+            {site.email}
+          </a>
+        </li>
+        <li class="pt-2">{t.contact.channels.locationValue}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-line">
+    <p class="container-page py-6 text-xs text-ink-muted">
+      © {year} {site.name} {t.footer.rights}
+    </p>
+  </div>
+</footer>

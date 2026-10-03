@@ -1,0 +1,26 @@
+---
+import Button from '@/components/ui/Button.astro';
+import { getDictionary } from '@/i18n';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const lang = 'es';
+const t = getDictionary(lang).notFound;
+---
+
+<BaseLayout
+  title={`${t.title} — Bazan & Co.`}
+  description={t.text}
+  lang={lang}
+  homeHref="/"
+  privacyHref="/privacidad"
+  noindex
+>
+  <section class="container-page grid min-h-[70vh] place-content-center pt-(--nav-height) text-center">
+    <p class="font-mono text-eyebrow text-accent uppercase">404</p>
+    <h1 class="mt-4 font-display text-h2 font-normal">{t.title}</h1>
+    <p class="mx-auto mt-4 max-w-md">{t.text}</p>
+    <div class="mt-8">
+      <Button href="/">{t.cta}</Button>
+    </div>
+  </section>
+</BaseLayout>

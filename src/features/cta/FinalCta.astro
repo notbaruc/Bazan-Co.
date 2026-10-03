@@ -1,0 +1,54 @@
+---
+import Button from '@/components/ui/Button.astro';
+import RichText from '@/components/ui/RichText.astro';
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon.astro';
+import { buildWhatsAppUrl } from '@/features/whatsapp/whatsapp';
+import { getDictionary, type Locale } from '@/i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const dict = getDictionary(Astro.props.lang);
+const t = dict.finalCta;
+---
+
+<section aria-labelledby="cta-final-title" class="py-(--spacing-section)">
+  <div class="container-page">
+    <div
+      class="cta-panel relative isolate overflow-hidden rounded-[2rem] border border-accent/25 bg-elevated px-6 py-14 text-center md:px-16 md:py-20"
+      data-reveal
+    >
+      <div class="cta-glow pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
+      <h2
+        id="cta-final-title"
+        class="mx-auto max-w-[20ch] font-display text-h2 font-normal tracking-[-0.01em]"
+      >
+        <RichText text={t.title} />
+      </h2>
+      <p class="mx-auto mt-5 max-w-(--container-prose) text-lead">{t.text}</p>
+      <div class="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+        <Button
+          href={buildWhatsAppUrl(dict.whatsapp.defaultMessage)}
+          variant="whatsapp"
+          external
+          data-wa-source="final-cta"
+        >
+          <WhatsAppIcon class="size-5" />
+          {t.primaryCta}
+        </Button>
+        <Button href="#contacto" variant="secondary">
+          {t.secondaryCta}
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-glow {
+    background:
+      radial-gradient(50% 80% at 50% 0%, rgb(217 180 90 / 0.16), transparent 70%),
+      radial-gradient(40% 60% at 100% 100%, rgb(91 123 181 / 0.14), transparent 70%);
+  }
+</style>

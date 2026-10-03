@@ -1,14 +1,24 @@
 ---
 import { Font } from 'astro:assets';
+import CookieBanner from '@/features/consent/CookieBanner.astro';
+import Footer from '@/features/layout/Footer.astro';
+import Navbar from '@/features/layout/Navbar.astro';
+import WhatsAppFab from '@/features/whatsapp/WhatsAppFab.astro';
+import { getDictionary, type Locale } from '@/i18n';
 import '@/styles/global.css';
 
 interface Props {
   title: string;
   description: string;
-  lang?: 'es' | 'en';
+  lang: Locale;
+  /** Prefijo para los enlaces de sección: '' en la home, '/' en páginas secundarias. */
+  homeHref?: string;
+  privacyHref: string;
+  noindex?: boolean;
 }
 
-const { title, description, lang = 'es' } = Astro.props;
+const { title, description, lang, homeHref = '', privacyHref, noindex = false } = Astro.props;
+const t = getDictionary(lang);
 ---
 
 <!doctype html>
@@ -18,12 +28,28 @@ const { title, description, lang = 'es' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#07090f" />
-    <Font cssVariable="--font-instrument" preload={[{ style: 'normal' }]} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <Font cssVariable="--font-instrument" preload />
     <Font cssVariable="--font-geist" />
     <Font cssVariable="--font-geist-mono" />
   </head>
   <body>
-    <slot />
+    <a
+      href="#contenido"
+      class="fixed top-3 left-3 z-[60] -translate-y-24 rounded-full bg-accent px-5 py-3 font-medium text-ink-inverse focus:translate-y-0"
+    >
+      {t.a11y.skipToContent}
+    </a>
+    <Navbar lang={lang} homeHref={homeHref} />
+    <main id="contenido" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Footer lang={lang} homeHref={homeHref} privacyHref={privacyHref} />
+    <WhatsAppFab lang={lang} />
+    <CookieBanner lang={lang} privacyHref={privacyHref} />
   </body>
 </html>

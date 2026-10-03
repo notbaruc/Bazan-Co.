@@ -1,0 +1,21 @@
+---
+/**
+ * Renderiza texto con partes marcadas entre asteriscos (`*así*`) como <em> con color de acento.
+ * Permite que los títulos con énfasis vivan completos en los archivos de traducción.
+ */
+interface Props {
+  text: string;
+  accentClass?: string;
+}
+
+const { text, accentClass = 'text-accent italic' } = Astro.props;
+const parts = text.split(/(\*[^*]+\*)/g).filter(Boolean);
+---
+
+{parts.map((part) =>
+  part.startsWith('*') && part.endsWith('*') ? (
+    <em class={accentClass}>{part.slice(1, -1)}</em>
+  ) : (
+    part
+  ),
+)}

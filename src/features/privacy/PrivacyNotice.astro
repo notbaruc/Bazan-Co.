@@ -1,0 +1,41 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import Pending from '@/components/ui/Pending.astro';
+import { getDictionary, isPending, type Locale } from '@/i18n';
+
+interface Props {
+  lang: Locale;
+  homeHref: string;
+}
+
+const { lang, homeHref } = Astro.props;
+const dict = getDictionary(lang);
+const t = dict.privacy;
+---
+
+<article class="container-page max-w-[calc(var(--container-prose)+2*var(--spacing-gutter))] pt-[calc(var(--nav-height)+4rem)] pb-(--spacing-section)">
+  <a
+    href={homeHref}
+    class="inline-flex min-h-11 items-center gap-2 text-sm text-accent hover:text-accent-hi"
+  >
+    <Icon name="arrow-right" class="size-4 rotate-180" strokeWidth={2} />
+    {t.back}
+  </a>
+  <h1 class="mt-6 font-display text-h2 font-normal">{t.title}</h1>
+  <p class="mt-3 font-mono text-sm text-ink-muted">{t.updated}</p>
+
+  {t.sections.map((section) => (
+    <section class="mt-12">
+      <h2 class="text-h3 font-medium">{section.title}</h2>
+      {section.paragraphs.map((paragraph) =>
+        isPending(paragraph) ? (
+          <p class="mt-4">
+            <Pending text={paragraph} label={dict.a11y.pendingLabel} />
+          </p>
+        ) : (
+          <p class="mt-4">{paragraph}</p>
+        ),
+      )}
+    </section>
+  ))}
+</article>
