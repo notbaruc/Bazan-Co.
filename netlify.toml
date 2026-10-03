@@ -1,0 +1,53 @@
+# Build estático de Astro. La rama de producción la define Netlify (main).
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+# ---------- Caché ----------
+# Assets con hash en el nombre (JS, CSS, fuentes, imágenes optimizadas): inmutables 1 año.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Archivos de /public sin hash (favicons, OG, manifest): 1 día + revalidación.
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/*.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+# HTML: siempre revalidar para que cada deploy se vea al instante.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# ---------- Redirecciones ----------
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+
+# Rutas del sitio anterior (legacy) que pudieron quedar indexadas.
+[[redirects]]
+  from = "/img/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/css/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/js/*"
+  to = "/"
+  status = 301

@@ -1,0 +1,7 @@
+dist/
+.astro/
+legacy/
+node_modules/
+package-lock.json
+lighthouse/
+*.md
