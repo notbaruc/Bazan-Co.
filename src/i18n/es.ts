@@ -7,9 +7,13 @@
  */
 const es = {
   meta: {
-    title: 'Bazan & Co. — Diseño web premium, SEO y landing pages en Chihuahua',
+    title: 'Diseño web premium y SEO en Chihuahua | Bazan & Co.',
     description:
-      'Ingeniería web en Chihuahua, México. Sitios rápidos, bilingües y a la medida para negocios locales y PYMEs que quieren más clientes. Servicio remoto global.',
+      'Ingeniería web en Chihuahua, México: sitios rápidos, bilingües y a la medida, SEO técnico y landing pages que convierten visitas en clientes. Servicio remoto.',
+    ogLocale: 'es_MX',
+    ogImage: '/og/bazan-co-es.jpg',
+    ogImageAlt:
+      'Bazan & Co.: «No construimos páginas web. Diseñamos máquinas de conversión.» Ingeniería web en Chihuahua, México.',
   },
   language: {
     name: 'Español',
@@ -352,9 +356,18 @@ const es = {
         service: 'Elige un servicio o «Otro / No estoy seguro».',
         summary: 'Revisa los campos marcados para poder enviar tu mensaje.',
       },
-      notConnected:
-        'El formulario se conecta en la siguiente fase. Mientras tanto, escríbenos por WhatsApp.',
       responseTime: 'Te respondemos en menos de 24 horas.',
+      sending: 'Enviando…',
+      successTitle: '¡Mensaje enviado!',
+      successText:
+        'Gracias por escribirnos. Te respondemos en menos de 24 horas. Si es urgente, escríbenos por WhatsApp.',
+      errorText:
+        'No pudimos enviar tu mensaje. Revisa tu conexión e inténtalo de nuevo, o envíanoslo por WhatsApp.',
+      whatsappAlt: 'Prefiero enviarlo por WhatsApp',
+      whatsappTemplate: 'Hola, soy {name}. Me interesa: {service}. {message}',
+      privacyNote: 'Al enviar aceptas nuestro',
+      privacyLink: 'aviso de privacidad',
+      honeypot: 'No llenes este campo si eres humano',
     },
   },
   cookies: {

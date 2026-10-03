@@ -55,6 +55,14 @@ escala fluida, espaciado, radios, sombras, easings y duraciones. Las fuentes son
 mediante la API de fuentes de Astro (`astro.config.mjs`), con `font-display: swap` y fallbacks
 con métricas ajustadas para evitar CLS.
 
+## Variables de entorno
+
+| Variable       | Uso                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------- |
+| `PUBLIC_GA_ID` | ID de Google Analytics 4. Por defecto `G-CN941SX6Q7`. Vacío = analítica desactivada. |
+
+Ver `.env.example`. GA solo se carga si el visitante acepta cookies de analítica.
+
 ## Despliegue (Netlify)
 
 La configuración está en [`netlify.toml`](netlify.toml): comando `npm run build`, carpeta `dist`,
@@ -62,3 +70,5 @@ Node 24, cabeceras de caché/seguridad y redirecciones. No hay pasos manuales.
 
 1. Cada push a una rama genera un **Deploy Preview / Branch deploy** (si está activado en Netlify).
 2. Producción se publica **solo** al hacer merge a `main`.
+3. **Formulario:** usa Netlify Forms. Activa *Form detection* en Netlify (Site configuration → Forms)
+   y configura la notificación por email. El formulario se llama `contacto`.

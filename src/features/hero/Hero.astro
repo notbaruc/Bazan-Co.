@@ -28,10 +28,7 @@ const t = getDictionary(Astro.props.lang);
   </div>
 
   <div class="container-page">
-    <p
-      class="hero-fade mb-6 flex items-center gap-3 font-mono text-eyebrow text-accent uppercase"
-      style="--delay: 0ms"
-    >
+    <p class="hero-fade mb-6 flex items-center gap-3 font-mono text-eyebrow text-accent uppercase">
       <span class="h-px w-8 bg-accent/60" aria-hidden="true"></span>
       {t.hero.eyebrow}
     </p>
@@ -46,10 +43,7 @@ const t = getDictionary(Astro.props.lang);
     <!-- Sin animación de entrada: en móvil este párrafo suele ser el elemento LCP. -->
     <p class="mt-7 max-w-(--container-prose) text-lead text-ink-secondary">{t.hero.lead}</p>
 
-    <div
-      class="hero-fade mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
-      style="--delay: 500ms"
-    >
+    <div class="hero-fade mt-10 flex flex-col gap-3 [--delay:500ms] sm:flex-row sm:items-center">
       <Button
         href={buildWhatsAppUrl(t.whatsapp.defaultMessage)}
         variant="whatsapp"
@@ -70,9 +64,7 @@ const t = getDictionary(Astro.props.lang);
       </Button>
     </div>
 
-    <p class="hero-fade mt-5 text-sm text-ink-muted" style="--delay: 600ms">
-      {t.hero.note}
-    </p>
+    <p class="hero-fade mt-5 text-sm text-ink-muted [--delay:600ms]">{t.hero.note}</p>
   </div>
 </section>
 

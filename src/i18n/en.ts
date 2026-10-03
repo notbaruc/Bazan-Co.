@@ -7,9 +7,13 @@ import type { Dictionary } from './es';
 
 const en: Dictionary = {
   meta: {
-    title: 'Bazan & Co. — Premium web design, SEO and landing pages from Chihuahua, Mexico',
+    title: 'Premium Web Design & SEO from Chihuahua, Mexico | Bazan & Co.',
     description:
-      'Web engineering studio in Chihuahua, Mexico, working remotely worldwide. Fast, bilingual, custom-built websites for local businesses and SMBs that want more customers.',
+      'Web engineering from Chihuahua, Mexico: fast, bilingual, custom-built websites, technical SEO and landing pages that turn visitors into customers. Remote worldwide.',
+    ogLocale: 'en_US',
+    ogImage: '/og/bazan-co-en.jpg',
+    ogImageAlt:
+      'Bazan & Co.: “We don’t build web pages. We engineer conversion machines.” Web engineering from Chihuahua, Mexico.',
   },
   language: {
     name: 'English',
@@ -350,9 +354,18 @@ const en: Dictionary = {
         service: 'Choose a service or "Something else / I\'m not sure".',
         summary: 'Please fix the highlighted fields to send your message.',
       },
-      notConnected:
-        'The form will be connected in the next phase. Meanwhile, message us on WhatsApp.',
       responseTime: 'We reply within 24 hours.',
+      sending: 'Sending…',
+      successTitle: 'Message sent!',
+      successText:
+        "Thanks for reaching out. We'll reply within 24 hours. If it's urgent, message us on WhatsApp.",
+      errorText:
+        "We couldn't send your message. Check your connection and try again, or send it to us on WhatsApp.",
+      whatsappAlt: "I'd rather send it on WhatsApp",
+      whatsappTemplate: "Hi, I'm {name}. I'm interested in: {service}. {message}",
+      privacyNote: 'By sending this you accept our',
+      privacyLink: 'privacy notice',
+      honeypot: "Don't fill this out if you're human",
     },
   },
   cookies: {

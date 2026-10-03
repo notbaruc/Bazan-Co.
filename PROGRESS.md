@@ -3,14 +3,14 @@
 > Se lee al iniciar cada sesión junto con `PLAN.md`. Se actualiza al cerrar cada fase.
 > Rama de trabajo: `redesign/premium` (nunca merge a `main` sin aprobación del usuario).
 
-**Estado actual:** ejecución autónoma en curso (2026-10-03). Fases 1–4 cerradas.
+**Estado actual:** ejecución autónoma en curso (2026-10-03). Fases 1–5 cerradas.
 
 ## Checklist de fases
 - [x] **Fase 1 — Base:** scaffold, design tokens, estructura de carpetas, linting, reporte de tamaño.
 - [x] **Fase 2 — Layout y secciones estáticas** con correcciones de contenido.
 - [x] **Fase 3 — Animaciones y micro-interacciones.**
 - [x] **Fase 4 — i18n ES/EN.**
-- [ ] **Fase 5 — SEO, analítica, formulario y WhatsApp.**
+- [x] **Fase 5 — SEO, analítica, formulario y WhatsApp.**
 - [ ] **Fase 6 — Optimización final y auditoría de calidad.**
 
 ## Métricas por fase
@@ -19,6 +19,7 @@
 | Sitio actual en producción (referencia) | 9.5 KB sin minificar + GA | 28.9 KB sin minificar | 35.7 KB sin minificar | Google Fonts, 12 pesos | **78 / 96 / 100 / 100** | 3.88 s | 0 | 225 ms |
 | Fase 1 (página de tokens) | 0 KB | incluido en HTML | 4.3 KB | 4 woff2 · 80.5 KB total, 1 precargada (20.5 KB) | n/a (página temporal) | — | — | — |
 | Fase 2 (landing estática) | 0 KB al cargar · 46.9 KB diferidos (isla del formulario, `client:visible`) | incluido en HTML | 23.8 KB | 2 precargadas (42.1 KB) | **100 / 100 / 100 / 100** | 1.51 s | 0 | 16 ms |
+| Fase 5 (SEO, GA, formulario, CSP) | 3.0 KB al cargar (motion + idioma + analítica) · isla del formulario diferida (51 KB con React) · GA solo tras consentimiento | incluido en HTML | 29.4 KB (head 12.6 KB) | 2 precargadas (42.1 KB) | **ES 99/100/100/100 · EN 100/100/100/100** | 1.66 s | 0 | 0 ms |
 | Fase 4 (i18n, `/` y `/en/`) | igual que Fase 3 (+ script de idioma inline, <1 KB) | incluido en HTML | 27 KB por idioma | 2 precargadas (42.1 KB) | **ES 100/100/100/100 · EN 100/100/100/100** | 1.59 s | 0 | 26–40 ms |
 | Fase 3 (animaciones) | 1.6 KB al cargar (todos) · +6.5 KB solo escritorio en idle (Lenis 5.5 + efectos de puntero 1.0) · isla del formulario diferida | incluido en HTML | 26.6 KB | 2 precargadas (42.1 KB) | **100 / 100 / 100 / 100** · escritorio 100/100/100/100 | 1.58 s | 0 | 0 ms |
 
@@ -105,6 +106,17 @@ Presupuesto de la fase: ≤ 8 KB gz de JS nuevo en escritorio, ≤ 2 KB en móvi
 - **SEO de idiomas:** `<html lang>`, `canonical` y `hreflang` (`es`, `en`, `x-default` → español) en cada página. Aviso de privacidad en inglés marcado como traducción de cortesía (prevalece el español) y actualizado para mencionar que se guarda el idioma preferido.
 - Cambio de idioma sin CLS: son páginas estáticas separadas. CLS medido = 0 en ambas.
 
+## Fase 5 — hecho
+- **Contenido indexable:** todo el HTML se genera en el build (Astro SSG); la isla del formulario también se prerenderiza.
+- **SEO:** títulos y descripciones nuevos por idioma (≤ 60 / ≤ 160 caracteres), `canonical`, `hreflang`, Open Graph completo (imagen 1200×630 por idioma generada con la tipografía y paleta del sitio, `og:locale` + alterno), Twitter Card `summary_large_image`, **verificación de Search Console conservada** (`vkZJiBpk1G6FxHcrMStEB7mfx0OqFYhLGhKE58p7JNI`).
+- **JSON-LD** (`@graph`): `ProfessionalService` (nombre, URL, logo, imagen, email, teléfono, Chihuahua/MX, `areaServed`, `knowsLanguage`, `serviceType`), `WebSite` y `WebPage` por idioma. Va al final del `<body>` para no engordar el `<head>`.
+- **`sitemap.xml`** con las 4 URLs y alternos `xhtml:link` (es, en, x-default) y **`robots.txt`** con la URL del sitemap (ambos generados en el build).
+- **Google Analytics 4** (mismo ID `G-CN941SX6Q7`, configurable con `PUBLIC_GA_ID`): **solo se descarga si el visitante acepta cookies**, en idle; Consent Mode v2 (`ad_*` denegados); si después rechaza, se revoca y se borran las cookies `_ga*`. **Eventos de conversión:** `whatsapp_click` (con `source`: hero, fab, final-cta, contact, footer, form), `generate_lead` (envío exitoso del formulario, con `service`), `project_click` y `language_change`; todos con `language`.
+- **Formulario con Netlify Forms:** `data-netlify`, honeypot (`bot-field`), campos `form-name` y `language` ocultos; validación en cliente; estados **enviando** (spinner, `aria-busy`, campos deshabilitados), **éxito** (mensaje con foco para lectores de pantalla) y **error** (mensaje `role="alert"` y reintento); sin JS funciona con validación nativa y envío normal a Netlify. **Alternativa a WhatsApp** que arma el mensaje con nombre, servicio elegido y mensaje. Nota de aviso de privacidad junto al botón.
+- **Pruebas E2E** (Puppeteer + Edge, ES y EN, 34 comprobaciones): validación y foco, POST con honeypot e idioma, éxito con `generate_lead`, error recuperable, WhatsApp con servicio, sin violaciones de CSP ni errores JS. GA verificado: no carga nada sin consentimiento.
+- **Seguridad:** CSP de Astro con hashes por página (meta) para scripts y estilos, `default-src 'self'`, GA permitido; en `netlify.toml`: `frame-ancestors 'none'`, `upgrade-insecure-requests`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Cross-Origin-Opener-Policy`. Se quitaron todos los atributos `style` inline para que la CSP no necesite `unsafe-inline`.
+- **Compuerta superada:** ES 99/100/100/100 y EN 100/100/100/100, LCP 1.66 s, CLS 0, TBT 0.
+
 ## Decisiones tomadas
 - Deploy en Netlify con build estático. *(usuario)*
 - Paleta **A1 "Tinta y Oro"** y tipografía **B2 (Instrument Serif + Geist)**. *(usuario)*
@@ -132,6 +144,11 @@ Presupuesto de la fase: ≤ 8 KB gz de JS nuevo en escritorio, ≤ 2 KB en móvi
 - `[REVISAR]` **Detección por navegador = sugerencia, no redirección automática.** Googlebot rastrea con idioma inglés: una redirección automática por idioma del navegador le ocultaría la versión en español. La redirección solo ocurre con una preferencia elegida por el visitante.
 - `[REVISAR]` Los `id` de las secciones (`#servicios`, `#portafolio`…) son los mismos en ambos idiomas para que el cambio de idioma conserve la sección.
 - `[REVISAR]` Variantes de idioma genéricas (`es`, `en`) en `lang` y `hreflang`; `x-default` apunta al español.
+- `[REVISAR]` **GA4 solo con consentimiento previo.** Esto cambia tus números respecto al sitio actual (que mide a todos sin preguntar): verás menos visitas, pero es coherente con el aviso de privacidad y con el banner. El ID es el mismo, así que el histórico continúa en la misma propiedad.
+- `[REVISAR]` **CSP con hashes:** sube ~80 ms el FCP simulado (los hashes no se comprimen); el LCP sigue en 1.66 s. Se prefirió la seguridad.
+- `[REVISAR]` Sin JS, el envío del formulario muestra la página de confirmación genérica de Netlify (no se creó una página de "gracias" propia para no agregar alcance).
+- `[REVISAR]` El número de WhatsApp conserva el formato del sitio anterior (`5216143436765`). WhatsApp acepta también `526143436765`; si notas problemas al abrir el chat, cámbialo en `src/lib/site.ts`.
+- `[REVISAR]` Títulos SEO: "Diseño web premium y SEO en Chihuahua | Bazan & Co." / "Premium Web Design & SEO from Chihuahua, Mexico | Bazan & Co.".
 - `[REVISAR]` Botón de WhatsApp: ícono blanco sobre el verde oficial (#25D366) por reconocimiento de marca; el contraste del ícono es 2:1 (es un logotipo, el botón tiene nombre accesible).
 
 ## Pendientes del usuario
@@ -149,6 +166,12 @@ Presupuesto de la fase: ≤ 8 KB gz de JS nuevo en escritorio, ≤ 2 KB en móvi
 - [ ] Confirmar el compromiso "respuesta en menos de 24 horas".
 - [ ] Confirmar el email `contacto@bazanco.com` (¿el dominio existe y recibe correo?) y el número de WhatsApp `+52 614 343 6765`.
 - [ ] Redes o perfiles profesionales para enlazar (LinkedIn, GitHub…), si los hay.
+
+### Configuración en Netlify (antes de publicar)
+- [ ] **Activar la detección de formularios** en Netlify (Site configuration → Forms → *Enable form detection*); en sitios nuevos viene apagada.
+- [ ] Configurar la **notificación por email** de envíos del formulario (Forms → Form notifications).
+- [ ] (Opcional) Definir `PUBLIC_GA_ID` en Environment variables si cambias de propiedad de GA.
+- [ ] En GA4, marcar `generate_lead` y `whatsapp_click` como **eventos clave** (conversiones).
 
 ### Para fases posteriores
 - [ ] ¿Dominio propio (p. ej. `bazanco.com`)?

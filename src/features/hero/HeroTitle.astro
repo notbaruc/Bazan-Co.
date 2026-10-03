@@ -20,14 +20,10 @@ const lines = text
   });
 ---
 
-{lines.map((line, index) =>
+{lines.map((line) =>
   line.accent ? (
-    <em class="hero-line block text-accent italic" style={`--i: ${index}`}>
-      {line.text}
-    </em>
+    <em class="hero-line block text-accent italic">{line.text}</em>
   ) : (
-    <span class="hero-line block" style={`--i: ${index}`}>
-      {line.text}
-    </span>
+    <span class="hero-line block">{line.text}</span>
   ),
 )}

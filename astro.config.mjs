@@ -11,6 +11,26 @@ export default defineConfig({
     // El CSS completo es pequeño: inline evita una petición que bloquea el render.
     inlineStylesheets: 'always',
   },
+  security: {
+    // CSP con hashes generados por Astro para cada script y estilo propio (meta en cada página).
+    // Google Analytics solo se carga tras el consentimiento; sus dominios están permitidos aquí.
+    csp: {
+      directives: [
+        "default-src 'self'",
+        "img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com",
+        "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
+        "font-src 'self'",
+        "form-action 'self'",
+        "base-uri 'self'",
+        "object-src 'none'",
+      ],
+      scriptDirective: {
+        resources: ["'self'", 'https://www.googletagmanager.com'],
+      },
+    },
+  },
+  // Sin markdown en el sitio: se desactiva Shiki (usa estilos inline incompatibles con la CSP).
+  markdown: { syntaxHighlight: false },
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()],

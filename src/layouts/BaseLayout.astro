@@ -14,6 +14,8 @@ import {
   type Locale,
   type RouteName,
 } from '@/i18n';
+import { buildStructuredData } from '@/lib/seo';
+import { site as business } from '@/lib/site';
 import '@/styles/global.css';
 
 interface Props {
@@ -37,6 +39,14 @@ const alternates = route
   ? locales.map((locale) => ({ locale, href: new URL(routes[route][locale], site).href }))
   : [];
 const xDefault = route ? new URL(routes[route][defaultLocale], site).href : undefined;
+const siteUrl = site.href.replace(/\/$/, '');
+const ogImage = new URL(t.meta.ogImage, site).href;
+const ogAlternateLocale = getDictionary(otherLocale(lang)).meta.ogLocale;
+const structuredData = canonical
+  ? JSON.stringify(buildStructuredData({ lang, pageUrl: canonical, siteUrl, t }))
+  : undefined;
+/** Verificación de Google Search Console (la misma del sitio anterior). */
+const googleSiteVerification = 'vkZJiBpk1G6FxHcrMStEB7mfx0OqFYhLGhKE58p7JNI';
 ---
 
 <!doctype html>
@@ -80,6 +90,22 @@ const xDefault = route ? new URL(routes[route][defaultLocale], site).href : unde
       })();
     </script>
     <meta name="theme-color" content="#07090f" />
+    <meta name="google-site-verification" content={googleSiteVerification} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:locale" content={t.meta.ogLocale} />
+    <meta property="og:locale:alternate" content={ogAlternateLocale} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={t.meta.ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon-32.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -102,9 +128,13 @@ const xDefault = route ? new URL(routes[route][defaultLocale], site).href : unde
     <WhatsAppFab lang={lang} />
     <CookieBanner lang={lang} privacyHref={privacyHref} />
     <LanguageSuggestion lang={lang} href={switchHref} />
+    <!-- Datos estructurados al final: no retrasan el primer render (el <head> queda más liviano). -->
+    {structuredData && <script type="application/ld+json" set:html={structuredData} />}
     <script>
+      import { initAnalytics } from '@/lib/analytics';
       import { initMotion } from '@/lib/motion';
       initMotion();
+      initAnalytics();
     </script>
   </body>
 </html>

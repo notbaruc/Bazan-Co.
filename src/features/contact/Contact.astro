@@ -4,7 +4,7 @@ import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon.astro';
 import { buildWhatsAppUrl } from '@/features/whatsapp/whatsapp';
-import { getDictionary, type Locale } from '@/i18n';
+import { getDictionary, routes, type Locale } from '@/i18n';
 import { site } from '@/lib/site';
 import ContactForm from './ContactForm';
 
@@ -73,7 +73,12 @@ const t = dict.contact;
     </div>
 
     <div data-reveal>
-      <ContactForm client:visible copy={t.form} />
+      <ContactForm
+        client:visible
+        copy={t.form}
+        lang={Astro.props.lang}
+        privacyHref={routes.privacy[Astro.props.lang]}
+      />
     </div>
   </div>
 </Section>

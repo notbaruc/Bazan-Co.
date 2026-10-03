@@ -6,6 +6,19 @@
 [build.environment]
   NODE_VERSION = "24"
 
+# ---------- Seguridad ----------
+# La política principal (script-src/style-src con hashes) va en un <meta> que genera Astro en cada
+# página. Aquí van las directivas que un <meta> no admite y el resto de cabeceras de seguridad.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "frame-ancestors 'none'; upgrade-insecure-requests"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+    Cross-Origin-Opener-Policy = "same-origin"
+
 # ---------- Caché ----------
 # Assets con hash en el nombre (JS, CSS, fuentes, imágenes optimizadas): inmutables 1 año.
 [[headers]]
@@ -16,6 +29,16 @@
 # Archivos de /public sin hash (favicons, OG, manifest): 1 día + revalidación.
 [[headers]]
   for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/og/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/favicon.ico"
   [headers.values]
     Cache-Control = "public, max-age=86400, must-revalidate"
 
