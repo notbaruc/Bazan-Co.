@@ -16,12 +16,12 @@ const t = getDictionary(lang);
 
 <header id="site-header" class="fixed inset-x-0 top-0 z-50">
   <div
-    class="absolute inset-0 border-b border-line bg-bg/85 backdrop-blur-md"
+    class="nav-bg absolute inset-0 border-b border-line bg-bg/80 backdrop-blur-md"
     aria-hidden="true"
   ></div>
   <nav
     aria-label={t.a11y.mainNav}
-    class="relative container-page flex h-(--nav-height) items-center justify-between gap-6"
+    class="nav-inner relative container-page flex h-(--nav-height) items-center justify-between gap-6"
   >
     <a href={`${homeHref}#inicio`} class="-m-2 rounded-lg p-2">
       <Logo srSuffix={t.a11y.homeSuffix} />
@@ -95,6 +95,26 @@ const t = getDictionary(lang);
     </ul>
   </div>
 </header>
+
+<style>
+  /* Navbar compacta: arriba de todo es transparente y un poco más baja; al hacer scroll aparece el
+     fondo difuminado y el contenido sube (solo opacity/transform). Sin JS el fondo siempre es visible. */
+  .nav-bg {
+    transition: opacity var(--dur-slow) var(--ease-out-expo);
+  }
+
+  .nav-inner {
+    transition: transform var(--dur-slow) var(--ease-out-expo);
+  }
+
+  :global(html.js) #site-header:not(.is-scrolled):not(:has([aria-expanded='true'])) .nav-bg {
+    opacity: 0;
+  }
+
+  :global(html.js) #site-header:not(.is-scrolled) .nav-inner {
+    transform: translateY(0.5rem);
+  }
+</style>
 
 <script>
   import { initNavbar } from './navbar';

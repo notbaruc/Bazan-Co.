@@ -30,6 +30,14 @@ const t = getDictionary(lang);
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#07090f" />
+    <script is:inline>
+      // Antes del primer render: marca que hay JS y activa las animaciones solo si el usuario
+      // no pidió reducir movimiento.
+      document.documentElement.classList.add('js');
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('motion');
+      }
+    </script>
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon-32.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -51,5 +59,9 @@ const t = getDictionary(lang);
     <Footer lang={lang} homeHref={homeHref} privacyHref={privacyHref} />
     <WhatsAppFab lang={lang} />
     <CookieBanner lang={lang} privacyHref={privacyHref} />
+    <script>
+      import { initMotion } from '@/lib/motion';
+      initMotion();
+    </script>
   </body>
 </html>

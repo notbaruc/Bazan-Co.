@@ -48,7 +48,7 @@ const es = {
     items: [
       {
         value: '<2 s',
-        number: 2,
+        number: null,
         prefix: '<',
         suffix: ' s',
         label: 'objetivo de carga en celular',
@@ -73,6 +73,23 @@ const es = {
       'Formación en Ingeniería en Desarrollo de Software (UTCH BIS)',
       'Inglés avanzado',
       'Chihuahua, México · servicio remoto global',
+    ],
+  },
+  tech: {
+    label: 'Tecnologías y herramientas con las que trabajamos',
+    items: [
+      'Astro',
+      'React',
+      'TypeScript',
+      'Tailwind CSS',
+      'JavaScript',
+      'HTML',
+      'CSS',
+      'Netlify',
+      'Google Analytics 4',
+      'Google Search Console',
+      'Lighthouse',
+      'Schema.org',
     ],
   },
   problem: {

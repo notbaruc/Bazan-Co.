@@ -1,0 +1,59 @@
+---
+import { getDictionary, type Locale } from '@/i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const t = getDictionary(Astro.props.lang).tech;
+---
+
+<section aria-label={t.label} class="overflow-hidden border-y border-line py-6">
+  <div class="marquee flex w-max" data-loop data-paused>
+    {[false, true].map((duplicate) => (
+      <ul
+        class="flex shrink-0 items-center gap-10 pr-10"
+        aria-hidden={duplicate ? 'true' : undefined}
+      >
+        {t.items.map((item) => (
+          <li class="flex items-center gap-10 font-mono text-sm whitespace-nowrap text-ink-muted">
+            {item}
+            <span class="size-1 rounded-full bg-accent/60" aria-hidden="true" />
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .marquee {
+      animation: marquee 40s linear infinite;
+    }
+
+    .marquee:hover {
+      animation-play-state: paused;
+    }
+  }
+
+  /* Con movimiento reducido la lista se muestra completa, sin desplazamiento. */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      width: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-inline: var(--spacing-gutter);
+    }
+
+    .marquee > ul[aria-hidden] {
+      display: none;
+    }
+
+    .marquee > ul {
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 0.75rem;
+    }
+  }
+</style>

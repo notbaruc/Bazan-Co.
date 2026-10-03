@@ -1,0 +1,33 @@
+---
+/**
+ * Titular del hero con reveal escalonado por línea (CSS puro, sin esperar JS).
+ * Respeta el énfasis `*así*` de los textos traducidos: esa parte va en su propia línea, en itálica dorada.
+ * Por línea y no por palabra: animar cada palabra costaba ~100 ms de bloqueo con CPU ×4.
+ */
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+
+const lines = text
+  .split(/(\*[^*]+\*)/g)
+  .map((part) => part.trim())
+  .filter((part) => part.length > 0)
+  .map((part) => {
+    const accent = part.startsWith('*') && part.endsWith('*');
+    return { accent, text: accent ? part.slice(1, -1) : part };
+  });
+---
+
+{lines.map((line, index) =>
+  line.accent ? (
+    <em class="hero-line block text-accent italic" style={`--i: ${index}`}>
+      {line.text}
+    </em>
+  ) : (
+    <span class="hero-line block" style={`--i: ${index}`}>
+      {line.text}
+    </span>
+  ),
+)}

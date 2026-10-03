@@ -136,3 +136,137 @@
   margin-inline: auto;
   padding-inline: var(--spacing-gutter);
 }
+
+/* ---------------------------------------------------------------------------
+ * Movimiento (Fase 3). Solo transform/opacity. Con reduced-motion no se aplica nada:
+ * la clase `motion` la pone el script inline del <head> únicamente si el usuario no
+ * pidió reducir el movimiento.
+ * ------------------------------------------------------------------------- */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@keyframes line-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+}
+
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@layer components {
+  /* Scroll-reveal: oculto solo si hay JS + motion; si el módulo no carga, se muestra a los 2.5 s. */
+  html.motion [data-reveal] {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition:
+      opacity var(--dur-reveal) var(--ease-out-expo),
+      transform var(--dur-reveal) var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  html.motion:not(.motion-ok) [data-reveal] {
+    animation: reveal-failsafe 0s 2.5s forwards;
+  }
+
+  html.motion [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-reveal]:nth-child(2) {
+    --reveal-delay: 90ms;
+  }
+
+  [data-reveal]:nth-child(3) {
+    --reveal-delay: 180ms;
+  }
+
+  [data-reveal]:nth-child(n + 4) {
+    --reveal-delay: 270ms;
+  }
+
+  /* Secciones fuera de pantalla: el navegador no calcula su estilo/layout hasta que se acercan
+     (reduce el trabajo del hilo principal en la carga). `auto` recuerda el tamaño real ya medido. */
+  .defer-render {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+
+  /* Titular del hero: cada línea entra con un retardo escalonado (CSS puro, sin esperar JS). */
+  html.motion .hero-line {
+    animation: line-in 1s var(--ease-out-expo) both;
+    animation-delay: calc(var(--i) * 140ms + 60ms);
+  }
+
+  html.motion .hero-fade {
+    animation: fade-up 0.8s var(--ease-out-expo) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  /* Animaciones en bucle: se pausan fuera de pantalla (data-paused lo pone pause-offscreen.ts). */
+  [data-loop][data-paused],
+  [data-loop][data-paused] * {
+    animation-play-state: paused !important;
+  }
+
+  /* Cursor: anillo decorativo que sigue al puntero; el cursor nativo se mantiene. */
+  .cursor-ring {
+    position: fixed;
+    top: -14px;
+    left: -14px;
+    z-index: 70;
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgb(217 180 90 / 0.6);
+    border-radius: 9999px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--dur-base) ease;
+  }
+
+  .cursor-ring.is-visible {
+    opacity: 1;
+  }
+}
+
+/* Lenis (estilos mínimos recomendados). */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Red de seguridad: con movimiento reducido, ninguna transición o animación dura más de un instante. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

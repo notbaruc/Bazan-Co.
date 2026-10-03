@@ -1,10 +1,10 @@
 ---
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
-import RichText from '@/components/ui/RichText.astro';
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon.astro';
 import { buildWhatsAppUrl } from '@/features/whatsapp/whatsapp';
 import { getDictionary, type Locale } from '@/i18n';
+import HeroTitle from './HeroTitle.astro';
 
 interface Props {
   lang: Locale;
@@ -18,13 +18,20 @@ const t = getDictionary(Astro.props.lang);
   aria-labelledby="inicio-title"
   class="relative isolate overflow-hidden pt-[calc(var(--nav-height)+3.5rem)] pb-16 md:pt-[calc(var(--nav-height)+6rem)] md:pb-24"
 >
-  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true" data-loop>
+    <div class="hero-aurora absolute inset-0">
+      <span class="aurora-blob aurora-blob--gold"></span>
+      <span class="aurora-blob aurora-blob--steel"></span>
+    </div>
     <div class="hero-grid absolute inset-0"></div>
-    <div class="hero-glow absolute inset-0"></div>
+    <div class="hero-grain absolute inset-0"></div>
   </div>
 
   <div class="container-page">
-    <p class="mb-6 flex items-center gap-3 font-mono text-eyebrow text-accent uppercase">
+    <p
+      class="hero-fade mb-6 flex items-center gap-3 font-mono text-eyebrow text-accent uppercase"
+      style="--delay: 0ms"
+    >
       <span class="h-px w-8 bg-accent/60" aria-hidden="true"></span>
       {t.hero.eyebrow}
     </p>
@@ -33,28 +40,39 @@ const t = getDictionary(Astro.props.lang);
       id="inicio-title"
       class="max-w-[15ch] font-display text-display font-normal tracking-[-0.02em] md:max-w-[18ch]"
     >
-      <RichText text={t.hero.title} accentClass="block italic text-accent" />
+      <HeroTitle text={t.hero.title} />
     </h1>
 
+    <!-- Sin animación de entrada: en móvil este párrafo suele ser el elemento LCP. -->
     <p class="mt-7 max-w-(--container-prose) text-lead text-ink-secondary">{t.hero.lead}</p>
 
-    <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+    <div
+      class="hero-fade mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
+      style="--delay: 500ms"
+    >
       <Button
         href={buildWhatsAppUrl(t.whatsapp.defaultMessage)}
         variant="whatsapp"
         external
+        magnetic
         data-wa-source="hero"
       >
         <WhatsAppIcon class="size-5" />
         {t.hero.primaryCta}
       </Button>
-      <Button href="#contacto" variant="secondary">
+      <Button href="#contacto" variant="secondary" magnetic>
         {t.hero.secondaryCta}
-        <Icon name="arrow-right" class="size-4" strokeWidth={2} />
+        <Icon
+          name="arrow-right"
+          class="size-4 transition-transform duration-(--dur-base) ease-out-expo group-hover/btn:translate-x-1"
+          strokeWidth={2}
+        />
       </Button>
     </div>
 
-    <p class="mt-5 text-sm text-ink-muted">{t.hero.note}</p>
+    <p class="hero-fade mt-5 text-sm text-ink-muted" style="--delay: 600ms">
+      {t.hero.note}
+    </p>
   </div>
 </section>
 
@@ -67,9 +85,53 @@ const t = getDictionary(Astro.props.lang);
     mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 75%);
   }
 
-  .hero-glow {
-    background:
-      radial-gradient(60% 50% at 85% 10%, rgb(217 180 90 / 0.14), transparent 70%),
-      radial-gradient(50% 45% at 10% 40%, rgb(91 123 181 / 0.14), transparent 70%);
+  /* Aurora: dos capas de gradiente radial que se desplazan con transform (sin filter: blur). */
+  .aurora-blob {
+    position: absolute;
+    width: 80vmax;
+    height: 80vmax;
+    border-radius: 9999px;
+    will-change: transform;
+  }
+
+  .aurora-blob--gold {
+    top: -45vmax;
+    right: -30vmax;
+    background: radial-gradient(closest-side, rgb(217 180 90 / 0.2), transparent);
+  }
+
+  .aurora-blob--steel {
+    top: -15vmax;
+    left: -45vmax;
+    background: radial-gradient(closest-side, rgb(91 123 181 / 0.2), transparent);
+  }
+
+  /* En móvil la aurora queda fija: animarla costaba ~80 ms de bloqueo con CPU ×4. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
+    .aurora-blob--gold {
+      animation: drift-gold 26s var(--ease-in-out) infinite alternate;
+    }
+
+    .aurora-blob--steel {
+      animation: drift-steel 32s var(--ease-in-out) infinite alternate;
+    }
+  }
+
+  @keyframes drift-gold {
+    to {
+      transform: translate(-12vmax, 10vmax) scale(1.15);
+    }
+  }
+
+  @keyframes drift-steel {
+    to {
+      transform: translate(14vmax, -6vmax) scale(0.9);
+    }
+  }
+
+  /* Grano: ruido SVG estático en mosaico (se rasteriza una vez). */
+  .hero-grain {
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 </style>

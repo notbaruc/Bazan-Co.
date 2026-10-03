@@ -10,6 +10,8 @@ type Props = HTMLAttributes<'a'> & {
   variant?: Variant;
   size?: Size;
   external?: boolean;
+  /** Se desplaza levemente hacia el puntero (solo escritorio, ver lib/motion/pointer-effects). */
+  magnetic?: boolean;
   class?: string;
 };
 
@@ -18,6 +20,7 @@ const {
   variant = 'primary',
   size = 'md',
   external = false,
+  magnetic = false,
   class: className,
   ...rest
 } = Astro.props;
@@ -26,7 +29,7 @@ const variants: Record<Variant, string> = {
   primary: 'bg-accent text-ink-inverse hover:bg-accent-hi shadow-glow',
   secondary:
     'border border-line-strong bg-white/[0.03] text-ink hover:border-accent/50 hover:bg-white/[0.06]',
-  whatsapp: 'bg-whatsapp text-[#03140a] hover:brightness-110',
+  whatsapp: 'bg-whatsapp text-[#03140a] hover:bg-[#3ee27f]',
   ghost: 'text-ink hover:text-accent',
 };
 
@@ -35,9 +38,14 @@ const sizes: Record<Size, string> = {
   sm: 'min-h-11 px-4 text-sm',
 };
 
+// Brillo que cruza el botón al pasar el mouse (solo transform).
+const shine =
+  'overflow-hidden after:pointer-events-none after:absolute after:inset-y-0 after:-left-1/2 after:w-1/2 after:-skew-x-12 after:-translate-x-full after:bg-linear-to-r after:from-transparent after:via-white/30 after:to-transparent after:transition-transform after:duration-700 after:ease-out-expo hover:after:translate-x-[400%] motion-reduce:after:hidden';
+
 const classes = [
   'group/btn relative inline-flex items-center justify-center gap-2 rounded-full font-medium',
-  'transition-[background-color,border-color,color,filter] duration-(--dur-base) ease-out-expo',
+  'transition-[background-color,border-color,color,scale,transform] duration-(--dur-base) ease-out-expo active:scale-[0.98]',
+  (variant === 'primary' || variant === 'whatsapp') && shine,
   variants[variant],
   sizes[size],
   className,
@@ -48,6 +56,7 @@ const classes = [
   href={href}
   class:list={classes}
   {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+  {...(magnetic ? { 'data-magnetic': '' } : {})}
   {...rest}
 >
   <slot />

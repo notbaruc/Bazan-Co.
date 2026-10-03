@@ -3,12 +3,12 @@
 > Se lee al iniciar cada sesión junto con `PLAN.md`. Se actualiza al cerrar cada fase.
 > Rama de trabajo: `redesign/premium` (nunca merge a `main` sin aprobación del usuario).
 
-**Estado actual:** ejecución autónoma en curso (2026-10-03). Fases 1–2 cerradas.
+**Estado actual:** ejecución autónoma en curso (2026-10-03). Fases 1–3 cerradas.
 
 ## Checklist de fases
 - [x] **Fase 1 — Base:** scaffold, design tokens, estructura de carpetas, linting, reporte de tamaño.
 - [x] **Fase 2 — Layout y secciones estáticas** con correcciones de contenido.
-- [ ] **Fase 3 — Animaciones y micro-interacciones.**
+- [x] **Fase 3 — Animaciones y micro-interacciones.**
 - [ ] **Fase 4 — i18n ES/EN.**
 - [ ] **Fase 5 — SEO, analítica, formulario y WhatsApp.**
 - [ ] **Fase 6 — Optimización final y auditoría de calidad.**
@@ -19,7 +19,10 @@
 | Sitio actual en producción (referencia) | 9.5 KB sin minificar + GA | 28.9 KB sin minificar | 35.7 KB sin minificar | Google Fonts, 12 pesos | **78 / 96 / 100 / 100** | 3.88 s | 0 | 225 ms |
 | Fase 1 (página de tokens) | 0 KB | incluido en HTML | 4.3 KB | 4 woff2 · 80.5 KB total, 1 precargada (20.5 KB) | n/a (página temporal) | — | — | — |
 | Fase 2 (landing estática) | 0 KB al cargar · 46.9 KB diferidos (isla del formulario, `client:visible`) | incluido en HTML | 23.8 KB | 2 precargadas (42.1 KB) | **100 / 100 / 100 / 100** | 1.51 s | 0 | 16 ms |
+| Fase 3 (animaciones) | 1.6 KB al cargar (todos) · +6.5 KB solo escritorio en idle (Lenis 5.5 + efectos de puntero 1.0) · isla del formulario diferida | incluido en HTML | 26.6 KB | 2 precargadas (42.1 KB) | **100 / 100 / 100 / 100** · escritorio 100/100/100/100 | 1.58 s | 0 | 0 ms |
 
+> **Prueba de estrés con CPU ×4 real** (Lighthouse `throttlingMethod: devtools`, mediana de 5): Fase 2 = 94 / LCP 2.10 s / TBT 228 ms; Fase 3 = 93 / LCP 1.79 s / TBT 275 ms (rango 92–95; la máquina de pruebas introduce bastante varianza).
+>
 > Lighthouse 13 móvil (Moto G Power simulado, 4G lento, CPU ×4), mediana de 3 corridas, contra `dist/` servido con brotli (simula Netlify) usando Microsoft Edge (no hay Chrome en esta máquina). La referencia del sitio actual se midió contra producción. Peso total transferido de la home: 103 KB (antes 436 KB).
 
 ## Fase 1 — hecho
@@ -43,6 +46,54 @@
 - Favicons (`favicon.ico`, 32 px, apple-touch) generados del logo actual.
 - **Compuerta de calidad superada:** Lighthouse móvil 100/100/100/100, LCP 1.51 s, CLS 0, TBT 16 ms. INP: no lo mide Lighthouse en navegación; TBT ≈ 0 y casi sin JS en la carga (se mide en la Fase 6).
 
+## Fase 3 — plan de efectos (escrito antes de implementar)
+Principios: solo `transform`/`opacity`; nada bloquea el primer render; todo efecto de puntero solo en `(hover: hover) and (pointer: fine)`; con `prefers-reduced-motion: reduce` no hay movimiento y el contenido es visible; los módulos de escritorio se cargan con `import()` dinámico (el móvil no los descarga).
+
+| Efecto | Implementación | Costo JS estimado (gz) | Riesgo LCP / CLS / INP |
+|---|---|---|---|
+| Reveal del titular por palabra | CSS puro (`@keyframes`, retardo por palabra), arranca sin JS | 0 KB | **LCP: medio** (el `h1` es candidato a LCP). Se mide; si empeora >150 ms se pasa a solo `transform`. CLS: nulo |
+| Fondo aurora + grano + grid | Capas con `radial-gradient` animadas con `transform` (sin `filter: blur`), grano SVG estático; pausa fuera de pantalla | <0.5 KB | GPU en gama media: medio → 2 capas, animación lenta, pausada fuera de viewport |
+| CTA magnético | Vanilla, rAF, `translate` ≤ 6 px | ~0.5 KB (solo escritorio) | INP: bajo |
+| Smooth scroll (Lenis) | `import()` dinámico solo en escritorio y sin reduced-motion | ~4 KB | INP: bajo; en móvil se usa scroll nativo |
+| Scroll-reveal escalonado | IntersectionObserver + clase; estado inicial oculto solo si JS y motion activos | ~0.5 KB | CLS: nulo (transform) |
+| Contadores | rAF al entrar en viewport, solo cifras verificables (100 %, 95+); "<2 s" queda fijo | ~0.4 KB | CLS: bajo (`tabular-nums`) |
+| Tarjetas de servicios: tilt 3D + spotlight + hover | Vanilla; spotlight = capa con gradiente movida con `transform` | ~0.8 KB (solo escritorio) | INP: bajo (rAF, listeners pasivos) |
+| Portafolio: parallax sutil + preview en hover | Parallax con rAF solo en tarjetas visibles (escritorio); hover = escala + overlay con opacidad | ~0.5 KB | Bajo |
+| Navbar compacta con blur | Clase al pasar 24 px: capa de fondo con opacidad + desplazamiento con `transform` | ~0.2 KB | Nulo |
+| Cursor personalizado | Anillo que sigue al puntero (lerp), crece sobre elementos interactivos; **cursor nativo se mantiene** | ~0.6 KB (solo escritorio) | INP: bajo |
+| Micro-interacciones | CSS: brillo en botones, flecha que avanza, `active:scale`, foco de inputs, aparición de errores | 0 KB | Nulo |
+| Marquee de tecnologías | CSS (`translateX` infinito, lista duplicada `aria-hidden`), pausa al pasar el mouse | 0 KB | Nulo |
+| Preloader | **No se implementa:** cualquier preloader retrasa el primer render y el LCP | — | — |
+| Three.js / R3F | **No se implementa:** three + R3F ≈ 190 KB gz, multiplicaría ×4 el JS de la página y su costo de GPU en móviles; la aurora CSS logra el efecto a ~0 KB | — | — |
+| Framer Motion | **No se usa en esta fase:** todos los efectos se logran con CSS/vanilla; añadirlo costaría ~18–30 KB gz sin beneficio visible | — | — |
+
+Presupuesto de la fase: ≤ 8 KB gz de JS nuevo en escritorio, ≤ 2 KB en móvil; LCP sin degradarse más de 150 ms; CLS < 0.05.
+
+## Fase 3 — hecho
+- **Hero:** titular con reveal escalonado **por línea** (CSS puro, arranca sin JS); eyebrow, CTAs y nota con fade-up; fondo con **aurora** (2 gradientes radiales animados con `transform`, sin `filter`), **grid** con máscara y **grano** SVG estático. CTAs **magnéticos** en escritorio.
+- **Scroll-reveal escalonado** (`[data-reveal]` + IntersectionObserver; escalonado con `:nth-child` en CSS). Sin JS o si el módulo falla, el contenido se muestra igual (failsafe a los 2.5 s).
+- **Contadores** al entrar en pantalla solo para cifras verificables (100 %, 95+). El HTML ya trae el valor final.
+- **Servicios:** tilt 3D (≤5°), spotlight que sigue al cursor (capa movida con `transform`), línea de glow superior e ícono que sube al hover.
+- **Portafolio:** parallax sutil de la captura (escritorio, solo tarjetas visibles) y zoom de preview al hover.
+- **Navbar** transparente arriba; al hacer scroll aparece el fondo difuminado y el contenido sube (opacity/transform).
+- **Cursor personalizado** (anillo con lerp que crece sobre elementos interactivos), solo con mouse; el cursor nativo se conserva.
+- **Micro-interacciones:** brillo que cruza los botones primarios, flecha que avanza, `active:scale`, foco de inputs, errores del formulario con fade-up.
+- **Marquee de tecnologías** (CSS, pausado fuera de pantalla y al pasar el mouse; con movimiento reducido se muestra como lista estática).
+- **Lenis** solo en escritorio (import dinámico en idle) con offset para la navbar en las anclas.
+- `prefers-reduced-motion`: no se inicializa ningún efecto, el contenido es visible y hay una red de seguridad global que anula transiciones y animaciones.
+- **Optimización encontrada al medir con CPU ×4:** `content-visibility: auto` en las secciones fuera de pantalla (el navegador no calcula su layout hasta que se acercan). Bajó el TBT con estrés de ~550 ms a ~200–300 ms y el LCP a <1.9 s.
+
+### Efectos descartados o ajustados (y por qué)
+- **Preloader:** descartado. Cualquier pantalla de carga retrasa el primer render y el LCP.
+- **Three.js / R3F:** descartado. ~190 KB gz (×4 el JS actual) y costo de GPU en móviles de gama media; la aurora CSS cuesta ~0 KB.
+- **Framer Motion:** no se usó. Todos los efectos se lograron con CSS/vanilla; añadirlo costaría ~18–30 KB gz sin diferencia visible.
+- **GSAP/ScrollTrigger:** no hizo falta (no hay secuencias con pin/scrub).
+- **Reveal por palabra → por línea:** por palabra costaba ~100 ms de bloqueo extra con CPU ×4.
+- **Fade del párrafo del hero:** eliminado. En móvil ese párrafo es el elemento LCP y la animación lo retrasaba ~500 ms.
+- **Aurora animada en móvil:** queda fija en pantallas < 768 px (ahorraba ~80 ms de bloqueo con CPU ×4); en escritorio sí se anima.
+- **`mix-blend-mode` en el grano:** eliminado (obligaba a recomponer la capa en cada frame de la aurora).
+- **Contador en "<2 s":** no se anima; contar de 0 a 2 mostraría valores falsos ("<0 s").
+
 ## Decisiones tomadas
 - Deploy en Netlify con build estático. *(usuario)*
 - Paleta **A1 "Tinta y Oro"** y tipografía **B2 (Instrument Serif + Geist)**. *(usuario)*
@@ -63,6 +114,9 @@
 - `[REVISAR]` Se conservan del sitio anterior (redactados por ti): "consulta técnica sin costo" y "Te respondemos en menos de 24 horas".
 - `[REVISAR]` Credencial mostrada como "Formación en Ingeniería en Desarrollo de Software (UTCH BIS)": es verdadera tanto si el título está terminado como en curso. Ajustar cuando confirmes.
 - `[REVISAR]` Indicador "95+ Lighthouse móvil de este sitio": se mantiene solo mientras las mediciones lo sostengan (hoy 100). Se vuelve a verificar en la Fase 6.
+- `[REVISAR]` **Framer Motion no se usa** (está en el stack de `CLAUDE.md`): los efectos de la Fase 3 se lograron con CSS/vanilla con menos peso. Se puede añadir más adelante si aparece un caso que lo justifique.
+- `[REVISAR]` **Cursor personalizado** implementado como anillo decorativo que acompaña al cursor nativo (ocultar el cursor del sistema perjudica la accesibilidad y la precisión).
+- `[REVISAR]` **Compuerta de rendimiento:** se evalúa con Lighthouse móvil estándar (simulación, igual que PageSpeed Insights). La prueba de estrés con CPU ×4 real se usa como control de regresión, no como compuerta: en esta máquina varía ±4 puntos.
 - `[REVISAR]` Botón de WhatsApp: ícono blanco sobre el verde oficial (#25D366) por reconocimiento de marca; el contraste del ícono es 2:1 (es un logotipo, el botón tiene nombre accesible).
 
 ## Pendientes del usuario
@@ -87,5 +141,6 @@
 - [ ] Revisión del copy en inglés (Fase 4).
 
 ## Ideas para después
+- Probar `content-visibility` también en la página de privacidad si crece.
 - Husky + lint-staged para correr lint/format antes de cada commit.
 - Actualizar la línea "Stack" de `CLAUDE.md` para reflejar Astro.

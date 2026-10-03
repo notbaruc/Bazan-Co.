@@ -12,7 +12,7 @@ const { id, class: className, ...rest } = Astro.props;
 <section
   id={id}
   aria-labelledby={`${id}-title`}
-  class:list={['relative scroll-mt-(--nav-height) py-(--spacing-section)', className]}
+  class:list={['defer-render relative scroll-mt-(--nav-height) py-(--spacing-section)', className]}
   {...rest}
 >
   <div class="container-page">

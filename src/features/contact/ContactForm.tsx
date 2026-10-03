@@ -204,7 +204,10 @@ export default function ContactForm({ copy }: Props) {
         </Field>
       </div>
 
-      <div role="alert" className="mt-5 text-sm text-danger empty:hidden">
+      <div
+        role="alert"
+        className="mt-5 text-sm text-danger empty:hidden motion-safe:animate-[fade-up_300ms_ease-out]"
+      >
         {status === 'invalid' ? copy.errors.summary : null}
       </div>
 
@@ -247,7 +250,10 @@ function Field({ id, label, errorId, error, required, hint, children }: FieldPro
       </label>
       {children}
       {error ? (
-        <p id={errorId} className="text-sm text-danger">
+        <p
+          id={errorId}
+          className="text-sm text-danger motion-safe:animate-[fade-up_300ms_ease-out]"
+        >
           {error}
         </p>
       ) : null}
