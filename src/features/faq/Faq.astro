@@ -19,7 +19,7 @@ const t = dict.faq;
 
     <div class="divide-y divide-line border-y border-line">
       {t.items.map((item) => (
-        <details class="faq-item group" name="faq">
+        <details class="group" name="faq">
           <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-lg text-ink [&::-webkit-details-marker]:hidden">
             <span>{item.q}</span>
             <span class="grid size-8 shrink-0 place-items-center rounded-full border border-line-strong text-accent transition-transform duration-(--dur-base) ease-out-expo group-open:rotate-45">

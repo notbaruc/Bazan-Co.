@@ -10,16 +10,18 @@ interface Props {
 const t = getDictionary(Astro.props.lang);
 ---
 
-<a
-  href={buildWhatsAppUrl(t.whatsapp.defaultMessage)}
-  target="_blank"
-  rel="noopener noreferrer"
-  aria-label={`${t.whatsapp.fabLabel} ${t.a11y.externalLink}`}
-  class="whatsapp-fab fixed right-4 bottom-4 z-40 grid size-14 place-items-center rounded-full bg-whatsapp text-white shadow-[0_8px_24px_-6px_rgb(37_211_102/0.55)] transition-transform duration-(--dur-base) ease-out-expo hover:-translate-y-0.5 md:right-6 md:bottom-6"
-  data-wa-source="fab"
->
-  <WhatsAppIcon class="size-7" />
-</a>
+<aside aria-label={t.a11y.quickContact}>
+  <a
+    href={buildWhatsAppUrl(t.whatsapp.defaultMessage)}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={`${t.whatsapp.fabLabel} ${t.a11y.externalLink}`}
+    class="whatsapp-fab fixed right-4 bottom-4 z-40 grid size-14 place-items-center rounded-full bg-whatsapp text-white shadow-[0_8px_24px_-6px_rgb(37_211_102/0.55)] transition-transform duration-(--dur-base) ease-out-expo hover:-translate-y-0.5 md:right-6 md:bottom-6"
+    data-wa-source="fab"
+  >
+    <WhatsAppIcon class="size-7" />
+  </a>
+</aside>
 
 <style>
   /* Sube el botón mientras el banner de cookies está visible para que no se tapen. */

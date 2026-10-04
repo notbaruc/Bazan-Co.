@@ -33,6 +33,7 @@ const es = {
     closeMenu: 'Cerrar menú',
     externalLink: '(se abre en una pestaña nueva)',
     pendingLabel: 'Pendiente',
+    quickContact: 'Contacto rápido',
   },
   nav: {
     links: [

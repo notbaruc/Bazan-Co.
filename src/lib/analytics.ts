@@ -7,6 +7,7 @@
  * El ID se configura con la variable de entorno PUBLIC_GA_ID (por defecto, el ID del sitio anterior).
  */
 import { CONSENT_EVENT, getConsent } from '@/features/consent/consent';
+import { whenIdle } from '@/lib/idle';
 
 const GA_ID = import.meta.env.PUBLIC_GA_ID ?? 'G-CN941SX6Q7';
 
@@ -59,11 +60,6 @@ function revoke(): void {
   }
 }
 
-function whenIdle(callback: () => void): void {
-  if ('requestIdleCallback' in window) window.requestIdleCallback(callback, { timeout: 3000 });
-  else setTimeout(callback, 1500);
-}
-
 /** Envía un evento a GA4 solo si hay consentimiento. */
 export function track(event: string, params: Record<string, string> = {}): void {
   if (getConsent() !== 'granted') return;
@@ -99,7 +95,7 @@ function trackClicks(): void {
 
 export function initAnalytics(): void {
   trackClicks();
-  if (getConsent() === 'granted') whenIdle(load);
+  if (getConsent() === 'granted') whenIdle(load, 3000);
   window.addEventListener(CONSENT_EVENT, (event) => {
     if (!(event instanceof CustomEvent)) return;
     const value: unknown = event.detail;

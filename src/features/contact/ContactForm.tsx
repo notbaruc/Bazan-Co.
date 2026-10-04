@@ -102,7 +102,9 @@ export default function ContactForm({ copy, lang, privacyHref }: Props) {
     const firstInvalid = CONTACT_FIELDS.find((field) => nextErrors[field]);
     if (firstInvalid) {
       setStatus('invalid');
-      fieldRefs.current[firstInvalid]?.focus();
+      // Tras el siguiente frame: los errores se pintan primero y el foco no fuerza un layout
+      // dentro de la interacción (mejor INP).
+      requestAnimationFrame(() => fieldRefs.current[firstInvalid]?.focus());
       return;
     }
 

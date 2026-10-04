@@ -5,6 +5,7 @@
  *   dispositivos con mouse/trackpad, mediante import() dinámico.
  * - Todo anima únicamente `transform` y `opacity`.
  */
+import { whenIdle } from '@/lib/idle';
 import { initCounters } from './counters';
 import { initNavbarScroll } from './navbar-scroll';
 import { initPauseOffscreen } from './pause-offscreen';
@@ -12,11 +13,6 @@ import { initReveal } from './reveal';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-
-function whenIdle(callback: () => void): void {
-  if ('requestIdleCallback' in window) window.requestIdleCallback(callback, { timeout: 2000 });
-  else setTimeout(callback, 200);
-}
 
 export function initMotion(): void {
   initNavbarScroll();

@@ -33,6 +33,7 @@ const en: Dictionary = {
     closeMenu: 'Close menu',
     externalLink: '(opens in a new tab)',
     pendingLabel: 'Pending',
+    quickContact: 'Quick contact',
   },
   nav: {
     links: [
