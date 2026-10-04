@@ -3,7 +3,7 @@
 > Se lee al iniciar cada sesión junto con `PLAN.md`. Se actualiza al cerrar cada fase.
 > Rama de trabajo: `redesign/premium` (nunca merge a `main` sin aprobación del usuario).
 
-**Estado actual:** ejecución autónoma en curso (2026-10-03). Fases 1–5 cerradas.
+**Estado actual:** las 6 fases están cerradas (2026-10-03). Resumen final, riesgos e instrucciones de publicación en [`REPORT.md`](REPORT.md). **Esperando tu revisión; nada se ha mergeado a `main` ni desplegado.**
 
 ## Checklist de fases
 - [x] **Fase 1 — Base:** scaffold, design tokens, estructura de carpetas, linting, reporte de tamaño.
@@ -11,7 +11,7 @@
 - [x] **Fase 3 — Animaciones y micro-interacciones.**
 - [x] **Fase 4 — i18n ES/EN.**
 - [x] **Fase 5 — SEO, analítica, formulario y WhatsApp.**
-- [ ] **Fase 6 — Optimización final y auditoría de calidad.**
+- [x] **Fase 6 — Optimización final y auditoría de calidad.**
 
 ## Métricas por fase
 | Fase | JS cargado por la home (gz) | CSS (gz, inline) | HTML home (gz) | Fuentes | Lighthouse móvil (P/A/BP/SEO) | LCP | CLS | TBT |
@@ -19,9 +19,10 @@
 | Sitio actual en producción (referencia) | 9.5 KB sin minificar + GA | 28.9 KB sin minificar | 35.7 KB sin minificar | Google Fonts, 12 pesos | **78 / 96 / 100 / 100** | 3.88 s | 0 | 225 ms |
 | Fase 1 (página de tokens) | 0 KB | incluido en HTML | 4.3 KB | 4 woff2 · 80.5 KB total, 1 precargada (20.5 KB) | n/a (página temporal) | — | — | — |
 | Fase 2 (landing estática) | 0 KB al cargar · 46.9 KB diferidos (isla del formulario, `client:visible`) | incluido en HTML | 23.8 KB | 2 precargadas (42.1 KB) | **100 / 100 / 100 / 100** | 1.51 s | 0 | 16 ms |
-| Fase 5 (SEO, GA, formulario, CSP) | 3.0 KB al cargar (motion + idioma + analítica) · isla del formulario diferida (51 KB con React) · GA solo tras consentimiento | incluido en HTML | 29.4 KB (head 12.6 KB) | 2 precargadas (42.1 KB) | **ES 99/100/100/100 · EN 100/100/100/100** | 1.66 s | 0 | 0 ms |
-| Fase 4 (i18n, `/` y `/en/`) | igual que Fase 3 (+ script de idioma inline, <1 KB) | incluido en HTML | 27 KB por idioma | 2 precargadas (42.1 KB) | **ES 100/100/100/100 · EN 100/100/100/100** | 1.59 s | 0 | 26–40 ms |
 | Fase 3 (animaciones) | 1.6 KB al cargar (todos) · +6.5 KB solo escritorio en idle (Lenis 5.5 + efectos de puntero 1.0) · isla del formulario diferida | incluido en HTML | 26.6 KB | 2 precargadas (42.1 KB) | **100 / 100 / 100 / 100** · escritorio 100/100/100/100 | 1.58 s | 0 | 0 ms |
+| Fase 4 (i18n, `/` y `/en/`) | igual que Fase 3 (+ script de idioma inline, <1 KB) | incluido en HTML | 27 KB por idioma | 2 precargadas (42.1 KB) | **ES 100/100/100/100 · EN 100/100/100/100** | 1.59 s | 0 | 26–40 ms |
+| Fase 5 (SEO, GA, formulario, CSP) | 3.0 KB al cargar (motion + idioma + analítica) · isla del formulario diferida (51 KB con React) · GA solo tras consentimiento | incluido en HTML | 29.4 KB (head 12.6 KB) | 2 precargadas (42.1 KB) | **ES 99/100/100/100 · EN 100/100/100/100** | 1.66 s | 0 | 0 ms |
+| **Fase 6 (final)** | 3.0 KB al cargar · +6.5 KB solo escritorio en idle · isla del formulario diferida (51 KB con React, solo al llegar al formulario) | incluido en HTML | 29.5 KB (head 12.6 KB) | 2 precargadas (42.1 KB) | **móvil 99/100/100/100 en las 4 páginas · escritorio 100/100/100/100** | 1.66 s (escritorio 0.40 s) | 0 | 0 ms · INP medido 96–112 ms móvil / 144 ms escritorio con CPU ×4 |
 
 > **Prueba de estrés con CPU ×4 real** (Lighthouse `throttlingMethod: devtools`, mediana de 5): Fase 2 = 94 / LCP 2.10 s / TBT 228 ms; Fase 3 = 93 / LCP 1.79 s / TBT 275 ms (rango 92–95; la máquina de pruebas introduce bastante varianza).
 >
@@ -117,6 +118,16 @@ Presupuesto de la fase: ≤ 8 KB gz de JS nuevo en escritorio, ≤ 2 KB en móvi
 - **Seguridad:** CSP de Astro con hashes por página (meta) para scripts y estilos, `default-src 'self'`, GA permitido; en `netlify.toml`: `frame-ancestors 'none'`, `upgrade-insecure-requests`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Cross-Origin-Opener-Policy`. Se quitaron todos los atributos `style` inline para que la CSP no necesite `unsafe-inline`.
 - **Compuerta superada:** ES 99/100/100/100 y EN 100/100/100/100, LCP 1.66 s, CLS 0, TBT 0.
 
+## Fase 6 — hecho
+- **Lighthouse final** (mediana de 5 en móvil, 3 en escritorio): móvil **99/100/100/100** en `/`, `/en/`, `/privacidad/` y `/en/privacy/` (LCP 1.66 s, CLS 0, TBT 0); escritorio **100/100/100/100** (LCP ~0.4 s). Prueba de estrés con CPU ×4 real: 92, LCP 1.87 s. Peso de la home: **112 KB** (antes 436 KB).
+- **INP medido** con Event Timing y CPU ×4 sobre interacciones reales (banner, menú, FAQ, formulario): móvil 96–112 ms, escritorio 144 ms (antes de optimizar, el envío con errores llegaba a 208 ms: ahora el foco al primer error se mueve en el siguiente frame).
+- **Accesibilidad:** axe-core completo (no solo el subconjunto de Lighthouse) sin violaciones en las 5 páginas, en móvil y escritorio, tras envolver el botón flotante de WhatsApp en un landmark. Teclado: skip link primero, foco visible en todos los pasos, orden lógico; menú móvil abre/cierra con Escape y devuelve el foco. `prefers-reduced-motion`: sin animaciones, sin Lenis ni cursor, todo el contenido visible.
+- **Revisión de código:** sin `any`, sin casts inseguros, sin íconos ni clases sin uso; helper `whenIdle` unificado; se quitaron clases y una variable CSS muertas. Dependencias: solo las necesarias (Astro, React, Tailwind, Lenis + herramientas de desarrollo); no hay Framer Motion, GSAP, Three ni librerías de i18n.
+- **Contenido:** búsqueda de claims prohibidos (C1, certificaciones, A/B testing, cifras inventadas): ninguno. 15 datos pendientes por idioma + la captura de GECH, todos marcados `[PENDIENTE USUARIO]`.
+- **Pruebas funcionales** (Puppeteer + Edge): formulario (validación, envío, éxito, error, honeypot, idioma), WhatsApp con servicio, eventos de GA con y sin consentimiento, cambio y persistencia de idioma, sugerencia de idioma. Todas en verde en ES y EN.
+- **Build de Netlify verificado** en un clon limpio: `npm ci` + `npm run build` sin pasos manuales (typecheck 0 errores).
+- **Ajuste de conversión:** la sugerencia de idioma ya no aparece encima del banner de cookies (en móvil tapaban el hero); espera a que el visitante decida sobre las cookies.
+
 ## Decisiones tomadas
 - Deploy en Netlify con build estático. *(usuario)*
 - Paleta **A1 "Tinta y Oro"** y tipografía **B2 (Instrument Serif + Geist)**. *(usuario)*
@@ -149,10 +160,12 @@ Presupuesto de la fase: ≤ 8 KB gz de JS nuevo en escritorio, ≤ 2 KB en móvi
 - `[REVISAR]` Sin JS, el envío del formulario muestra la página de confirmación genérica de Netlify (no se creó una página de "gracias" propia para no agregar alcance).
 - `[REVISAR]` El número de WhatsApp conserva el formato del sitio anterior (`5216143436765`). WhatsApp acepta también `526143436765`; si notas problemas al abrir el chat, cámbialo en `src/lib/site.ts`.
 - `[REVISAR]` Títulos SEO: "Diseño web premium y SEO en Chihuahua | Bazan & Co." / "Premium Web Design & SEO from Chihuahua, Mexico | Bazan & Co.".
+- `[REVISAR]` **Un aviso a la vez:** si el banner de cookies está pendiente, la sugerencia de idioma espera a que el visitante decida.
+- `[REVISAR]` `content-visibility: auto` en las secciones bajo el hero: mejora mucho el rendimiento en gama media; como efecto secundario, en saltos muy largos con scroll suave una sección puede tardar un frame en pintarse.
 - `[REVISAR]` Botón de WhatsApp: ícono blanco sobre el verde oficial (#25D366) por reconocimiento de marca; el contraste del ícono es 2:1 (es un logotipo, el botón tiene nombre accesible).
 
 ## Pendientes del usuario
-### Placeholders `[PENDIENTE USUARIO]` en el sitio (`npm run pending` los lista; 16 al cierre de la Fase 2)
+### Placeholders `[PENDIENTE USUARIO]` en el sitio (`npm run pending` los lista: 15 por idioma + captura de GECH)
 - [ ] Soldaduras y Equipos: resultado medible y testimonio.
 - [ ] RIES Chihuahua: resultado medible y testimonio. **Corregir el certificado HTTPS de rieschihuahua.com.**
 - [ ] **GECH:** tipo de proyecto y sector, reto, solución, stack, resultado, testimonio, URL y captura.
@@ -179,6 +192,11 @@ Presupuesto de la fase: ≤ 8 KB gz de JS nuevo en escritorio, ≤ 2 KB en móvi
 - [ ] **Revisión del copy en inglés** (`src/i18n/en.ts`): lo redacté yo; valida tono y términos.
 
 ## Ideas para después
+- Llevar las pruebas E2E (formulario, idioma, analítica) y Lighthouse CI al repositorio para correrlas en cada deploy preview (hoy viven fuera del repo para no agregar dependencias).
+- Página propia de "gracias" para el envío sin JS y para medir conversiones por URL.
+- Dominio propio y luego `report-to`/`report-uri` en la CSP para enterarte de bloqueos en producción.
+- Analítica sin cookies (Plausible, Netlify Analytics) si quieres medir a todos sin banner.
+- Herramienta de agenda (Cal.com) para que "Agenda una consulta" reserve directamente.
 - Probar `content-visibility` también en la página de privacidad si crece.
 - Husky + lint-staged para correr lint/format antes de cada commit.
 - Actualizar la línea "Stack" de `CLAUDE.md` para reflejar Astro.

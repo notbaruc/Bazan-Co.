@@ -46,6 +46,7 @@ const t = getDictionary(target).language;
 </aside>
 
 <script>
+  import { CONSENT_EVENT, getConsent } from '@/features/consent/consent';
   import { getLanguagePreference, saveLanguagePreference } from './language';
 
   // Cualquier enlace de cambio de idioma guarda la elección y conserva la sección actual (#hash).
@@ -62,10 +63,15 @@ const t = getDictionary(target).language;
   const browserLanguage = (navigator.languages[0] ?? navigator.language).slice(0, 2).toLowerCase();
 
   if (box && current && target && getLanguagePreference() === null && browserLanguage === target) {
-    box.hidden = false;
-    box.querySelector('[data-dismiss]')?.addEventListener('click', () => {
-      saveLanguagePreference(current);
-      box.hidden = true;
-    });
+    const show = () => {
+      box.hidden = false;
+      box.querySelector('[data-dismiss]')?.addEventListener('click', () => {
+        saveLanguagePreference(current);
+        box.hidden = true;
+      });
+    };
+    // Un aviso a la vez: si el banner de cookies está pendiente, la sugerencia espera a la decisión.
+    if (getConsent() === null) window.addEventListener(CONSENT_EVENT, show, { once: true });
+    else show();
   }
 </script>
