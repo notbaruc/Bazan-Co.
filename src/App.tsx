@@ -1,4 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import i18n, {
+  resolveInitialLanguage,
+  syncDocumentLanguageMeta,
+  type SupportedLanguage,
+} from './i18n/config';
+import { initGoogleAnalytics } from './utils/analytics';
 import { Navbar } from './components/Navbar';
 import {
   FaqSection,
@@ -90,9 +96,31 @@ export default function App() {
   const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
 
   useEffect(() => {
+    const initialLang = resolveInitialLanguage();
+    if (i18n.language !== initialLang) {
+      void i18n.changeLanguage(initialLang);
+    }
+    syncDocumentLanguageMeta(initialLang);
+
+    const onPopState = () => {
+      const pathLang: SupportedLanguage =
+        window.location.pathname === '/en' || window.location.pathname.startsWith('/en/')
+          ? 'en'
+          : 'es';
+      void i18n.changeLanguage(pathLang);
+      syncDocumentLanguageMeta(pathLang);
+    };
+
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  useEffect(() => {
     try {
       const saved = localStorage.getItem(COOKIE_STORAGE_KEY);
-      if (!saved) {
+      if (saved === 'accepted') {
+        initGoogleAnalytics();
+      } else if (!saved) {
         setCookieBannerVisible(true);
       }
     } catch {
@@ -145,6 +173,9 @@ export default function App() {
       localStorage.setItem(COOKIE_STORAGE_KEY, choice);
     } catch {
       // Ignorar si almacenamiento restringido
+    }
+    if (choice === 'accepted') {
+      initGoogleAnalytics();
     }
     setCookieBannerVisible(false);
   };

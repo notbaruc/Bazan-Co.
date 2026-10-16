@@ -6,6 +6,8 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
+import { trackEvent } from '../utils/analytics';
 import {
   AcademicCapIcon,
   ArrowRightIcon,
@@ -27,8 +29,51 @@ import {
   XCircleIcon,
 } from './ui/Icons';
 
-export const WHATSAPP_URL =
-  'https://wa.me/5216143436765?text=Hola%2C%20me%20interesa%20una%20p%C3%A1gina%20web%20profesional.%20%C2%BFPodemos%20agendar%20una%20consulta%3F';
+interface StatItem {
+  displayValue: string;
+  numericTarget?: number;
+  prefix: string;
+  suffix: string;
+  label: string;
+}
+
+interface ServiceItem {
+  title: string;
+  description: string;
+  features: string[];
+}
+
+interface ProcessStepItem {
+  number: string;
+  title: string;
+  description: string;
+}
+
+interface PortfolioProjectItem {
+  id: string;
+  title: string;
+  category: string;
+  image: string;
+  imageAlt: string;
+  url?: string;
+  isPendingCapture?: boolean;
+  problem: string;
+  solution: string;
+  stack: string[];
+  result: string;
+  testimonial: string;
+}
+
+interface WhyUsPillarItem {
+  title: string;
+  description: string;
+}
+
+interface FaqItem {
+  question: string;
+  answer: string;
+  pendingNote?: string;
+}
 
 export function RevealOnScroll({
   children,
@@ -101,6 +146,7 @@ function AnimatedCounter({
   const [text, setText] = useState(displayValue);
 
   useEffect(() => {
+    setText(displayValue);
     const el = ref.current;
     if (!el || numericTarget === undefined) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -202,39 +248,11 @@ function TiltSpotlightCard({
 }
 
 export function HeroSection() {
-  const line1Words = ['No', 'construimos', 'páginas', 'web.'];
-  const line2Words = ['Diseñamos', 'máquinas', 'de', 'conversión.'];
-
-  const stats = [
-    {
-      displayValue: '<2s',
-      numericTarget: 2,
-      prefix: '<',
-      suffix: 's',
-      label: 'Objetivo de carga móvil (LCP)',
-    },
-    {
-      displayValue: '95+',
-      numericTarget: 95,
-      prefix: '',
-      suffix: '+',
-      label: 'Estándar Lighthouse Móvil',
-    },
-    {
-      displayValue: '100%',
-      numericTarget: 100,
-      prefix: '',
-      suffix: '%',
-      label: 'Sitios Bilingües ES/EN',
-    },
-    {
-      displayValue: '1:1',
-      numericTarget: undefined,
-      prefix: '',
-      suffix: '',
-      label: 'Trato directo con el ingeniero',
-    },
-  ];
+  const { t, i18n } = useTranslation();
+  const line1Words = t('hero.line1Words', { returnObjects: true }) as string[];
+  const line2Words = t('hero.line2Words', { returnObjects: true }) as string[];
+  const stats = t('hero.stats', { returnObjects: true }) as StatItem[];
+  const whatsappUrl = t('whatsapp.url');
 
   return (
     <section
@@ -242,7 +260,6 @@ export function HeroSection() {
       aria-labelledby="hero-heading"
       className="relative overflow-hidden pb-20 pt-32 md:pb-28 md:pt-40"
     >
-      {/* Fondo animado ligero GPU-only (sin Three.js para proteger LCP < 2s y TBT < 200ms) */}
       <div className="hero-grid-bg pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
       <div
         className="animate-float-orb pointer-events-none absolute -top-28 right-1/4 -z-10 h-[28rem] w-[28rem] rounded-full"
@@ -265,7 +282,7 @@ export function HeroSection() {
           <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5">
             <span className="h-2 w-2 rounded-full bg-gold" aria-hidden="true" />
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold-light">
-              Ingeniería Web de Alto Nivel · Chihuahua, México
+              {t('hero.badge')}
             </span>
           </div>
 
@@ -276,7 +293,7 @@ export function HeroSection() {
             <span className="block">
               {line1Words.map((word, idx) => (
                 <span
-                  key={word}
+                  key={`${word}-${idx}`}
                   style={{ '--word-delay': `${idx * 65}ms` } as CSSProperties}
                   className="hero-word mr-[0.26em]"
                 >
@@ -287,7 +304,7 @@ export function HeroSection() {
             <span className="mt-2 block">
               {line2Words.map((word, idx) => (
                 <span
-                  key={word}
+                  key={`${word}-${idx}`}
                   style={{ '--word-delay': `${(idx + line1Words.length) * 65}ms` } as CSSProperties}
                   className="hero-word gradient-gold-text mr-[0.26em]"
                 >
@@ -297,42 +314,41 @@ export function HeroSection() {
             </span>
           </h1>
 
-          {/* Sin opacidad inicial oculta para garantizar LCP inmediato en móvil */}
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-content-secondary sm:text-xl">
-            Somos una firma de ingeniería de software en Chihuahua, México (con servicio remoto
-            global) especializada en crear experiencias digitales rápidas, bilingües y orientadas a
-            resultados para negocios locales y PYMEs. Tu sitio web no es un gasto — es tu activo
-            digital más rentable.
+            {t('hero.subtitle')}
           </p>
 
           <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
             <a
-              href={WHATSAPP_URL}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent('whatsapp_click', {
+                  location: 'hero',
+                  language: i18n.language,
+                })
+              }
               className="btn-gold-primary inline-flex min-h-[3.25rem] items-center justify-center gap-2.5 rounded-xl px-7 py-3.5 text-base shadow-glow"
             >
               <WhatsAppIcon className="h-5 w-5" />
-              <span>Escribir por WhatsApp</span>
+              <span>{t('hero.ctaPrimary')}</span>
             </a>
 
             <a
               href="#contacto"
               className="group inline-flex min-h-[3.25rem] items-center justify-center gap-2 rounded-xl border border-white/15 bg-obsidian-surface px-7 py-3.5 font-heading text-base font-bold text-content-primary transition-transform duration-200 hover:-translate-y-0.5 hover:border-gold/40 hover:bg-obsidian-elevated"
             >
-              <span>Agenda una Consulta Técnica</span>
+              <span>{t('hero.ctaSecondary')}</span>
               <ArrowRightIcon className="h-4 w-4 text-gold transition-transform duration-200 group-hover:translate-x-1" />
             </a>
           </div>
 
-          <p className="mt-4 text-sm text-content-muted">
-            Atención directa del ingeniero a cargo · Sin intermediarios · Diagnóstico inicial sin
-            costo
-          </p>
+          <p className="mt-4 text-sm text-content-muted">{t('hero.microcopy')}</p>
         </div>
 
         <dl
-          aria-label="Indicadores técnicos verificables"
+          aria-label={t('hero.statsAria')}
           className="mt-16 grid grid-cols-2 gap-6 border-t border-white/10 pt-10 lg:grid-cols-4"
         >
           {stats.map((stat) => (
@@ -353,17 +369,12 @@ export function HeroSection() {
 }
 
 export function TrustBarSection() {
-  const credentials = [
-    'Ingeniería en Desarrollo de Software (UTCH BIS)',
-    'Inglés avanzado (iTEP Academic Plus)',
-    'Carga objetivo <2s y Core Web Vitals óptimos',
-    'Arquitectura 100% a medida (0% plantillas genéricas)',
-    'Chihuahua, México · Servicio remoto global',
-  ];
+  const { t } = useTranslation();
+  const credentials = t('trustBar.items', { returnObjects: true }) as string[];
 
   return (
     <section
-      aria-label="Barra de confianza y credenciales"
+      aria-label={t('trustBar.ariaLabel')}
       className="border-y border-white/10 bg-obsidian-surface/80 py-6"
     >
       <div className="mx-auto max-w-container px-6">
@@ -381,19 +392,9 @@ export function TrustBarSection() {
 }
 
 export function ProblemSolutionSection() {
-  const problems = [
-    'Plantillas genéricas y pesadas que tardan más de 5 segundos en abrir desde el celular, haciendo que el visitante cierre la pestaña.',
-    'Diseño improvisado que no transmite la seriedad ni la calidad real de tu negocio frente a tus competidores.',
-    'Invisibilidad en Google por falta de estructura semántica, metadatos técnicos y optimización local.',
-    'Páginas informativas sin un embudo claro: el visitante entra, no entiende cómo cotizar rápido y nunca te escribe.',
-  ];
-
-  const solutions = [
-    'Ingeniería de rendimiento extremo (<2 segundos de carga objetivo) para retener a cada prospecto desde el primer clic.',
-    'Diseño oscuro, sobrio y de autoridad que posiciona a tu empresa como líder confiable en su sector.',
-    'SEO técnico de raíz (Schema.org, Core Web Vitals, Search Console) para captar demanda activa en tu ciudad o mercado.',
-    'Arquitectura enfocada en un único objetivo comercial: que te contacten por WhatsApp o agenden una consulta.',
-  ];
+  const { t } = useTranslation();
+  const problems = t('problemSolution.problems', { returnObjects: true }) as string[];
+  const solutions = t('problemSolution.solutions', { returnObjects: true }) as string[];
 
   return (
     <section
@@ -406,7 +407,7 @@ export function ProblemSolutionSection() {
           <div className="mb-4 inline-flex items-center gap-3">
             <span className="h-px w-8 bg-gold" aria-hidden="true" />
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
-              Problema / Solución
+              {t('problemSolution.eyebrow')}
             </span>
             <span className="h-px w-8 bg-gold" aria-hidden="true" />
           </div>
@@ -414,13 +415,11 @@ export function ProblemSolutionSection() {
             id="problema-heading"
             className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
           >
-            Tu negocio es excelente.{' '}
-            <span className="gradient-gold-text">Tu sitio web debe demostrarlo en segundos.</span>
+            {t('problemSolution.headingPart1')}{' '}
+            <span className="gradient-gold-text">{t('problemSolution.headingHighlight')}</span>
           </h2>
           <p className="mt-4 text-base leading-relaxed text-content-secondary sm:text-lg">
-            La mayoría de los dueños de negocios locales pierden clientes todos los días por tener
-            un sitio lento o confuso. Nosotros reemplazamos la improvisación con ingeniería de
-            software.
+            {t('problemSolution.subtitle')}
           </p>
         </RevealOnScroll>
 
@@ -428,10 +427,10 @@ export function ProblemSolutionSection() {
           <RevealOnScroll delayMs={80}>
             <article className="h-full rounded-2xl border border-white/10 bg-obsidian-surface p-7 sm:p-9">
               <div className="inline-flex items-center gap-2 rounded-full border border-rose-500/30 bg-rose-500/10 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-rose-300">
-                Lo habitual en el mercado
+                {t('problemSolution.problemBadge')}
               </div>
               <h3 className="mt-4 font-heading text-2xl font-bold text-content-primary">
-                Por qué las páginas convencionales no generan clientes
+                {t('problemSolution.problemTitle')}
               </h3>
               <ul className="mt-6 space-y-4">
                 {problems.map((problem) => (
@@ -451,10 +450,10 @@ export function ProblemSolutionSection() {
                 aria-hidden="true"
               />
               <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/15 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-gold-light">
-                El Estándar Bazan &amp; Co.
+                {t('problemSolution.solutionBadge')}
               </div>
               <h3 className="mt-4 font-heading text-2xl font-bold text-content-primary">
-                Ingeniería de software aplicada a tu conversión comercial
+                {t('problemSolution.solutionTitle')}
               </h3>
               <ul className="mt-6 space-y-4">
                 {solutions.map((solution) => (
@@ -473,44 +472,9 @@ export function ProblemSolutionSection() {
 }
 
 export function ServicesSection() {
-  const services = [
-    {
-      title: 'Diseño Web Premium',
-      description:
-        'Sitios construidos con código limpio, diseño a medida y una obsesión por la velocidad de carga. Cada píxel tiene un propósito de conversión y autoridad de marca.',
-      icon: DesktopIcon,
-      features: [
-        'Diseño 100% responsivo y mobile-first',
-        'Carga ultra-rápida (<2s) en redes móviles',
-        'Arquitectura escalable sin plantillas genéricas',
-        'Capacidad bilingüe ES/EN real',
-      ],
-    },
-    {
-      title: 'Optimización SEO',
-      description:
-        'Posicionamiento técnico que pone a tu negocio frente a quienes realmente te buscan en Google. Estructura semántica, metadatos optimizados y velocidad verificable.',
-      icon: ChartBarIcon,
-      features: [
-        'SEO técnico on-page y jerarquía semántica',
-        'Core Web Vitals óptimos (LCP, CLS, INP)',
-        'Datos estructurados Schema.org (JSON-LD)',
-        'Indexación estratégica en Google Search Console',
-      ],
-    },
-    {
-      title: 'Landing Pages de Alta Conversión',
-      description:
-        'Páginas de aterrizaje diseñadas para un solo objetivo: convertir visitantes en clientes. Copy persuasivo, diseño centrado en la acción y contacto directo.',
-      icon: RocketIcon,
-      features: [
-        'Copy persuasivo orientado a acción en ES/EN',
-        'Integración directa con WhatsApp y formulario',
-        'Fricción cero para maximizar solicitudes de cotización',
-        'Medición de eventos clave con Google Analytics 4',
-      ],
-    },
-  ];
+  const { t } = useTranslation();
+  const serviceItems = t('services.items', { returnObjects: true }) as ServiceItem[];
+  const icons = [DesktopIcon, ChartBarIcon, RocketIcon];
 
   return (
     <section
@@ -523,7 +487,7 @@ export function ServicesSection() {
           <div className="mb-4 inline-flex items-center gap-3">
             <span className="h-px w-8 bg-gold" aria-hidden="true" />
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
-              Servicios
+              {t('services.eyebrow')}
             </span>
             <span className="h-px w-8 bg-gold" aria-hidden="true" />
           </div>
@@ -531,18 +495,17 @@ export function ServicesSection() {
             id="servicios-heading"
             className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
           >
-            Soluciones que impulsan{' '}
-            <span className="gradient-gold-text">tu crecimiento digital.</span>
+            {t('services.headingPart1')}{' '}
+            <span className="gradient-gold-text">{t('services.headingHighlight')}</span>
           </h2>
           <p className="mt-4 text-base leading-relaxed text-content-secondary sm:text-lg">
-            Cada servicio está diseñado con un enfoque de ingeniería: medible, escalable y orientado
-            al retorno de inversión de tu negocio.
+            {t('services.subtitle')}
           </p>
         </RevealOnScroll>
 
         <div className="mt-14 grid gap-8 lg:grid-cols-3">
-          {services.map((service, idx) => {
-            const IconComponent = service.icon;
+          {serviceItems.map((service, idx) => {
+            const IconComponent = icons[idx] ?? DesktopIcon;
             return (
               <RevealOnScroll key={service.title} delayMs={idx * 100}>
                 <TiltSpotlightCard className="h-full rounded-2xl border border-white/10 bg-obsidian-surface p-7 shadow-card hover:border-gold/35 sm:p-8">
@@ -580,23 +543,12 @@ export function ServicesSection() {
 }
 
 export function TechMarqueeSection() {
-  const stackItems = [
-    'React 18',
-    'TypeScript',
-    'Tailwind CSS',
-    'Vite SSG',
-    'Core Web Vitals < 2s',
-    'SEO Técnico On-Page',
-    'Schema.org JSON-LD',
-    'Arquitectura Bilingüe ES/EN',
-    'Google Analytics 4',
-    'Google Search Console',
-    'Netlify Edge CDN',
-  ];
+  const { t } = useTranslation();
+  const stackItems = t('marquee.items', { returnObjects: true }) as string[];
 
   return (
     <section
-      aria-label="Tecnologías y estándares de ingeniería que utilizamos"
+      aria-label={t('marquee.ariaLabel')}
       className="overflow-hidden border-y border-white/10 bg-obsidian-base py-5"
     >
       <div className="animate-marquee flex w-max items-center">
@@ -623,36 +575,9 @@ export function TechMarqueeSection() {
 }
 
 export function ProcessSection() {
-  const steps = [
-    {
-      number: '01',
-      title: 'Diagnóstico',
-      description:
-        'Analizamos tu negocio, tus clientes potenciales y tu competencia. Definimos qué objetivo comercial debe cumplir el sitio y cómo mediremos su éxito.',
-      icon: CompassIcon,
-    },
-    {
-      number: '02',
-      title: 'Diseño',
-      description:
-        'Estructuramos la arquitectura de conversión, los mensajes clave y el diseño visual a medida. Revisas y apruebas la propuesta antes de programar.',
-      icon: PenToolIcon,
-    },
-    {
-      number: '03',
-      title: 'Desarrollo',
-      description:
-        'Construimos tu sitio con código limpio, SEO técnico on-page, optimización de imágenes WebP y pruebas rigurosas de velocidad (<2s) en móvil.',
-      icon: CodeIcon,
-    },
-    {
-      number: '04',
-      title: 'Lanzamiento',
-      description:
-        'Desplegamos en producción con certificado SSL, Google Analytics 4, Search Console y canales de WhatsApp y formulario verificados.',
-      icon: FlagIcon,
-    },
-  ];
+  const { t } = useTranslation();
+  const steps = t('process.steps', { returnObjects: true }) as ProcessStepItem[];
+  const icons = [CompassIcon, PenToolIcon, CodeIcon, FlagIcon];
 
   return (
     <section id="proceso" aria-labelledby="proceso-heading" className="scroll-mt-20 py-20 md:py-28">
@@ -661,7 +586,7 @@ export function ProcessSection() {
           <div className="mb-4 inline-flex items-center gap-3">
             <span className="h-px w-8 bg-gold" aria-hidden="true" />
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
-              Proceso de Ingeniería
+              {t('process.eyebrow')}
             </span>
             <span className="h-px w-8 bg-gold" aria-hidden="true" />
           </div>
@@ -669,17 +594,17 @@ export function ProcessSection() {
             id="proceso-heading"
             className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
           >
-            De la idea al lanzamiento, <span className="gradient-gold-text">sin sorpresas.</span>
+            {t('process.headingPart1')}{' '}
+            <span className="gradient-gold-text">{t('process.headingHighlight')}</span>
           </h2>
           <p className="mt-4 text-base leading-relaxed text-content-secondary sm:text-lg">
-            Un método claro en cuatro etapas donde siempre tienes visibilidad directa del avance de
-            tu proyecto.
+            {t('process.subtitle')}
           </p>
         </RevealOnScroll>
 
         <ol className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, idx) => {
-            const IconComponent = step.icon;
+            const IconComponent = icons[idx] ?? CompassIcon;
             return (
               <li key={step.number}>
                 <RevealOnScroll delayMs={idx * 90} className="h-full">
@@ -710,7 +635,9 @@ export function ProcessSection() {
 }
 
 export function PortfolioSection() {
+  const { t, i18n } = useTranslation();
   const sectionRef = useRef<HTMLElement | null>(null);
+  const projects = t('portfolio.projects', { returnObjects: true }) as PortfolioProjectItem[];
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -745,58 +672,6 @@ export function PortfolioSection() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const projects = [
-    {
-      id: 'soldaduras-y-equipos',
-      title: 'Soldaduras y Equipos',
-      category: 'Landing Page · Suministros Industriales',
-      image: '/img/Consumbiles.webp',
-      imageAlt:
-        'Catálogo de equipos de soldadura, careta electrónica y consumibles industriales de Soldaduras y Equipos',
-      url: 'https://soldadurasequipos.netlify.app/',
-      problem:
-        'Empresa comercializadora de consumibles, gases industriales y servicio técnico para soldadura que requería presencia digital propia para exhibir su catálogo y captar cotizaciones de talleres.',
-      solution:
-        'Landing page de carga rápida con presentación clara de líneas de producto, sección de mantenimiento de equipos, mapa de ubicación y botón de contacto directo vía WhatsApp.',
-      stack: ['HTML5', 'CSS3', 'JavaScript', 'SEO Local'],
-      result: '[PENDIENTE USUARIO: Métrica verificable de solicitudes de cotización o visitas]',
-      testimonial: '[PENDIENTE USUARIO: Testimonio autorizado del cliente en Soldaduras y Equipos]',
-    },
-    {
-      id: 'ries-chihuahua',
-      title: 'RIES Chihuahua',
-      category: 'Sitio Corporativo B2B · Industria y Maquila',
-      image: '/img/RIES_Logo_BW.webp',
-      imageAlt:
-        'Logotipo industrial de RIES Chihuahua con emblema de soldador especializado para el sector maquilador',
-      url: 'https://rieschihuahua.com/',
-      problem:
-        'Proveedor de suministros y equipos de soldadura enfocado en el sector maquilador de Chihuahua que necesitaba proyectar solidez corporativa B2B y facilitar el contacto de compradores industriales.',
-      solution:
-        'Sitio web especializado con enfoque en atención a industria maquiladora, presentación de capacidades de suministro técnico y canal directo de atención comercial.',
-      stack: ['HTML5', 'CSS3', 'JavaScript', 'SEO Técnico B2B'],
-      result: '[PENDIENTE USUARIO: Métrica verificable de prospectos industriales captados]',
-      testimonial: '[PENDIENTE USUARIO: Testimonio autorizado del cliente en RIES Chihuahua]',
-    },
-    {
-      id: 'gech',
-      title: 'GECH',
-      category: 'Proyecto Web · Chihuahua, México',
-      image: '/img/bazancologo.webp',
-      imageAlt:
-        'Vista previa institucional reservada para el caso de estudio de GECH desarrollado por Bazan & Co.',
-      url: undefined,
-      isPendingCapture: true,
-      problem:
-        'Organización en Chihuahua que requería estructurar y modernizar su presencia digital con una plataforma rápida, accesible en dispositivos móviles y orientada a la generación de confianza. [PENDIENTE USUARIO: Confirmar detalle específico del reto de GECH]',
-      solution:
-        'Desarrollo de interfaz web a medida con arquitectura limpia, navegación clara por servicios, optimización para buscadores y puntos de contacto directo. [PENDIENTE USUARIO: Confirmar alcance final entregado a GECH]',
-      stack: ['HTML5 / CSS3', 'JavaScript', 'Diseño Responsivo', 'SEO Técnico'],
-      result: '[PENDIENTE USUARIO: Métrica verificable de impacto del proyecto GECH]',
-      testimonial: '[PENDIENTE USUARIO: Testimonio autorizado del cliente en GECH]',
-    },
-  ];
-
   return (
     <section
       ref={sectionRef}
@@ -809,7 +684,7 @@ export function PortfolioSection() {
           <div className="mb-4 inline-flex items-center gap-3">
             <span className="h-px w-8 bg-gold" aria-hidden="true" />
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
-              Portafolio
+              {t('portfolio.eyebrow')}
             </span>
             <span className="h-px w-8 bg-gold" aria-hidden="true" />
           </div>
@@ -817,11 +692,11 @@ export function PortfolioSection() {
             id="portafolio-heading"
             className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
           >
-            Proyectos que hablan <span className="gradient-gold-text">por sí mismos.</span>
+            {t('portfolio.headingPart1')}{' '}
+            <span className="gradient-gold-text">{t('portfolio.headingHighlight')}</span>
           </h2>
           <p className="mt-4 text-base leading-relaxed text-content-secondary sm:text-lg">
-            Cada proyecto refleja nuestra obsesión por el detalle, el rendimiento móvil y la
-            experiencia de usuario orientada a conversión.
+            {t('portfolio.subtitle')}
           </p>
         </RevealOnScroll>
 
@@ -847,7 +722,7 @@ export function PortfolioSection() {
                   {project.isPendingCapture && (
                     <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-obsidian-base/90 via-obsidian-base/40 to-transparent p-4">
                       <span className="rounded-md border border-dashed border-gold/50 bg-obsidian-base/90 px-3 py-1 font-mono text-xs text-gold-light">
-                        [PENDIENTE USUARIO: Captura oficial de GECH]
+                        {t('portfolio.labels.pendingCapture')}
                       </span>
                     </div>
                   )}
@@ -863,19 +738,25 @@ export function PortfolioSection() {
 
                   <dl className="mt-5 flex-1 space-y-4 text-sm">
                     <div>
-                      <dt className="font-heading font-bold text-content-primary">Problema</dt>
+                      <dt className="font-heading font-bold text-content-primary">
+                        {t('portfolio.labels.problem')}
+                      </dt>
                       <dd className="mt-1 leading-relaxed text-content-secondary">
                         {project.problem}
                       </dd>
                     </div>
                     <div>
-                      <dt className="font-heading font-bold text-content-primary">Solución</dt>
+                      <dt className="font-heading font-bold text-content-primary">
+                        {t('portfolio.labels.solution')}
+                      </dt>
                       <dd className="mt-1 leading-relaxed text-content-secondary">
                         {project.solution}
                       </dd>
                     </div>
                     <div>
-                      <dt className="font-heading font-bold text-content-primary">Resultado</dt>
+                      <dt className="font-heading font-bold text-content-primary">
+                        {t('portfolio.labels.result')}
+                      </dt>
                       <dd className="mt-1">
                         <span className="inline-block rounded-lg border border-dashed border-gold/40 bg-gold/5 px-3 py-1.5 font-mono text-xs text-gold-light">
                           {project.result}
@@ -883,7 +764,9 @@ export function PortfolioSection() {
                       </dd>
                     </div>
                     <div>
-                      <dt className="font-heading font-bold text-content-primary">Testimonio</dt>
+                      <dt className="font-heading font-bold text-content-primary">
+                        {t('portfolio.labels.testimonial')}
+                      </dt>
                       <dd className="mt-1">
                         <span className="inline-block rounded-lg border border-dashed border-gold/40 bg-gold/5 px-3 py-1.5 font-mono text-xs text-gold-light">
                           {project.testimonial}
@@ -894,11 +777,11 @@ export function PortfolioSection() {
 
                   <div className="mt-6 border-t border-white/10 pt-5">
                     <p className="text-xs font-semibold uppercase tracking-wider text-content-muted">
-                      Stack Técnico
+                      {t('portfolio.labels.stack')}
                     </p>
                     <ul
                       className="mt-2.5 flex flex-wrap gap-2"
-                      aria-label={`Stack de ${project.title}`}
+                      aria-label={`${t('portfolio.labels.stackAriaPrefix')} ${project.title}`}
                     >
                       {project.stack.map((tech) => (
                         <li
@@ -915,14 +798,21 @@ export function PortfolioSection() {
                         href={project.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() =>
+                          trackEvent('project_click', {
+                            project_id: project.id,
+                            project_title: project.title,
+                            language: i18n.language,
+                          })
+                        }
                         className="mt-5 inline-flex items-center gap-2 font-heading text-sm font-bold text-gold-light hover:text-gold"
                       >
-                        <span>Ver proyecto en vivo</span>
+                        <span>{t('portfolio.labels.visitSite')}</span>
                         <ExternalLinkIcon className="h-4 w-4" />
                       </a>
                     ) : (
                       <p className="mt-5 font-mono text-xs text-content-muted">
-                        [PENDIENTE USUARIO: Enlace público de GECH]
+                        {t('portfolio.labels.pendingUrl')}
                       </p>
                     )}
                   </div>
@@ -937,32 +827,9 @@ export function PortfolioSection() {
 }
 
 export function WhyUsSection() {
-  const pillars = [
-    {
-      title: 'Velocidad Extrema (<2s)',
-      description:
-        'Sitios diseñados para cargar en menos de 2 segundos en redes móviles. Rendimiento técnico real que mejora tu SEO y retiene a tus prospectos.',
-      icon: BoltIcon,
-    },
-    {
-      title: 'Respaldo Académico e Ingeniería',
-      description:
-        'Formación en Ingeniería en Desarrollo de Software por la Universidad Tecnológica de Chihuahua (UTCH BIS). Arquitectura limpia, sin deuda técnica.',
-      icon: AcademicCapIcon,
-    },
-    {
-      title: 'Alcance Bilingüe Internacional',
-      description:
-        'Inglés avanzado (iTEP Academic Plus) para construir sitios 100% bilingües (ES/EN) con redacción natural que abre puertas a clientes en México y EE. UU.',
-      icon: GlobeIcon,
-    },
-    {
-      title: 'Trato Directo 1:1 sin Intermediarios',
-      description:
-        'Comunicación directa con el ingeniero responsable de tu proyecto. Sin vendedores comisionistas, sin tickets perdidos y con resultados medibles.',
-      icon: ShieldCheckIcon,
-    },
-  ];
+  const { t } = useTranslation();
+  const pillars = t('whyUs.pillars', { returnObjects: true }) as WhyUsPillarItem[];
+  const icons = [BoltIcon, AcademicCapIcon, GlobeIcon, ShieldCheckIcon];
 
   return (
     <section
@@ -976,33 +843,27 @@ export function WhyUsSection() {
             <div className="mb-4 inline-flex items-center gap-3">
               <span className="h-px w-8 bg-gold" aria-hidden="true" />
               <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
-                Diferenciadores
+                {t('whyUs.eyebrow')}
               </span>
             </div>
             <h2
               id="por-que-heading"
               className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
             >
-              ¿Por qué elegir <span className="gradient-gold-text">Bazan &amp; Co.?</span>
+              {t('whyUs.headingPart1')}{' '}
+              <span className="gradient-gold-text">{t('whyUs.headingHighlight')}</span>
             </h2>
             <p className="mt-5 text-base leading-relaxed text-content-secondary">
-              En <strong className="text-content-primary">Bazan &amp; Co.</strong> aplicamos
-              estándares de ingeniería de software de primer nivel. No somos una agencia masiva que
-              recicla plantillas lentas; construimos activos digitales a la medida diseñados para
-              generar confianza, autoridad y contactos comerciales.
+              {t('whyUs.paragraph1')}
             </p>
             <p className="mt-4 text-base leading-relaxed text-content-secondary">
-              Nuestro dominio de{' '}
-              <strong className="text-content-primary">Inglés avanzado (iTEP Academic Plus)</strong>{' '}
-              y formación en la <strong className="text-content-primary">UTCH BIS</strong>{' '}
-              garantizan una ejecución impecable tanto en código como en comunicación comercial
-              bilingüe.
+              {t('whyUs.paragraph2')}
             </p>
           </RevealOnScroll>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:col-span-7">
             {pillars.map((pillar, idx) => {
-              const IconComponent = pillar.icon;
+              const IconComponent = icons[idx] ?? BoltIcon;
               return (
                 <RevealOnScroll key={pillar.title} delayMs={idx * 90}>
                   <article className="h-full rounded-2xl border border-white/10 bg-obsidian-surface p-6 shadow-card transition-transform duration-300 hover:-translate-y-1 hover:border-gold/35">
@@ -1027,44 +888,8 @@ export function WhyUsSection() {
 }
 
 export function FaqSection() {
-  const faqs = [
-    {
-      question: '¿Cuánto cuesta desarrollar un sitio web o landing page?',
-      answer:
-        'La inversión depende del alcance del proyecto (landing page de conversión, sitio corporativo multipágina o integración bilingüe ES/EN). Tras una breve llamada de diagnóstico sin costo, entregamos una propuesta cerrada por escrito sin cargos ocultos.',
-      pendingNote:
-        '[PENDIENTE USUARIO: Rangos de inversión orientativos por paquete si desea publicarlos]',
-    },
-    {
-      question: '¿En cuánto tiempo estará listo mi sitio web?',
-      answer:
-        'Trabajamos por hitos semanales claros (Diagnóstico, Diseño, Desarrollo y Lanzamiento) para que puedas revisar avances reales desde la primera semana.',
-      pendingNote: '[PENDIENTE USUARIO: Tiempo estimado promedio de entrega en semanas]',
-    },
-    {
-      question: '¿Necesito saber de programación o tecnología para trabajar con ustedes?',
-      answer:
-        'En absoluto. Nos encargamos del 100% de la complejidad técnica (dominio, hosting, certificado SSL, velocidad, SEO y analítica) y te hablamos siempre en términos de negocio y resultados.',
-    },
-    {
-      question: '¿Trabajan solo en Chihuahua o atienden a negocios de otras ciudades y países?',
-      answer:
-        'Nuestra firma está en Chihuahua, México, y trabajamos de forma remota con empresas de todo México, Estados Unidos y Latinoamérica, tanto en español como en inglés.',
-    },
-    {
-      question:
-        '¿Qué diferencia hay entre Bazan & Co. y una agencia tradicional con WordPress/Wix?',
-      answer:
-        'Los constructores visuales genéricos generan código pesado que tarda en cargar y limita tu crecimiento. Nosotros desarrollamos con ingeniería de software moderna logrando cargas menores a 2 segundos, seguridad superior y diseño 100% enfocado en que tus visitantes te contacten.',
-    },
-    {
-      question: '¿Ofrecen mantenimiento o actualizaciones después del lanzamiento?',
-      answer:
-        'Tu sitio queda completamente funcional, documentado y con Google Analytics 4 y Search Console activos. Además, contamos con acompañamiento técnico directo cuando tu negocio requiera nuevas secciones o ajustes.',
-      pendingNote:
-        '[PENDIENTE USUARIO: Detalles de póliza o esquema de soporte mensual post-lanzamiento]',
-    },
-  ];
+  const { t } = useTranslation();
+  const faqs = t('faq.items', { returnObjects: true }) as FaqItem[];
 
   return (
     <section
@@ -1077,7 +902,7 @@ export function FaqSection() {
           <div className="mb-4 inline-flex items-center gap-3">
             <span className="h-px w-8 bg-gold" aria-hidden="true" />
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
-              Preguntas Frecuentes
+              {t('faq.eyebrow')}
             </span>
             <span className="h-px w-8 bg-gold" aria-hidden="true" />
           </div>
@@ -1085,7 +910,8 @@ export function FaqSection() {
             id="faq-heading"
             className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
           >
-            Resolvemos tus dudas <span className="gradient-gold-text">antes de empezar.</span>
+            {t('faq.headingPart1')}{' '}
+            <span className="gradient-gold-text">{t('faq.headingHighlight')}</span>
           </h2>
         </RevealOnScroll>
 
@@ -1117,6 +943,9 @@ export function FaqSection() {
 }
 
 export function FinalCtaSection() {
+  const { t, i18n } = useTranslation();
+  const whatsappUrl = t('whatsapp.url');
+
   return (
     <section aria-labelledby="final-cta-heading" className="py-20 md:py-24">
       <div className="mx-auto max-w-container px-6">
@@ -1133,29 +962,33 @@ export function FinalCtaSection() {
               id="final-cta-heading"
               className="mx-auto max-w-2xl font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
             >
-              ¿Listo para transformar tu presencia digital en una{' '}
-              <span className="gradient-gold-text">máquina de conversión?</span>
+              {t('finalCta.headingPart1')}{' '}
+              <span className="gradient-gold-text">{t('finalCta.headingHighlight')}</span>
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-content-secondary sm:text-lg">
-              Agenda una consulta técnica sin costo o escríbenos directamente por WhatsApp.
-              Analizamos tu situación actual y diseñamos una estrategia web enfocada en resultados
-              reales.
+              {t('finalCta.subtitle')}
             </p>
             <div className="mt-9 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center">
               <a
-                href={WHATSAPP_URL}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent('whatsapp_click', {
+                    location: 'final_cta',
+                    language: i18n.language,
+                  })
+                }
                 className="btn-gold-primary inline-flex min-h-[3.25rem] items-center justify-center gap-2.5 rounded-xl px-7 py-3.5 text-base shadow-glow"
               >
                 <WhatsAppIcon className="h-5 w-5" />
-                <span>Iniciar Conversación por WhatsApp</span>
+                <span>{t('finalCta.ctaPrimary')}</span>
               </a>
               <a
                 href="#contacto"
                 className="inline-flex min-h-[3.25rem] items-center justify-center gap-2 rounded-xl border border-white/15 bg-obsidian-base/80 px-7 py-3.5 font-heading text-base font-bold text-content-primary transition-transform duration-200 hover:-translate-y-0.5 hover:border-gold/40"
               >
-                <span>Solicitar Propuesta por Formulario</span>
+                <span>{t('finalCta.ctaSecondary')}</span>
                 <ArrowRightIcon className="h-4 w-4 text-gold" />
               </a>
             </div>

@@ -108,35 +108,33 @@
   transform: translate3d(0, 0, 0) scale(0.98);
 }
 
-/* Hero word reveal (solo transform y opacity) */
+/* Hero word reveal (GPU transform para LCP instantáneo y contraste 100% desde frame 0) */
 @keyframes hero-word-in {
   0% {
-    opacity: 0.01;
-    transform: translate3d(0, 14px, 0);
+    transform: translate3d(0, 12px, 0);
   }
   100% {
-    opacity: 1;
     transform: translate3d(0, 0, 0);
   }
 }
 
 .hero-word {
   display: inline-block;
-  animation: hero-word-in 650ms var(--ease-out) both;
+  animation: hero-word-in 550ms var(--ease-out) both;
   animation-delay: var(--word-delay, 0ms);
 }
 
-/* Scroll reveal escalonado (solo transform y opacity) */
+/* Scroll reveal escalonado (solo transform para preservar contraste 100% en auditorías automatizadas) */
 .reveal-item {
   transition:
-    opacity 650ms var(--ease-out),
-    transform 650ms var(--ease-out);
+    opacity 600ms var(--ease-out),
+    transform 600ms var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
 .reveal-item.is-hidden {
-  opacity: 0.01;
-  transform: translate3d(0, 24px, 0);
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
 }
 
 .reveal-item.is-visible {

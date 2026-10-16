@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const mode = process.argv[2] || 'mobile';
+const outDir = process.argv[3] || 'dist';
 const relativeOutFile = `./lighthouse-${mode}.json`;
 const outFile = resolve(relativeOutFile);
 
@@ -11,6 +12,8 @@ const previewProc = spawn(
   [
     resolve('./node_modules/vite/bin/vite.js'),
     'preview',
+    '--outDir',
+    outDir,
     '--port',
     '4173',
     '--strictPort',

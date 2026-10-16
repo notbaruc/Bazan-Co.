@@ -1,0 +1,379 @@
+{
+  "meta": {
+    "title": "Bazan & Co. — Premium Web Engineering | Custom Development, Technical SEO & High-Converting Landing Pages",
+    "description": "Bazan & Co. is a software and web engineering firm in Chihuahua, Mexico (serving clients globally). We build fast (<2s), bilingual, conversion-driven websites for SMBs."
+  },
+  "whatsapp": {
+    "url": "https://wa.me/5216143436765?text=Hi%2C%20I%27m%20interested%20in%20a%20high-converting%20website.%20Could%20we%20schedule%20a%20consultation%3F",
+    "fabAria": "Contact Bazan & Co. on WhatsApp"
+  },
+  "nav": {
+    "skipToContent": "Skip to main content",
+    "mainAria": "Main navigation",
+    "langSwitcherAria": "Switch site language",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "ctaDesktop": "Book a Consultation",
+    "ctaMobile": "Book a Technical Consultation",
+    "items": {
+      "problema": "The Problem",
+      "servicios": "Services",
+      "proceso": "Process",
+      "portafolio": "Work",
+      "porQue": "Why Us",
+      "faq": "FAQ",
+      "contacto": "Contact"
+    }
+  },
+  "hero": {
+    "badge": "High-Performance Web Engineering · Chihuahua, Mexico",
+    "line1Words": ["We", "don't", "just", "build", "websites."],
+    "line2Words": ["We", "engineer", "conversion", "machines."],
+    "subtitle": "We are a software engineering firm based in Chihuahua, Mexico (serving clients worldwide) focused on building ultra-fast, bilingual, revenue-driven web experiences for growing businesses and SMBs. Your website isn't an expense—it's your highest-performing digital asset.",
+    "ctaPrimary": "Chat on WhatsApp",
+    "ctaSecondary": "Book a Technical Consultation",
+    "microcopy": "Work directly with the lead engineer · Zero middlemen · Free initial technical audit",
+    "statsAria": "Verifiable technical benchmarks",
+    "stats": [
+      {
+        "displayValue": "<2s",
+        "numericTarget": 2,
+        "prefix": "<",
+        "suffix": "s",
+        "label": "Target mobile load time (LCP)"
+      },
+      {
+        "displayValue": "95+",
+        "numericTarget": 95,
+        "prefix": "",
+        "suffix": "+",
+        "label": "Mobile Lighthouse Standard"
+      },
+      {
+        "displayValue": "100%",
+        "numericTarget": 100,
+        "prefix": "",
+        "suffix": "%",
+        "label": "Bilingual ES/EN Architecture"
+      },
+      {
+        "displayValue": "1:1",
+        "prefix": "",
+        "suffix": "",
+        "label": "Direct access to your engineer"
+      }
+    ]
+  },
+  "trustBar": {
+    "ariaLabel": "Trust and engineering credentials bar",
+    "items": [
+      "B.S. in Software Development Engineering (UTCH BIS)",
+      "Advanced English proficiency (iTEP Academic Plus)",
+      "Sub-2s target load & optimal Core Web Vitals",
+      "100% custom architecture (0% bloated templates)",
+      "Chihuahua, Mexico · Global remote delivery"
+    ]
+  },
+  "problemSolution": {
+    "eyebrow": "Problem / Solution",
+    "headingPart1": "Your business delivers excellence.",
+    "headingHighlight": "Your website should prove it in seconds.",
+    "subtitle": "Most local and growing businesses lose high-intent prospects every day to slow, confusing websites. We replace guesswork with disciplined software engineering.",
+    "problemBadge": "The Industry Norm",
+    "problemTitle": "Why conventional websites fail to generate leads",
+    "problems": [
+      "Bloated page-builder templates that take 5+ seconds to load on mobile, causing prospects to bounce before reading a single word.",
+      "Generic layouts that fail to communicate the true authority, reliability, and caliber of your business.",
+      "Zero visibility on Google due to broken semantic hierarchy, missing technical metadata, and poor Core Web Vitals.",
+      "Brochure-style pages with no clear conversion funnel—visitors arrive, don't see how to request a quote quickly, and leave."
+    ],
+    "solutionBadge": "The Bazan & Co. Standard",
+    "solutionTitle": "Software engineering built for commercial conversion",
+    "solutions": [
+      "Extreme performance engineering (<2-second target mobile load) so you retain every prospect from the very first tap.",
+      "Executive dark-mode aesthetic crafted to position your company as the trusted authority in your market.",
+      "Root-level technical SEO (Schema.org, Core Web Vitals, Search Console) engineered to capture high-intent search demand.",
+      "Conversion-focused architecture designed around one goal: getting qualified prospects to message you on WhatsApp or request a quote."
+    ]
+  },
+  "services": {
+    "eyebrow": "Services",
+    "headingPart1": "Engineering solutions that",
+    "headingHighlight": "accelerate your digital growth.",
+    "subtitle": "Every engagement is built with an engineering mindset: measurable, scalable, and focused on commercial return on investment.",
+    "items": [
+      {
+        "title": "Premium Web Design & Development",
+        "description": "Custom-engineered websites built with clean code, tailored visual identity, and an obsession with mobile speed. Every pixel serves brand authority and lead generation.",
+        "features": [
+          "100% responsive, mobile-first architecture",
+          "Ultra-fast (<2s) load times on mobile networks",
+          "Scalable codebase free of generic templates",
+          "True native ES/EN bilingual capability"
+        ]
+      },
+      {
+        "title": "Technical SEO Optimization",
+        "description": "Foundational search engineering that puts your business in front of buyers actively searching on Google. Semantic HTML, structured data, and verified speed.",
+        "features": [
+          "On-page technical SEO & semantic hierarchy",
+          "Top-tier Core Web Vitals (LCP, CLS, INP)",
+          "Schema.org (JSON-LD) structured data",
+          "Google Search Console indexing & setup"
+        ]
+      },
+      {
+        "title": "High-Converting Landing Pages",
+        "description": "Focused landing pages engineered for a single objective: turning ad and search traffic into qualified leads through persuasive copy and frictionless contact.",
+        "features": [
+          "Action-driven bilingual copywriting (ES/EN)",
+          "Direct WhatsApp & lead-form integration",
+          "Zero-friction user flow to maximize quote requests",
+          "Key conversion event tracking in Google Analytics 4"
+        ]
+      }
+    ]
+  },
+  "marquee": {
+    "ariaLabel": "Engineering technologies and standards we use",
+    "items": [
+      "React 18",
+      "TypeScript",
+      "Tailwind CSS",
+      "Vite SSG",
+      "Core Web Vitals < 2s",
+      "On-Page Technical SEO",
+      "Schema.org JSON-LD",
+      "Bilingual ES/EN Architecture",
+      "Google Analytics 4",
+      "Google Search Console",
+      "Netlify Edge CDN"
+    ]
+  },
+  "process": {
+    "eyebrow": "Engineering Process",
+    "headingPart1": "From strategy to launch,",
+    "headingHighlight": "with zero surprises.",
+    "subtitle": "A transparent four-stage workflow where you have direct visibility into your project's progress at every milestone.",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Discovery",
+        "description": "We audit your business goals, ideal customer profile, and competitors to define clear commercial KPIs and conversion architecture."
+      },
+      {
+        "number": "02",
+        "title": "Architecture & Design",
+        "description": "We structure your messaging hierarchy, conversion funnel, and bespoke visual interface. You review and approve before we write production code."
+      },
+      {
+        "number": "03",
+        "title": "Engineering",
+        "description": "We build your site with clean code, on-page technical SEO, WebP asset optimization, and strict mobile speed testing (<2s target)."
+      },
+      {
+        "number": "04",
+        "title": "Launch",
+        "description": "We deploy to production with SSL security, Google Analytics 4, Search Console indexing, and verified WhatsApp and form lead channels."
+      }
+    ]
+  },
+  "portfolio": {
+    "eyebrow": "Selected Work",
+    "headingPart1": "Projects that speak",
+    "headingHighlight": "for themselves.",
+    "subtitle": "Every project reflects our commitment to technical precision, mobile speed, and conversion-focused user experience.",
+    "labels": {
+      "problem": "Challenge",
+      "solution": "Solution",
+      "result": "Outcome",
+      "testimonial": "Client Feedback",
+      "stack": "Tech Stack",
+      "stackAriaPrefix": "Tech stack for",
+      "visitSite": "View live project",
+      "pendingCapture": "[PENDIENTE USUARIO: Official screenshot for GECH]",
+      "pendingUrl": "[PENDIENTE USUARIO: Public URL for GECH]"
+    },
+    "projects": [
+      {
+        "id": "soldaduras-y-equipos",
+        "title": "Soldaduras y Equipos",
+        "category": "Landing Page · Industrial Welding Supplies",
+        "image": "/img/Consumbiles.webp",
+        "imageAlt": "Catalog of welding equipment, electronic helmets, and industrial consumables for Soldaduras y Equipos",
+        "url": "https://soldadurasequipos.netlify.app/",
+        "problem": "Industrial welding supplies, gases, and technical maintenance provider that needed a dedicated digital presence to showcase its product lines and capture quote requests from local workshops.",
+        "solution": "Fast-loading landing page featuring clear product line categorization, equipment maintenance services, interactive location map, and instant WhatsApp lead routing.",
+        "stack": ["HTML5", "CSS3", "JavaScript", "Local SEO"],
+        "result": "[PENDIENTE USUARIO: Verifiable metric of quote requests or visitor growth]",
+        "testimonial": "[PENDIENTE USUARIO: Authorized client testimonial from Soldaduras y Equipos]"
+      },
+      {
+        "id": "ries-chihuahua",
+        "title": "RIES Chihuahua",
+        "category": "B2B Corporate Site · Manufacturing & Maquila Sector",
+        "image": "/img/RIES_Logo_BW.webp",
+        "imageAlt": "RIES Chihuahua industrial emblem featuring a specialized welder for the manufacturing sector",
+        "url": "https://rieschihuahua.com/",
+        "problem": "Welding equipment and industrial supply partner serving Chihuahua's manufacturing (maquiladora) sector that needed to project B2B corporate credibility and streamline purchasing inquiries.",
+        "solution": "Specialized B2B corporate website tailored to industrial procurement teams, highlighting technical supply capabilities and direct commercial contact channels.",
+        "stack": ["HTML5", "CSS3", "JavaScript", "B2B Technical SEO"],
+        "result": "[PENDIENTE USUARIO: Verifiable metric of industrial B2B leads captured]",
+        "testimonial": "[PENDIENTE USUARIO: Authorized client testimonial from RIES Chihuahua]"
+      },
+      {
+        "id": "gech",
+        "title": "GECH",
+        "category": "Web Project · Chihuahua, Mexico",
+        "image": "/img/bazancologo.webp",
+        "imageAlt": "Reserved institutional preview for the GECH case study developed by Bazan & Co.",
+        "isPendingCapture": true,
+        "problem": "Organization in Chihuahua requiring a structured, modern digital platform engineered for fast mobile access and institutional trust. [PENDIENTE USUARIO: Confirm specific challenge details for GECH]",
+        "solution": "Custom web interface engineered with clean semantic architecture, streamlined service navigation, search engine optimization, and direct contact touchpoints. [PENDIENTE USUARIO: Confirm final delivered scope for GECH]",
+        "stack": ["HTML5 / CSS3", "JavaScript", "Responsive Design", "Technical SEO"],
+        "result": "[PENDIENTE USUARIO: Verifiable impact metric for the GECH project]",
+        "testimonial": "[PENDIENTE USUARIO: Authorized client testimonial from GECH]"
+      }
+    ]
+  },
+  "whyUs": {
+    "eyebrow": "Why Us",
+    "headingPart1": "Why partner with",
+    "headingHighlight": "Bazan & Co.?",
+    "paragraph1": "At Bazan & Co., we apply rigorous software engineering standards to every project. Unlike high-volume agencies that recycle sluggish templates, we build bespoke digital assets engineered to earn trust, project authority, and generate qualified commercial leads.",
+    "paragraph2": "Our Advanced English proficiency (iTEP Academic Plus) and Software Development Engineering background at UTCH BIS ensure seamless execution in both code quality and bilingual business communication.",
+    "pillars": [
+      {
+        "title": "Sub-2-Second Speed (<2s)",
+        "description": "Engineered to load in under 2 seconds on mobile networks. Real technical performance that boosts Google rankings and keeps prospects engaged."
+      },
+      {
+        "title": "Software Engineering Pedigree",
+        "description": "Backed by Software Development Engineering training at Universidad Tecnológica de Chihuahua (UTCH BIS). Clean, maintainable architecture with zero technical debt."
+      },
+      {
+        "title": "Cross-Border Bilingual Reach",
+        "description": "Advanced English proficiency (iTEP Academic Plus) to craft natural, conversion-ready bilingual (ES/EN) websites for markets in Mexico and the United States."
+      },
+      {
+        "title": "Direct 1:1 Engineer Access",
+        "description": "You collaborate directly with the engineer building your project—no commissioned salespeople, no lost support tickets, just accountable results."
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "Frequently Asked Questions",
+    "headingPart1": "Clear answers",
+    "headingHighlight": "before we start.",
+    "items": [
+      {
+        "question": "How much does a custom website or landing page cost?",
+        "answer": "Your investment depends on project scope (high-converting landing page, multi-section corporate site, or full ES/EN bilingual deployment). Following a free discovery call, we provide a fixed-price written proposal with zero hidden fees.",
+        "pendingNote": "[PENDIENTE USUARIO: Starting price ranges per package if you wish to publish them]"
+      },
+      {
+        "question": "How long will it take to launch my website?",
+        "answer": "We work in clear weekly milestones (Discovery, Design, Engineering, and Launch) so you can review tangible progress from week one.",
+        "pendingNote": "[PENDIENTE USUARIO: Estimated average delivery timeline in weeks]"
+      },
+      {
+        "question": "Do I need technical or coding knowledge to work with you?",
+        "answer": "Not at all. We handle 100% of the technical complexity—domain setup, hosting, SSL certificates, mobile speed optimization, SEO, and analytics—while communicating with you in clear business terms."
+      },
+      {
+        "question": "Do you only work with businesses in Chihuahua, or do you serve clients remotely?",
+        "answer": "We are based in Chihuahua, Mexico, and partner remotely with businesses across Mexico, the United States, and Latin America in both Spanish and English."
+      },
+      {
+        "question": "How is Bazan & Co. different from a traditional WordPress or Wix agency?",
+        "answer": "Generic visual page builders output heavy, slow code that hurts your rankings and limits growth. We use modern software engineering to achieve sub-2-second load times, superior security, and custom user flows built to convert visitors into leads."
+      },
+      {
+        "question": "Do you offer post-launch support or updates?",
+        "answer": "Your website is delivered fully documented with Google Analytics 4 and Search Console active. We also provide direct technical support whenever your business needs new sections or updates.",
+        "pendingNote": "[PENDIENTE USUARIO: Monthly maintenance or post-launch support plan details]"
+      }
+    ]
+  },
+  "finalCta": {
+    "headingPart1": "Ready to turn your digital presence into a",
+    "headingHighlight": "conversion machine?",
+    "subtitle": "Book a free technical consultation or message us directly on WhatsApp. We'll evaluate your current presence and map out a results-driven web strategy.",
+    "ctaPrimary": "Start a Conversation on WhatsApp",
+    "ctaSecondary": "Request a Proposal via Form"
+  },
+  "contact": {
+    "eyebrow": "Direct Contact",
+    "headingPart1": "Let's discuss your",
+    "headingHighlight": "next project.",
+    "subtitle": "Every successful project starts with a straightforward conversation. Message us on WhatsApp for immediate attention or fill out the form to receive a tailored technical proposal—no pressure, no fine print.",
+    "channels": {
+      "whatsappTitle": "Direct WhatsApp",
+      "whatsappNumber": "+52 1 614 343 6765",
+      "emailTitle": "Email",
+      "emailAddress": "contacto@bazanco.com",
+      "locationTitle": "Location",
+      "locationText": "Chihuahua, Mexico — Serving clients globally"
+    },
+    "form": {
+      "honeypotLabel": "Do not fill this out if you are human",
+      "nameLabel": "Full name",
+      "namePlaceholder": "Your name",
+      "emailLabel": "Business email",
+      "emailPlaceholder": "you@company.com",
+      "serviceLabel": "Service of interest",
+      "servicePlaceholder": "Select a service",
+      "services": {
+        "webDesign": "Premium Web Design",
+        "seo": "Technical SEO Optimization",
+        "landing": "High-Converting Landing Page",
+        "other": "Other / General Technical Audit"
+      },
+      "messageLabel": "Project details or goals",
+      "messagePlaceholder": "Tell us about your business and what you want to achieve...",
+      "submitIdle": "Send Request",
+      "submitSending": "Sending request...",
+      "privacyPrefix": "By submitting this form you agree to our",
+      "privacyLink": "Privacy Notice",
+      "privacySuffix": ". We respond within 24 business hours.",
+      "successTitle": "Request received!",
+      "successText": "We'll review your project details and get back to you within 24 business hours.",
+      "sendAnother": "Send another message",
+      "errorBanner": "Something went wrong while submitting the form. Please try again or message us directly on WhatsApp.",
+      "errors": {
+        "name": "Please enter your name (at least 2 characters).",
+        "email": "Please enter a valid email address (e.g., name@company.com).",
+        "service": "Please select a service of interest.",
+        "message": "Please share a few details about your project (at least 10 characters)."
+      }
+    }
+  },
+  "footer": {
+    "navAria": "Footer navigation and legal links",
+    "privacyLink": "Privacy Notice",
+    "cookiesLink": "Cookies",
+    "copyright": "© 2026 Bazan & Co. All rights reserved."
+  },
+  "cookieBanner": {
+    "ariaLabel": "Privacy and cookie preferences",
+    "textPrefix": "We use analytics cookies (Google Analytics 4) to measure and improve site performance. Read our",
+    "privacyLink": "Privacy Notice",
+    "accept": "Accept & close",
+    "reject": "Essential only"
+  },
+  "privacyModal": {
+    "title": "Privacy Notice",
+    "closeAria": "Close privacy notice",
+    "controllerLabel": "Data Controller:",
+    "controllerText": "Bazan & Co. (Chihuahua, Chihuahua, Mexico · Contact email:",
+    "pendingLegal": "[PENDIENTE USUARIO: Legal entity name or full registered holder name if desired]",
+    "section1Title": "1. Contact Form (Netlify Forms):",
+    "section1Text": "The information you voluntarily submit through our contact form (name, email address, service of interest, and project message) is processed via Netlify Forms solely to respond to your consultation or quote request. We never sell or rent your personal data to third parties.",
+    "section2Title": "2. Web Analytics (Google Analytics 4):",
+    "section2Text": "We use Google Analytics 4 (Measurement ID: G-CN941SX6Q7) to collect aggregated, anonymous traffic statistics and interaction events (contact button clicks, form submissions, and language selection) strictly to improve website performance. You can accept or decline analytics cookies at any time via the cookie banner.",
+    "section3Title": "3. WhatsApp Communication:",
+    "section3Text": "When you click on WhatsApp links (wa.me), your conversation takes place directly on the external WhatsApp platform under its own privacy policy and end-to-end encryption.",
+    "section4Title": "4. Data Subject Rights (ARCO):",
+    "section4Text": "You may request access, rectification, cancellation, or opposition regarding your personal data at any time by emailing"
+  }
+}

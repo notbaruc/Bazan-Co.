@@ -1,4 +1,6 @@
 import { type FormEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { trackEvent } from '../utils/analytics';
 import {
   ArrowRightIcon,
   CheckIcon,
@@ -7,7 +9,6 @@ import {
   MapPinIcon,
   WhatsAppIcon,
 } from './ui/Icons';
-import { WHATSAPP_URL } from './Sections';
 
 interface FormValues {
   name: string;
@@ -25,6 +26,7 @@ interface FormErrors {
 }
 
 export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
+  const { t, i18n } = useTranslation();
   const [values, setValues] = useState<FormValues>({
     name: '',
     email: '',
@@ -34,21 +36,22 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const whatsappUrl = t('whatsapp.url');
 
   const validate = (): FormErrors => {
     const nextErrors: FormErrors = {};
     if (!values.name.trim() || values.name.trim().length < 2) {
-      nextErrors.name = 'Por favor ingresa tu nombre (mínimo 2 caracteres).';
+      nextErrors.name = t('contact.form.errors.name');
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!values.email.trim() || !emailRegex.test(values.email.trim())) {
-      nextErrors.email = 'Ingresa un correo electrónico válido (ej. nombre@empresa.com).';
+      nextErrors.email = t('contact.form.errors.email');
     }
     if (!values.service) {
-      nextErrors.service = 'Selecciona el servicio de tu interés.';
+      nextErrors.service = t('contact.form.errors.service');
     }
     if (!values.message.trim() || values.message.trim().length < 10) {
-      nextErrors.message = 'Cuéntanos brevemente sobre tu proyecto (mínimo 10 caracteres).';
+      nextErrors.message = t('contact.form.errors.message');
     }
     return nextErrors;
   };
@@ -84,6 +87,10 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
         window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1'
       ) {
+        trackEvent('form_submit', {
+          service: values.service,
+          language: i18n.language,
+        });
         setStatus('success');
         setValues({ name: '', email: '', service: '', message: '', botField: '' });
       } else {
@@ -91,6 +98,10 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
       }
     } catch {
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        trackEvent('form_submit', {
+          service: values.service,
+          language: i18n.language,
+        });
         setStatus('success');
       } else {
         setStatus('error');
@@ -110,26 +121,31 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
             <div className="mb-4 inline-flex items-center gap-3">
               <span className="h-px w-8 bg-gold" aria-hidden="true" />
               <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
-                Contacto Directo
+                {t('contact.eyebrow')}
               </span>
             </div>
             <h2
               id="contacto-heading"
               className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
             >
-              Hablemos de tu <span className="gradient-gold-text">próximo proyecto.</span>
+              {t('contact.headingPart1')}{' '}
+              <span className="gradient-gold-text">{t('contact.headingHighlight')}</span>
             </h2>
             <p className="mt-4 text-base leading-relaxed text-content-secondary">
-              Cada proyecto comienza con una conversación clara. Escríbenos por WhatsApp para
-              atención inmediata o completa el formulario y te enviaremos una propuesta técnica a la
-              medida — sin compromisos ni letra pequeña.
+              {t('contact.subtitle')}
             </p>
 
             <address className="mt-8 space-y-4 not-italic">
               <a
-                href={WHATSAPP_URL}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent('whatsapp_click', {
+                    location: 'contact_section',
+                    language: i18n.language,
+                  })
+                }
                 className="flex items-start gap-4 rounded-2xl border border-white/10 bg-obsidian-surface p-4 hover:border-gold/40"
               >
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
@@ -137,22 +153,28 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                 </span>
                 <div>
                   <div className="font-heading text-sm font-bold text-content-primary">
-                    WhatsApp Directo
+                    {t('contact.channels.whatsappTitle')}
                   </div>
-                  <div className="mt-0.5 text-sm text-content-secondary">+52 1 614 343 6765</div>
+                  <div className="mt-0.5 text-sm text-content-secondary">
+                    {t('contact.channels.whatsappNumber')}
+                  </div>
                 </div>
               </a>
 
               <a
-                href="mailto:contacto@bazanco.com"
+                href={`mailto:${t('contact.channels.emailAddress')}`}
                 className="flex items-start gap-4 rounded-2xl border border-white/10 bg-obsidian-surface p-4 hover:border-gold/40"
               >
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gold/10 text-gold">
                   <MailIcon className="h-5 w-5" />
                 </span>
                 <div>
-                  <div className="font-heading text-sm font-bold text-content-primary">Email</div>
-                  <div className="mt-0.5 text-sm text-content-secondary">contacto@bazanco.com</div>
+                  <div className="font-heading text-sm font-bold text-content-primary">
+                    {t('contact.channels.emailTitle')}
+                  </div>
+                  <div className="mt-0.5 text-sm text-content-secondary">
+                    {t('contact.channels.emailAddress')}
+                  </div>
                 </div>
               </a>
 
@@ -162,10 +184,10 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                 </span>
                 <div>
                   <div className="font-heading text-sm font-bold text-content-primary">
-                    Ubicación
+                    {t('contact.channels.locationTitle')}
                   </div>
                   <p className="mt-0.5 text-sm text-content-secondary">
-                    Chihuahua, México — Servicio remoto a nivel global
+                    {t('contact.channels.locationText')}
                   </p>
                 </div>
               </div>
@@ -185,7 +207,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
               <input type="hidden" name="form-name" value="contact" />
               <div className="sr-only" aria-hidden="true">
                 <label htmlFor="bot-field">
-                  No llenes este campo si eres humano
+                  {t('contact.form.honeypotLabel')}
                   <input
                     id="bot-field"
                     name="bot-field"
@@ -204,18 +226,17 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                     <CheckIcon className="h-7 w-7" />
                   </div>
                   <h3 className="mt-4 font-heading text-2xl font-bold text-content-primary">
-                    ¡Solicitud recibida con éxito!
+                    {t('contact.form.successTitle')}
                   </h3>
                   <p className="mx-auto mt-2 max-w-md text-sm text-content-secondary">
-                    Revisaremos los detalles de tu proyecto y te responderemos en menos de 24 horas
-                    hábiles.
+                    {t('contact.form.successText')}
                   </p>
                   <button
                     type="button"
                     onClick={() => setStatus('idle')}
                     className="mt-6 rounded-xl border border-white/15 px-5 py-2.5 text-sm font-semibold text-content-primary hover:border-gold/40"
                   >
-                    Enviar otro mensaje
+                    {t('contact.form.sendAnother')}
                   </button>
                 </div>
               ) : (
@@ -226,7 +247,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                         htmlFor="contact-name"
                         className="block text-sm font-medium text-content-primary"
                       >
-                        Nombre completo <span className="text-gold">*</span>
+                        {t('contact.form.nameLabel')} <span className="text-gold">*</span>
                       </label>
                       <input
                         id="contact-name"
@@ -234,7 +255,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                         type="text"
                         autoComplete="name"
                         required
-                        placeholder="Tu nombre"
+                        placeholder={t('contact.form.namePlaceholder')}
                         value={values.name}
                         onChange={(e) => {
                           setValues({ ...values, name: e.target.value });
@@ -256,7 +277,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                         htmlFor="contact-email"
                         className="block text-sm font-medium text-content-primary"
                       >
-                        Correo electrónico <span className="text-gold">*</span>
+                        {t('contact.form.emailLabel')} <span className="text-gold">*</span>
                       </label>
                       <input
                         id="contact-email"
@@ -264,7 +285,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                         type="email"
                         autoComplete="email"
                         required
-                        placeholder="tu@empresa.com"
+                        placeholder={t('contact.form.emailPlaceholder')}
                         value={values.email}
                         onChange={(e) => {
                           setValues({ ...values, email: e.target.value });
@@ -287,7 +308,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                       htmlFor="contact-service"
                       className="block text-sm font-medium text-content-primary"
                     >
-                      Servicio de interés <span className="text-gold">*</span>
+                      {t('contact.form.serviceLabel')} <span className="text-gold">*</span>
                     </label>
                     <select
                       id="contact-service"
@@ -303,12 +324,12 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                       className="mt-2 w-full rounded-xl border border-white/15 bg-obsidian-base px-4 py-3 text-sm text-content-primary focus:border-gold"
                     >
                       <option value="" disabled>
-                        Selecciona un servicio
+                        {t('contact.form.servicePlaceholder')}
                       </option>
-                      <option value="diseno-web">Diseño Web Premium</option>
-                      <option value="seo">Optimización SEO</option>
-                      <option value="landing-page">Landing Page de Alta Conversión</option>
-                      <option value="otro">Otro / Diagnóstico General</option>
+                      <option value="diseno-web">{t('contact.form.services.webDesign')}</option>
+                      <option value="seo">{t('contact.form.services.seo')}</option>
+                      <option value="landing-page">{t('contact.form.services.landing')}</option>
+                      <option value="otro">{t('contact.form.services.other')}</option>
                     </select>
                     {errors.service && (
                       <p id="error-service" role="alert" className="mt-1.5 text-xs text-rose-400">
@@ -322,14 +343,14 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                       htmlFor="contact-message"
                       className="block text-sm font-medium text-content-primary"
                     >
-                      Mensaje o detalles del proyecto <span className="text-gold">*</span>
+                      {t('contact.form.messageLabel')} <span className="text-gold">*</span>
                     </label>
                     <textarea
                       id="contact-message"
                       name="message"
                       rows={4}
                       required
-                      placeholder="Cuéntanos a qué se dedica tu negocio y qué objetivo buscas..."
+                      placeholder={t('contact.form.messagePlaceholder')}
                       value={values.message}
                       onChange={(e) => {
                         setValues({ ...values, message: e.target.value });
@@ -351,8 +372,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                       role="alert"
                       className="mt-4 rounded-xl border border-rose-500/40 bg-rose-500/10 p-3 text-xs text-rose-300"
                     >
-                      Ocurrió un inconveniente al enviar el formulario. Por favor intenta de nuevo o
-                      escríbenos directamente por WhatsApp.
+                      {t('contact.form.errorBanner')}
                     </div>
                   )}
 
@@ -362,21 +382,23 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                     className="btn-gold-primary mt-6 flex min-h-[3.25rem] w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-base disabled:opacity-60"
                   >
                     <span>
-                      {status === 'submitting' ? 'Enviando solicitud...' : 'Enviar Solicitud'}
+                      {status === 'submitting'
+                        ? t('contact.form.submitSending')
+                        : t('contact.form.submitIdle')}
                     </span>
                     <ArrowRightIcon className="h-4 w-4" />
                   </button>
 
                   <p className="mt-4 text-center text-xs text-content-muted">
-                    Al enviar este formulario aceptas nuestro{' '}
+                    {t('contact.form.privacyPrefix')}{' '}
                     <button
                       type="button"
                       onClick={onOpenPrivacy}
                       className="font-medium text-gold-light underline underline-offset-2 hover:text-gold"
                     >
-                      Aviso de Privacidad
+                      {t('contact.form.privacyLink')}
                     </button>
-                    . Respuesta en menos de 24 horas.
+                    {t('contact.form.privacySuffix')}
                   </p>
                 </>
               )}
@@ -395,14 +417,12 @@ export function FooterSection({
   onOpenPrivacy: () => void;
   onOpenCookies: () => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <footer className="border-t border-white/10 bg-obsidian-surface py-12">
       <div className="mx-auto flex max-w-container flex-col items-center justify-between gap-6 px-6 md:flex-row">
-        <a
-          href="#hero"
-          className="inline-flex items-center gap-2.5"
-          aria-label="Bazan & Co. — Volver arriba"
-        >
+        <a href="#hero" className="inline-flex items-center gap-2.5">
           <span
             className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-gold-light to-gold-dark font-heading text-xs font-black text-content-inverse"
             aria-hidden="true"
@@ -414,31 +434,31 @@ export function FooterSection({
           </span>
         </a>
 
-        <nav aria-label="Enlaces legales y de navegación del pie de página">
+        <nav aria-label={t('footer.navAria')}>
           <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-content-secondary">
             <li>
               <a href="#servicios" className="hover:text-gold-light">
-                Servicios
+                {t('nav.items.servicios')}
               </a>
             </li>
             <li>
               <a href="#proceso" className="hover:text-gold-light">
-                Proceso
+                {t('nav.items.proceso')}
               </a>
             </li>
             <li>
               <a href="#portafolio" className="hover:text-gold-light">
-                Portafolio
+                {t('nav.items.portafolio')}
               </a>
             </li>
             <li>
               <a href="#faq" className="hover:text-gold-light">
-                FAQ
+                {t('nav.items.faq')}
               </a>
             </li>
             <li>
               <a href="#contacto" className="hover:text-gold-light">
-                Contacto
+                {t('nav.items.contacto')}
               </a>
             </li>
             <li>
@@ -447,7 +467,7 @@ export function FooterSection({
                 onClick={onOpenPrivacy}
                 className="text-content-secondary hover:text-gold-light"
               >
-                Aviso de Privacidad
+                {t('footer.privacyLink')}
               </button>
             </li>
             <li>
@@ -456,27 +476,33 @@ export function FooterSection({
                 onClick={onOpenCookies}
                 className="text-content-secondary hover:text-gold-light"
               >
-                Cookies
+                {t('footer.cookiesLink')}
               </button>
             </li>
           </ul>
         </nav>
 
-        <p className="text-xs text-content-muted">
-          &copy; 2026 Bazan &amp; Co. Todos los derechos reservados.
-        </p>
+        <p className="text-xs text-content-muted">{t('footer.copyright')}</p>
       </div>
     </footer>
   );
 }
 
 export function WhatsAppFab() {
+  const { t, i18n } = useTranslation();
+
   return (
     <a
-      href={WHATSAPP_URL}
+      href={t('whatsapp.url')}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Contactar a Bazan & Co. por WhatsApp"
+      aria-label={t('whatsapp.fabAria')}
+      onClick={() =>
+        trackEvent('whatsapp_click', {
+          location: 'floating_button',
+          language: i18n.language,
+        })
+      }
       className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-[#07080C] shadow-lg hover:scale-105"
     >
       <WhatsAppIcon className="h-7 w-7" />
@@ -495,22 +521,23 @@ export function CookieBanner({
   onReject: () => void;
   onOpenPrivacy: () => void;
 }) {
+  const { t } = useTranslation();
+
   if (!visible) return null;
 
   return (
     <aside
-      aria-label="Preferencias de privacidad y cookies"
+      aria-label={t('cookieBanner.ariaLabel')}
       className="fixed bottom-4 left-4 right-20 z-50 max-w-md rounded-2xl border border-white/15 bg-obsidian-elevated/95 p-4 shadow-card backdrop-blur-md sm:left-6 sm:right-auto"
     >
       <p className="text-xs leading-relaxed text-content-secondary sm:text-sm">
-        Utilizamos cookies de analítica (Google Analytics 4) para medir y mejorar el rendimiento de
-        nuestro sitio. Puedes consultar nuestro{' '}
+        {t('cookieBanner.textPrefix')}{' '}
         <button
           type="button"
           onClick={onOpenPrivacy}
           className="font-semibold text-gold-light underline underline-offset-2 hover:text-gold"
         >
-          Aviso de Privacidad
+          {t('cookieBanner.privacyLink')}
         </button>
         .
       </p>
@@ -520,14 +547,14 @@ export function CookieBanner({
           onClick={onAccept}
           className="btn-gold-primary flex-1 rounded-lg px-3.5 py-2 text-xs font-bold"
         >
-          Aceptar y cerrar
+          {t('cookieBanner.accept')}
         </button>
         <button
           type="button"
           onClick={onReject}
           className="flex-1 rounded-lg border border-white/15 bg-obsidian-base px-3.5 py-2 text-xs font-semibold text-content-secondary hover:border-white/30 hover:text-content-primary"
         >
-          Solo esenciales
+          {t('cookieBanner.reject')}
         </button>
       </div>
     </aside>
@@ -535,6 +562,8 @@ export function CookieBanner({
 }
 
 export function PrivacyModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -562,12 +591,12 @@ export function PrivacyModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             id="privacy-modal-title"
             className="font-heading text-xl font-bold text-content-primary"
           >
-            Aviso de Privacidad
+            {t('privacyModal.title')}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Cerrar aviso de privacidad"
+            aria-label={t('privacyModal.closeAria')}
             className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-content-secondary hover:text-content-primary"
           >
             <CloseIcon className="h-5 w-5" />
@@ -576,45 +605,31 @@ export function PrivacyModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
 
         <div className="mt-4 space-y-4 text-sm leading-relaxed text-content-secondary">
           <p>
-            <strong className="text-content-primary">Responsable:</strong> Bazan &amp; Co.
-            (Chihuahua, Chihuahua, México · Correo de contacto:{' '}
+            <strong className="text-content-primary">{t('privacyModal.controllerLabel')}</strong>{' '}
+            {t('privacyModal.controllerText')}{' '}
             <a href="mailto:contacto@bazanco.com" className="text-gold-light underline">
               contacto@bazanco.com
             </a>
             ).{' '}
             <span className="font-mono text-xs text-gold-light">
-              [PENDIENTE USUARIO: Razón social o nombre completo del titular legal si desea
-              especificarlo]
+              {t('privacyModal.pendingLegal')}
             </span>
           </p>
           <p>
-            <strong className="text-content-primary">
-              1. Formulario de Contacto (Netlify Forms):
-            </strong>{' '}
-            Los datos que nos proporcionas voluntariamente en el formulario de contacto (nombre,
-            correo electrónico, servicio de interés y mensaje) se procesan a través de Netlify Forms
-            con la única finalidad de responder a tu solicitud de consulta técnica o cotización. No
-            vendemos ni cedemos tus datos a terceros.
+            <strong className="text-content-primary">{t('privacyModal.section1Title')}</strong>{' '}
+            {t('privacyModal.section1Text')}
           </p>
           <p>
-            <strong className="text-content-primary">2. Analítica Web (Google Analytics 4):</strong>{' '}
-            Utilizamos Google Analytics 4 (ID:{' '}
-            <code className="font-mono text-xs">G-CN941SX6Q7</code>) para recopilar estadísticas
-            agregadas y anónimas de navegación y eventos de interacción (clics en botones de
-            contacto, envío de formulario y selección de idioma) únicamente para mejorar el
-            desempeño del sitio. Puedes aceptar o rechazar las cookies analíticas en cualquier
-            momento desde el banner de cookies.
+            <strong className="text-content-primary">{t('privacyModal.section2Title')}</strong>{' '}
+            {t('privacyModal.section2Text')}
           </p>
           <p>
-            <strong className="text-content-primary">3. Contacto vía WhatsApp:</strong> Al hacer
-            clic en los enlaces hacia WhatsApp (<code className="font-mono text-xs">wa.me</code>),
-            la comunicación se realiza directamente en la plataforma externa de WhatsApp bajo sus
-            propias políticas de privacidad y cifrado.
+            <strong className="text-content-primary">{t('privacyModal.section3Title')}</strong>{' '}
+            {t('privacyModal.section3Text')}
           </p>
           <p>
-            <strong className="text-content-primary">4. Derechos ARCO:</strong> Puedes solicitar el
-            acceso, rectificación, cancelación u oposición sobre tus datos personales enviando un
-            correo a{' '}
+            <strong className="text-content-primary">{t('privacyModal.section4Title')}</strong>{' '}
+            {t('privacyModal.section4Text')}{' '}
             <a href="mailto:contacto@bazanco.com" className="text-gold-light underline">
               contacto@bazanco.com
             </a>

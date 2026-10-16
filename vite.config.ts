@@ -6,18 +6,7 @@ export default defineConfig({
   build: {
     target: 'es2020',
     cssCodeSplit: true,
+    modulePreload: false,
     minify: 'esbuild',
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-            return 'vendor-react';
-          }
-          if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) {
-            return 'vendor-i18n';
-          }
-        },
-      },
-    },
   },
 });

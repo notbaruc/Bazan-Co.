@@ -1,20 +1,35 @@
 import { useEffect, useState } from 'react';
-import { ArrowRightIcon, CloseIcon, MenuIcon } from './ui/Icons';
+import { useTranslation } from 'react-i18next';
+import { applyLanguageChange, type SupportedLanguage } from '../i18n/config';
+import { trackEvent } from '../utils/analytics';
+import { ArrowRightIcon, CloseIcon, GlobeIcon, MenuIcon } from './ui/Icons';
 
-const NAV_ITEMS = [
-  { id: 'problema', label: 'El Problema' },
-  { id: 'servicios', label: 'Servicios' },
-  { id: 'proceso', label: 'Proceso' },
-  { id: 'portafolio', label: 'Portafolio' },
-  { id: 'por-que', label: 'Por qué nosotros' },
-  { id: 'faq', label: 'FAQ' },
-  { id: 'contacto', label: 'Contacto' },
-];
+const SECTION_KEYS = [
+  { id: 'problema', key: 'problema' },
+  { id: 'servicios', key: 'servicios' },
+  { id: 'proceso', key: 'proceso' },
+  { id: 'portafolio', key: 'portafolio' },
+  { id: 'por-que', key: 'porQue' },
+  { id: 'faq', key: 'faq' },
+  { id: 'contacto', key: 'contacto' },
+] as const;
 
 export function Navbar() {
+  const { t, i18n } = useTranslation();
   const [activeId, setActiveId] = useState<string>('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const currentLang: SupportedLanguage = i18n.language?.startsWith('en') ? 'en' : 'es';
+
+  const handleLanguageSwitch = (nextLang: SupportedLanguage) => {
+    if (nextLang === currentLang) return;
+    trackEvent('language_change', {
+      from_language: currentLang,
+      to_language: nextLang,
+    });
+    applyLanguageChange(nextLang);
+  };
 
   useEffect(() => {
     let ticking = false;
@@ -33,7 +48,7 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const sectionIds = ['hero', ...NAV_ITEMS.map((item) => item.id)];
+    const sectionIds = ['hero', ...SECTION_KEYS.map((item) => item.id)];
     const elements = sectionIds
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -76,7 +91,7 @@ export function Navbar() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-gold focus:px-4 focus:py-2.5 focus:font-heading focus:text-sm focus:font-bold focus:text-content-inverse focus:shadow-glow"
       >
-        Saltar al contenido principal
+        {t('nav.skipToContent')}
       </a>
 
       <header className="fixed inset-x-0 top-0 z-50">
@@ -88,16 +103,12 @@ export function Navbar() {
         />
 
         <nav
-          aria-label="Navegación principal"
+          aria-label={t('nav.mainAria')}
           className={`relative mx-auto flex h-[4.5rem] max-w-container items-center justify-between px-6 transition-transform duration-300 ${
             scrolled ? 'scale-[0.985]' : 'scale-100'
           }`}
         >
-          <a
-            href="#hero"
-            className="group inline-flex items-center gap-3 rounded-lg py-1"
-            aria-label="Bazan & Co. — Ir al inicio"
-          >
+          <a href="#hero" className="group inline-flex shrink-0 items-center gap-3 rounded-lg py-1">
             <span
               className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-gold-light to-gold-dark font-heading text-base font-black text-content-inverse shadow-sm transition-transform duration-300 group-hover:scale-105"
               aria-hidden="true"
@@ -109,21 +120,21 @@ export function Navbar() {
             </span>
           </a>
 
-          <ul className="hidden items-center gap-1 lg:flex">
-            {NAV_ITEMS.map((item) => {
+          <ul className="hidden items-center gap-1 xl:flex">
+            {SECTION_KEYS.map((item) => {
               const isActive = activeId === item.id;
               return (
                 <li key={item.id}>
                   <a
                     href={`#${item.id}`}
                     aria-current={isActive ? 'location' : undefined}
-                    className={`relative rounded-lg px-3 py-2 text-sm font-medium transition-opacity ${
+                    className={`relative whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-opacity ${
                       isActive
                         ? 'text-gold-light opacity-100'
                         : 'text-content-secondary opacity-85 hover:text-content-primary hover:opacity-100'
                     }`}
                   >
-                    {item.label}
+                    {t(`nav.items.${item.key}`)}
                     <span
                       className={`
                         absolute inset-x-3 bottom-0.5 h-0.5 origin-left rounded-full bg-gold transition-transform duration-300
@@ -138,25 +149,94 @@ export function Navbar() {
           </ul>
 
           <div className="hidden items-center gap-3 lg:flex">
+            <div
+              role="group"
+              aria-label={t('nav.langSwitcherAria')}
+              className="inline-flex h-10 items-center rounded-xl border border-white/10 bg-obsidian-surface p-1"
+            >
+              <GlobeIcon className="ml-2 mr-1.5 h-4 w-4 text-gold" />
+              <button
+                type="button"
+                onClick={() => handleLanguageSwitch('es')}
+                aria-pressed={currentLang === 'es'}
+                className={`w-9 rounded-lg py-1 font-mono text-xs font-bold transition-opacity ${
+                  currentLang === 'es'
+                    ? 'bg-gold text-content-inverse shadow-sm'
+                    : 'text-content-secondary hover:text-content-primary'
+                }`}
+              >
+                ES
+              </button>
+              <button
+                type="button"
+                onClick={() => handleLanguageSwitch('en')}
+                aria-pressed={currentLang === 'en'}
+                className={`w-9 rounded-lg py-1 font-mono text-xs font-bold transition-opacity ${
+                  currentLang === 'en'
+                    ? 'bg-gold text-content-inverse shadow-sm'
+                    : 'text-content-secondary hover:text-content-primary'
+                }`}
+              >
+                EN
+              </button>
+            </div>
+
             <a
               href="#contacto"
-              className="btn-gold-primary inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm"
+              className="btn-gold-primary inline-flex min-w-[11.5rem] items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm"
             >
-              <span>Agenda una Consulta</span>
+              <span>{t('nav.ctaDesktop')}</span>
               <ArrowRightIcon className="h-4 w-4" />
             </a>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen((prev) => !prev)}
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-nav-menu"
-            aria-label={mobileMenuOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 text-content-primary hover:border-gold/40 lg:hidden"
-          >
-            {mobileMenuOpen ? <CloseIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
-          </button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <div
+              role="group"
+              aria-label={t('nav.langSwitcherAria')}
+              className="inline-flex h-10 items-center rounded-xl border border-white/10 bg-obsidian-surface p-1"
+            >
+              <button
+                type="button"
+                onClick={() => handleLanguageSwitch('es')}
+                aria-pressed={currentLang === 'es'}
+                className={`w-8 rounded-lg py-1 font-mono text-xs font-bold ${
+                  currentLang === 'es'
+                    ? 'bg-gold text-content-inverse'
+                    : 'text-content-secondary hover:text-content-primary'
+                }`}
+              >
+                ES
+              </button>
+              <button
+                type="button"
+                onClick={() => handleLanguageSwitch('en')}
+                aria-pressed={currentLang === 'en'}
+                className={`w-8 rounded-lg py-1 font-mono text-xs font-bold ${
+                  currentLang === 'en'
+                    ? 'bg-gold text-content-inverse'
+                    : 'text-content-secondary hover:text-content-primary'
+                }`}
+              >
+                EN
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav-menu"
+              aria-label={mobileMenuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 text-content-primary hover:border-gold/40"
+            >
+              {mobileMenuOpen ? (
+                <CloseIcon className="h-6 w-6" />
+              ) : (
+                <MenuIcon className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </nav>
 
         {mobileMenuOpen && (
@@ -165,7 +245,7 @@ export function Navbar() {
             className="relative border-t border-white/10 bg-obsidian-surface/95 px-6 py-5 backdrop-blur-xl lg:hidden"
           >
             <ul className="flex flex-col gap-1">
-              {NAV_ITEMS.map((item) => {
+              {SECTION_KEYS.map((item) => {
                 const isActive = activeId === item.id;
                 return (
                   <li key={item.id}>
@@ -179,7 +259,7 @@ export function Navbar() {
                           : 'text-content-secondary hover:text-content-primary'
                       }`}
                     >
-                      {item.label}
+                      {t(`nav.items.${item.key}`)}
                     </a>
                   </li>
                 );
@@ -191,7 +271,7 @@ export function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="btn-gold-primary flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl px-5 text-sm"
               >
-                <span>Agenda una Consulta Técnica</span>
+                <span>{t('nav.ctaMobile')}</span>
                 <ArrowRightIcon className="h-4 w-4" />
               </a>
             </div>
