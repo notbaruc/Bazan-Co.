@@ -14,6 +14,23 @@ const NAV_ITEMS = [
 export function Navbar() {
   const [activeId, setActiveId] = useState<string>('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 28);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     const sectionIds = ['hero', ...NAV_ITEMS.map((item) => item.id)];
@@ -62,10 +79,19 @@ export function Navbar() {
         Saltar al contenido principal
       </a>
 
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-obsidian-base/90 backdrop-blur-md">
+      <header className="fixed inset-x-0 top-0 z-50">
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 border-b border-white/10 bg-obsidian-base/90 backdrop-blur-xl transition-opacity duration-300 ${
+            scrolled || mobileMenuOpen ? 'opacity-100 shadow-md' : 'opacity-65'
+          }`}
+        />
+
         <nav
           aria-label="Navegación principal"
-          className="mx-auto flex h-[4.5rem] max-w-container items-center justify-between px-6"
+          className={`relative mx-auto flex h-[4.5rem] max-w-container items-center justify-between px-6 transition-transform duration-300 ${
+            scrolled ? 'scale-[0.985]' : 'scale-100'
+          }`}
         >
           <a
             href="#hero"
@@ -73,7 +99,7 @@ export function Navbar() {
             aria-label="Bazan & Co. — Ir al inicio"
           >
             <span
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-gold-light to-gold-dark font-heading text-base font-black text-content-inverse shadow-sm"
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-gold-light to-gold-dark font-heading text-base font-black text-content-inverse shadow-sm transition-transform duration-300 group-hover:scale-105"
               aria-hidden="true"
             >
               B
@@ -91,19 +117,20 @@ export function Navbar() {
                   <a
                     href={`#${item.id}`}
                     aria-current={isActive ? 'location' : undefined}
-                    className={`relative rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    className={`relative rounded-lg px-3 py-2 text-sm font-medium transition-opacity ${
                       isActive
-                        ? 'text-gold-light'
-                        : 'text-content-secondary hover:text-content-primary'
+                        ? 'text-gold-light opacity-100'
+                        : 'text-content-secondary opacity-85 hover:text-content-primary hover:opacity-100'
                     }`}
                   >
                     {item.label}
-                    {isActive && (
-                      <span
-                        className="absolute inset-x-3 bottom-0.5 h-0.5 rounded-full bg-gold"
-                        aria-hidden="true"
-                      />
-                    )}
+                    <span
+                      className={`
+                        absolute inset-x-3 bottom-0.5 h-0.5 origin-left rounded-full bg-gold transition-transform duration-300
+                        ${isActive ? 'scale-x-100' : 'scale-x-0'}
+                      `}
+                      aria-hidden="true"
+                    />
                   </a>
                 </li>
               );
@@ -135,7 +162,7 @@ export function Navbar() {
         {mobileMenuOpen && (
           <div
             id="mobile-nav-menu"
-            className="border-t border-white/10 bg-obsidian-surface px-6 py-5 lg:hidden"
+            className="relative border-t border-white/10 bg-obsidian-surface/95 px-6 py-5 backdrop-blur-xl lg:hidden"
           >
             <ul className="flex flex-col gap-1">
               {NAV_ITEMS.map((item) => {

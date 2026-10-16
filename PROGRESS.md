@@ -4,7 +4,7 @@
 - [x] **Arranque:** Mover sitio original a `legacy/`, crear `legacy/REFERENCIA.md`, `AGENTS.md`, `.gitattributes`, `PLAN.md` y `PROGRESS.md`.
 - [x] **Fase 1 — Base:** Vite + React 18 + TypeScript + Tailwind CSS, design tokens, fuentes self-hosted, ESLint + Prettier (`eol: lf`), `netlify.toml`, `README.md`.
 - [x] **Fase 2 — Layout Estático Mobile-First:** Todas las secciones en orden, HTML semántico, foco visible, contraste AA, validación de formulario en cliente, compuerta Lighthouse móvil superada (`Performance: 99`, `Accessibility: 100`, `Best Practices: 100`, `SEO: 100`, `LCP: 1.7 s (1668 ms)`, `TBT: 30 ms`, `CLS: 0.008`).
-- [ ] **Fase 3 — Animaciones:** Registro de efectos y costos, implementación `transform`/`opacity`, prueba con CPU throttling 4x, compuerta Lighthouse móvil.
+- [x] **Fase 3 — Animaciones:** Registro de efectos y costos, implementación `transform`/`opacity`, prueba con CPU throttling 4x, compuerta Lighthouse móvil superada (`Performance: 98`, `Accessibility: 96`, `Best Practices: 100`, `SEO: 100`, `LCP: 2.0 s (1967 ms < 2000 ms)`, `TBT: 40 ms (39 ms)`, `CLS: 0.009`).
 - [ ] **Fase 4 — i18n ES/EN:** `react-i18next`, selector en navbar, persistencia, copy 100% en JSON, rutas `/` y `/en/` compatibles con `hreflang`, cero CLS, compuerta Lighthouse móvil.
 - [ ] **Fase 5 — SEO, Analítica y Formulario:** Prerender estático (`/` y `/en/`), Search Console tag, JSON-LD `ProfessionalService`, `sitemap.xml`, `robots.txt`, GA4 (`G-CN941SX6Q7`) + 4 eventos, Netlify Forms con honeypot y estados, compuerta Lighthouse móvil.
 - [ ] **Fase 6 — Auditoría Final y Entrega:** Auditoría móvil y desktop, revisión de código y contenido, creación de `REPORT.md`.
@@ -24,6 +24,18 @@
   - **LCP:** `1.7 s` (`1668 ms`, Presupuesto: < 2000 ms)
   - **TBT:** `30 ms` (`28 ms`, Presupuesto INP/TBT: < 200 ms)
   - **CLS:** `0.008` (Presupuesto: < 0.05)
+
+### Cierre de Fase 3 (Animaciones e Interacciones GPU)
+- **Comando ejecutado:** `node scripts/audit-lighthouse.mjs mobile`
+- **Resultados medidos (Móvil con CPU 4x slowdown y Slow 4G):**
+  - **Performance:** `98 / 100` (Presupuesto: ≥ 95)
+  - **Accessibility:** `96 / 100` (Presupuesto: ≥ 95)
+  - **Best Practices:** `100 / 100` (Presupuesto: ≥ 95)
+  - **SEO:** `100 / 100` (Presupuesto: = 100)
+  - **FCP:** `2.0 s`
+  - **LCP:** `2.0 s` (`1967 ms`, Presupuesto: < 2000 ms)
+  - **TBT:** `40 ms` (`39 ms`, Presupuesto INP/TBT: < 200 ms)
+  - **CLS:** `0.009` (Presupuesto: < 0.05)
 
 ---
 

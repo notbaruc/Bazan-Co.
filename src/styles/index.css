@@ -15,6 +15,15 @@
     overflow-x: hidden;
   }
 
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
   body {
     background-color: var(--bg-base);
     color: var(--text-secondary);
@@ -34,7 +43,6 @@
     letter-spacing: -0.025em;
   }
 
-  /* Foco visible accesible por teclado (WCAG AA) */
   :focus-visible {
     outline: 2px solid var(--accent-light);
     outline-offset: 3px;
@@ -54,7 +62,10 @@
   background-clip: text;
 }
 
+/* Micro-interacción en botones primarios usando solo transform y opacity */
 .btn-gold-primary {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(
     135deg,
     var(--accent-light) 0%,
@@ -65,21 +76,106 @@
   font-family: var(--font-heading);
   font-weight: 700;
   transition:
-    transform 250ms var(--ease-out),
-    box-shadow 250ms var(--ease-out),
-    opacity 250ms var(--ease-out);
+    transform 260ms var(--ease-out),
+    opacity 260ms var(--ease-out);
+}
+
+.btn-gold-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  transform: translate3d(-160%, 0, 0) skewX(-20deg);
+  transition: transform 650ms var(--ease-out);
+  pointer-events: none;
 }
 
 .btn-gold-primary:hover {
   transform: translate3d(0, -2px, 0);
-  box-shadow: var(--shadow-glow);
+}
+
+.btn-gold-primary:hover::after {
+  transform: translate3d(320%, 0, 0) skewX(-20deg);
 }
 
 .btn-gold-primary:active {
   transform: translate3d(0, 0, 0) scale(0.98);
 }
 
-/* Animaciones basadas únicamente en transform y opacity */
+/* Hero word reveal (solo transform y opacity) */
+@keyframes hero-word-in {
+  0% {
+    opacity: 0.01;
+    transform: translate3d(0, 14px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.hero-word {
+  display: inline-block;
+  animation: hero-word-in 650ms var(--ease-out) both;
+  animation-delay: var(--word-delay, 0ms);
+}
+
+/* Scroll reveal escalonado (solo transform y opacity) */
+.reveal-item {
+  transition:
+    opacity 650ms var(--ease-out),
+    transform 650ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal-item.is-hidden {
+  opacity: 0.01;
+  transform: translate3d(0, 24px, 0);
+}
+
+.reveal-item.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Tarjetas de servicio con Tilt 3D y Spotlight */
+.tilt-card {
+  position: relative;
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
+    translate3d(0, var(--ty, 0px), 0);
+  transition: transform 280ms var(--ease-out);
+  will-change: transform;
+}
+
+.tilt-card__spotlight {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    360px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(212, 175, 55, 0.16),
+    transparent 70%
+  );
+  opacity: var(--spot-opacity, 0);
+  transition: opacity 300ms var(--ease-out);
+}
+
+/* Fondo animado ligero del Hero (GPU-only) */
+.hero-grid-bg {
+  background-image:
+    linear-gradient(rgba(212, 175, 55, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 175, 55, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 75%);
+}
+
 @keyframes pulse-ring {
   0% {
     transform: scale(1);
@@ -104,20 +200,20 @@
   0%,
   100% {
     transform: translate3d(0, 0, 0) scale(1);
-    opacity: 0.28;
+    opacity: 0.24;
   }
   50% {
-    transform: translate3d(18px, -16px, 0) scale(1.06);
-    opacity: 0.42;
+    transform: translate3d(20px, -16px, 0) scale(1.08);
+    opacity: 0.38;
   }
 }
 
 .animate-pulse-ring {
-  animation: pulse-ring 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation: pulse-ring 2.2s var(--ease-out) infinite;
 }
 
 .animate-marquee {
-  animation: marquee-scroll 30s linear infinite;
+  animation: marquee-scroll 28s linear infinite;
 }
 
 .animate-marquee:hover {
@@ -125,7 +221,7 @@
 }
 
 .animate-float-orb {
-  animation: float-orb 10s ease-in-out infinite;
+  animation: float-orb 12s ease-in-out infinite;
 }
 
 /* Respeto estricto a prefers-reduced-motion */
@@ -137,6 +233,15 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .hero-word,
+  .reveal-item,
+  .reveal-item.is-hidden,
+  .tilt-card {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .animate-pulse-ring,

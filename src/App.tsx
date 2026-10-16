@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Navbar } from './components/Navbar';
 import {
   FaqSection,
@@ -8,6 +8,7 @@ import {
   ProblemSolutionSection,
   ProcessSection,
   ServicesSection,
+  TechMarqueeSection,
   TrustBarSection,
   WhyUsSection,
 } from './components/Sections';
@@ -20,6 +21,69 @@ import {
 } from './components/ConversionSection';
 
 const COOKIE_STORAGE_KEY = 'bazan_cookie_consent';
+
+function CustomDesktopCursor() {
+  const ringRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!canHover || reducedMotion) return;
+
+    const ring = ringRef.current;
+    if (!ring) return;
+
+    let mouseX = -100;
+    let mouseY = -100;
+    let ringX = -100;
+    let ringY = -100;
+    let scale = 1;
+    let visible = false;
+    let rafId = 0;
+
+    const renderLoop = () => {
+      ringX += (mouseX - ringX) * 0.22;
+      ringY += (mouseY - ringY) * 0.22;
+      ring.style.transform = `translate3d(${ringX.toFixed(1)}px, ${ringY.toFixed(1)}px, 0) scale(${scale})`;
+      ring.style.opacity = visible ? '1' : '0';
+      rafId = window.requestAnimationFrame(renderLoop);
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return;
+      mouseX = e.clientX - 16;
+      mouseY = e.clientY - 16;
+      visible = true;
+
+      const target = e.target as HTMLElement | null;
+      const isInteractive = Boolean(target?.closest('a, button, summary, input, select, textarea'));
+      scale = isInteractive ? 1.45 : 1;
+    };
+
+    const onPointerLeave = () => {
+      visible = false;
+    };
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    document.addEventListener('mouseleave', onPointerLeave);
+    rafId = window.requestAnimationFrame(renderLoop);
+
+    return () => {
+      window.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('mouseleave', onPointerLeave);
+      window.cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={ringRef}
+      aria-hidden="true"
+      className="pointer-events-none fixed left-0 top-0 z-[80] hidden h-8 w-8 rounded-full border border-gold/60 opacity-0 transition-opacity duration-200 lg:block"
+      style={{ willChange: 'transform, opacity' }}
+    />
+  );
+}
 
 export default function App() {
   const [privacyOpen, setPrivacyOpen] = useState(false);
@@ -36,6 +100,46 @@ export default function App() {
     }
   }, []);
 
+  useEffect(() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    if (reducedMotion || !finePointer) return;
+
+    let rafId = 0;
+    let isCancelled = false;
+    let cleanupLenis: (() => void) | undefined;
+
+    const timer = window.setTimeout(async () => {
+      try {
+        const { default: Lenis } = await import('lenis');
+        if (isCancelled) return;
+        const lenis = new Lenis({
+          duration: 1.05,
+          smoothWheel: true,
+        });
+
+        const raf = (time: number) => {
+          lenis.raf(time);
+          rafId = window.requestAnimationFrame(raf);
+        };
+        rafId = window.requestAnimationFrame(raf);
+
+        cleanupLenis = () => {
+          window.cancelAnimationFrame(rafId);
+          lenis.destroy();
+        };
+      } catch {
+        // Fallback a smooth scroll nativo en caso de error
+      }
+    }, 350);
+
+    return () => {
+      isCancelled = true;
+      window.clearTimeout(timer);
+      if (cleanupLenis) cleanupLenis();
+    };
+  }, []);
+
   const handleCookieChoice = (choice: 'accepted' | 'rejected') => {
     try {
       localStorage.setItem(COOKIE_STORAGE_KEY, choice);
@@ -47,6 +151,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-obsidian-base text-content-secondary">
+      <CustomDesktopCursor />
       <Navbar />
 
       <main id="main-content" tabIndex={-1} className="outline-none">
@@ -54,6 +159,7 @@ export default function App() {
         <TrustBarSection />
         <ProblemSolutionSection />
         <ServicesSection />
+        <TechMarqueeSection />
         <ProcessSection />
         <PortfolioSection />
         <WhyUsSection />
