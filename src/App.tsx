@@ -48,36 +48,61 @@ function CustomDesktopCursor() {
     let rafId = 0;
 
     const renderLoop = () => {
-      ringX += (mouseX - ringX) * 0.22;
-      ringY += (mouseY - ringY) * 0.22;
+      const dx = mouseX - ringX;
+      const dy = mouseY - ringY;
+      ringX += dx * 0.24;
+      ringY += dy * 0.24;
       ring.style.transform = `translate3d(${ringX.toFixed(1)}px, ${ringY.toFixed(1)}px, 0) scale(${scale})`;
       ring.style.opacity = visible ? '1' : '0';
-      rafId = window.requestAnimationFrame(renderLoop);
+
+      if (Math.hypot(dx, dy) > 0.15) {
+        rafId = window.requestAnimationFrame(renderLoop);
+      } else {
+        rafId = 0;
+        ring.style.willChange = 'auto';
+      }
+    };
+
+    const scheduleLoop = () => {
+      if (rafId === 0) {
+        ring.style.willChange = 'transform, opacity';
+        rafId = window.requestAnimationFrame(renderLoop);
+      }
     };
 
     const onPointerMove = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
       mouseX = e.clientX - 16;
       mouseY = e.clientY - 16;
-      visible = true;
+      if (!visible) {
+        ringX = mouseX;
+        ringY = mouseY;
+        visible = true;
+      }
 
       const target = e.target as HTMLElement | null;
       const isInteractive = Boolean(target?.closest('a, button, summary, input, select, textarea'));
       scale = isInteractive ? 1.45 : 1;
+      scheduleLoop();
     };
 
     const onPointerLeave = () => {
       visible = false;
+      ring.style.opacity = '0';
+      if (rafId !== 0) {
+        window.cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      ring.style.willChange = 'auto';
     };
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
     document.addEventListener('mouseleave', onPointerLeave);
-    rafId = window.requestAnimationFrame(renderLoop);
 
     return () => {
       window.removeEventListener('pointermove', onPointerMove);
       document.removeEventListener('mouseleave', onPointerLeave);
-      window.cancelAnimationFrame(rafId);
+      if (rafId !== 0) window.cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -86,7 +111,6 @@ function CustomDesktopCursor() {
       ref={ringRef}
       aria-hidden="true"
       className="cursor-ring pointer-events-none fixed left-0 top-0 z-[80] hidden h-8 w-8 rounded-full opacity-0 transition-opacity duration-200 lg:block"
-      style={{ willChange: 'transform, opacity' }}
     />
   );
 }

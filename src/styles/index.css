@@ -121,22 +121,29 @@
   animation-delay: var(--word-delay, 0ms);
 }
 
-/* Scroll reveal escalonado */
+/* Contención de layout, estilo y pintura para secciones bajo el fold */
+.cv-section {
+  contain: layout style paint;
+}
+
+/* Scroll reveal escalonado estilo Apple */
 .reveal-item {
   transition:
-    opacity 600ms var(--ease-out),
-    transform 600ms var(--ease-out);
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
 .reveal-item.is-hidden {
   opacity: 0;
-  transform: translate3d(0, 22px, 0);
+  transform: translate3d(0, 18px, 0);
+  will-change: transform, opacity;
 }
 
 .reveal-item.is-visible {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+  will-change: auto;
 }
 
 /* Tarjetas de servicio con Tilt 3D y Spotlight */
@@ -145,6 +152,9 @@
   transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
     translate3d(0, var(--ty, 0px), 0);
   transition: transform 280ms var(--ease-out);
+}
+
+.tilt-card:hover {
   will-change: transform;
 }
 
@@ -256,6 +266,7 @@
 
 .animate-marquee {
   animation: marquee-scroll 28s linear infinite;
+  will-change: transform;
 }
 
 .animate-marquee:hover {

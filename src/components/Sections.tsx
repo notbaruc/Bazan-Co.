@@ -73,6 +73,30 @@ interface FaqItem {
   pendingNote?: string;
 }
 
+let sharedRevealObserver: IntersectionObserver | null = null;
+
+function getSharedRevealObserver(): IntersectionObserver | null {
+  if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+    return null;
+  }
+  if (!sharedRevealObserver) {
+    sharedRevealObserver = new IntersectionObserver(
+      (entries, obs) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
+            target.classList.remove('is-hidden');
+            target.classList.add('is-visible');
+            obs.unobserve(target);
+          }
+        }
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+    );
+  }
+  return sharedRevealObserver;
+}
+
 export function RevealOnScroll({
   children,
   delayMs = 0,
@@ -83,46 +107,39 @@ export function RevealOnScroll({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [state, setState] = useState<'ssr' | 'hidden' | 'visible'>('ssr');
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setState('visible');
+      el.classList.remove('is-hidden');
+      el.classList.add('is-visible');
       return;
     }
 
     const rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight * 0.92) {
-      setState('visible');
+      el.classList.add('is-visible');
       return;
     }
 
-    setState('hidden');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setState('visible');
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
-    );
+    const observer = getSharedRevealObserver();
+    if (!observer) {
+      el.classList.add('is-visible');
+      return;
+    }
 
+    el.classList.add('is-hidden');
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => observer.unobserve(el);
   }, []);
-
-  const visibilityClass =
-    state === 'hidden' ? 'is-hidden' : state === 'visible' ? 'is-visible' : '';
 
   return (
     <div
       ref={ref}
       style={{ '--reveal-delay': `${delayMs}ms` } as CSSProperties}
-      className={`reveal-item ${visibilityClass} ${className}`}
+      className={`reveal-item ${className}`}
     >
       {children}
     </div>
@@ -200,30 +217,52 @@ function TiltSpotlightCard({
   className?: string;
 }) {
   const cardRef = useRef<HTMLElement | null>(null);
+  const rectRef = useRef<DOMRect | null>(null);
+  const rafRef = useRef<number>(0);
+
+  const handlePointerEnter = (e: PointerEvent<HTMLElement>) => {
+    if (e.pointerType !== 'mouse') return;
+    const el = cardRef.current;
+    if (!el) return;
+    rectRef.current = el.getBoundingClientRect();
+  };
 
   const handlePointerMove = (e: PointerEvent<HTMLElement>) => {
     if (e.pointerType !== 'mouse') return;
     const el = cardRef.current;
     if (!el) return;
 
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    if (rafRef.current) return;
 
-    const rotateX = ((y - centerY) / centerY) * -4.5;
-    const rotateY = ((x - centerX) / centerX) * 4.5;
+    rafRef.current = window.requestAnimationFrame(() => {
+      rafRef.current = 0;
+      const rect = rectRef.current ?? el.getBoundingClientRect();
+      rectRef.current = rect;
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
 
-    el.style.setProperty('--rx', `${rotateX.toFixed(2)}deg`);
-    el.style.setProperty('--ry', `${rotateY.toFixed(2)}deg`);
-    el.style.setProperty('--ty', '-4px');
-    el.style.setProperty('--spot-x', `${x.toFixed(0)}px`);
-    el.style.setProperty('--spot-y', `${y.toFixed(0)}px`);
-    el.style.setProperty('--spot-opacity', '1');
+      const rotateX = ((y - centerY) / centerY) * -4.5;
+      const rotateY = ((x - centerX) / centerX) * 4.5;
+
+      el.style.setProperty('--rx', `${rotateX.toFixed(2)}deg`);
+      el.style.setProperty('--ry', `${rotateY.toFixed(2)}deg`);
+      el.style.setProperty('--ty', '-4px');
+      el.style.setProperty('--spot-x', `${x.toFixed(0)}px`);
+      el.style.setProperty('--spot-y', `${y.toFixed(0)}px`);
+      el.style.setProperty('--spot-opacity', '1');
+    });
   };
 
   const handlePointerLeave = () => {
+    if (rafRef.current) {
+      window.cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
+    }
+    rectRef.current = null;
     const el = cardRef.current;
     if (!el) return;
     el.style.setProperty('--rx', '0deg');
@@ -235,6 +274,7 @@ function TiltSpotlightCard({
   return (
     <article
       ref={cardRef}
+      onPointerEnter={handlePointerEnter}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       className={`tilt-card ${className}`}
@@ -275,12 +315,7 @@ export function HeroSection() {
                 stitchTiles="stitch"
               />
             </filter>
-            <pattern
-              id="hero-grain-pattern"
-              width="128"
-              height="128"
-              patternUnits="userSpaceOnUse"
-            >
+            <pattern id="hero-grain-pattern" width="128" height="128" patternUnits="userSpaceOnUse">
               <rect width="128" height="128" filter="url(#hero-grain-filter)" />
             </pattern>
           </defs>
@@ -487,7 +522,7 @@ export function ServicesSection() {
     <section
       id="servicios"
       aria-labelledby="servicios-heading"
-      className="scroll-mt-20 border-t border-line bg-surface py-20 md:py-28"
+      className="cv-section scroll-mt-20 border-t border-line bg-surface py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
         <RevealOnScroll className="max-w-3xl">
@@ -586,7 +621,7 @@ export function ProcessSection() {
     <section
       id="proceso"
       aria-labelledby="proceso-heading"
-      className="scroll-mt-20 bg-surface py-20 md:py-28"
+      className="cv-section scroll-mt-20 bg-surface py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
         <RevealOnScroll className="max-w-3xl">
@@ -782,7 +817,7 @@ export function WhyUsSection() {
     <section
       id="por-que"
       aria-labelledby="por-que-heading"
-      className="scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
+      className="cv-section scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
@@ -842,7 +877,7 @@ export function FaqSection() {
     <section
       id="faq"
       aria-labelledby="faq-heading"
-      className="scroll-mt-20 border-t border-line bg-surface py-20 md:py-28"
+      className="cv-section scroll-mt-20 border-t border-line bg-surface py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
         <RevealOnScroll className="max-w-3xl">
@@ -893,7 +928,7 @@ export function FinalCtaSection() {
   const whatsappUrl = t('whatsapp.url');
 
   return (
-    <section aria-labelledby="final-cta-heading" className="bg-bg py-20 md:py-24">
+    <section aria-labelledby="final-cta-heading" className="cv-section bg-bg py-20 md:py-24">
       <div className="mx-auto max-w-container px-6">
         <RevealOnScroll>
           <div className="relative overflow-hidden rounded-[2rem] border border-accent/30 bg-surface px-6 py-14 text-center shadow-card sm:px-14 sm:py-20">
