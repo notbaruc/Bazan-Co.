@@ -13,8 +13,8 @@
     "langSwitcherAria": "Switch site language",
     "openMenu": "Open navigation menu",
     "closeMenu": "Close navigation menu",
-    "ctaDesktop": "Book a Consultation",
-    "ctaMobile": "Book a Technical Consultation",
+    "ctaDesktop": "Book a consultation",
+    "ctaMobile": "Book a consultation",
     "items": {
       "problema": "The Problem",
       "servicios": "Services",
@@ -26,12 +26,12 @@
     }
   },
   "hero": {
-    "badge": "High-Performance Web Engineering · Chihuahua, Mexico",
-    "line1Words": ["We", "don't", "just", "build", "websites."],
+    "badge": "Web Engineering · Chihuahua, Mexico",
+    "line1Words": ["We", "don't", "build", "web", "pages."],
     "line2Words": ["We", "engineer", "conversion", "machines."],
     "subtitle": "We are a software engineering firm based in Chihuahua, Mexico (serving clients worldwide) focused on building ultra-fast, bilingual, revenue-driven web experiences for growing businesses and SMBs. Your website isn't an expense—it's your highest-performing digital asset.",
-    "ctaPrimary": "Chat on WhatsApp",
-    "ctaSecondary": "Book a Technical Consultation",
+    "ctaPrimary": "Message us on WhatsApp",
+    "ctaSecondary": "Book a consultation",
     "microcopy": "Work directly with the lead engineer · Zero middlemen · Free initial technical audit",
     "statsAria": "Verifiable technical benchmarks",
     "stats": [
@@ -60,17 +60,17 @@
         "displayValue": "1:1",
         "prefix": "",
         "suffix": "",
-        "label": "Direct access to your engineer"
+        "label": "Direct access"
       }
     ]
   },
   "trustBar": {
     "ariaLabel": "Trust and engineering credentials bar",
     "items": [
-      "B.S. in Software Development Engineering (UTCH BIS)",
-      "Advanced English proficiency (iTEP Academic Plus)",
-      "Sub-2s target load & optimal Core Web Vitals",
-      "100% custom architecture (0% bloated templates)",
+      "Software Development Engineering",
+      "Advanced English",
+      "Sub-2s target load",
+      "100% custom architecture",
       "Chihuahua, Mexico · Global remote delivery"
     ]
   },
@@ -186,8 +186,6 @@
     "labels": {
       "problem": "Challenge",
       "solution": "Solution",
-      "result": "Outcome",
-      "testimonial": "Client Feedback",
       "stack": "Tech Stack",
       "stackAriaPrefix": "Tech stack for",
       "visitSite": "View live project",
@@ -199,40 +197,34 @@
         "id": "soldaduras-y-equipos",
         "title": "Soldaduras y Equipos",
         "category": "Landing Page · Industrial Welding Supplies",
-        "image": "/img/Consumbiles.webp",
+        "image": "/img/SE.webp",
         "imageAlt": "Catalog of welding equipment, electronic helmets, and industrial consumables for Soldaduras y Equipos",
         "url": "https://soldadurasequipos.netlify.app/",
         "problem": "Industrial welding supplies, gases, and technical maintenance provider that needed a dedicated digital presence to showcase its product lines and capture quote requests from local workshops.",
         "solution": "Fast-loading landing page featuring clear product line categorization, equipment maintenance services, interactive location map, and instant WhatsApp lead routing.",
-        "stack": ["HTML5", "CSS3", "JavaScript", "Local SEO"],
-        "result": "[PENDIENTE USUARIO: Verifiable metric of quote requests or visitor growth]",
-        "testimonial": "[PENDIENTE USUARIO: Authorized client testimonial from Soldaduras y Equipos]"
+        "stack": ["HTML5", "Tailwind CSS", "JavaScript", "Responsive Design", "Local SEO"]
       },
       {
         "id": "ries-chihuahua",
         "title": "RIES Chihuahua",
         "category": "B2B Corporate Site · Manufacturing & Maquila Sector",
-        "image": "/img/RIES_Logo_BW.webp",
+        "image": "/img/RIES.webp",
         "imageAlt": "RIES Chihuahua industrial emblem featuring a specialized welder for the manufacturing sector",
         "url": "https://rieschihuahua.com/",
         "problem": "Welding equipment and industrial supply partner serving Chihuahua's manufacturing (maquiladora) sector that needed to project B2B corporate credibility and streamline purchasing inquiries.",
         "solution": "Specialized B2B corporate website tailored to industrial procurement teams, highlighting technical supply capabilities and direct commercial contact channels.",
-        "stack": ["HTML5", "CSS3", "JavaScript", "B2B Technical SEO"],
-        "result": "[PENDIENTE USUARIO: Verifiable metric of industrial B2B leads captured]",
-        "testimonial": "[PENDIENTE USUARIO: Authorized client testimonial from RIES Chihuahua]"
+        "stack": ["HTML5", "Tailwind CSS", "JavaScript", "Responsive Design", "Technical SEO"]
       },
       {
         "id": "gech",
         "title": "GECH",
         "category": "Web Project · Chihuahua, Mexico",
-        "image": "/img/bazancologo.webp",
-        "imageAlt": "Reserved institutional preview for the GECH case study developed by Bazan & Co.",
-        "isPendingCapture": true,
+        "image": "/img/GECH.webp",
+        "imageAlt": "Screenshot of the GECH website developed by Bazan & Co.",
+        "url": "https://gechmexico.com/",
         "problem": "Organization in Chihuahua requiring a structured, modern digital platform engineered for fast mobile access and institutional trust. [PENDIENTE USUARIO: Confirm specific challenge details for GECH]",
         "solution": "Custom web interface engineered with clean semantic architecture, streamlined service navigation, search engine optimization, and direct contact touchpoints. [PENDIENTE USUARIO: Confirm final delivered scope for GECH]",
-        "stack": ["HTML5 / CSS3", "JavaScript", "Responsive Design", "Technical SEO"],
-        "result": "[PENDIENTE USUARIO: Verifiable impact metric for the GECH project]",
-        "testimonial": "[PENDIENTE USUARIO: Authorized client testimonial from GECH]"
+        "stack": ["HTML5 / Tailwind CSS", "JavaScript", "Responsive Design", "Technical SEO"]
       }
     ]
   },

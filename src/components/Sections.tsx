@@ -60,8 +60,6 @@ interface PortfolioProjectItem {
   problem: string;
   solution: string;
   stack: string[];
-  result: string;
-  testimonial: string;
 }
 
 interface WhyUsPillarItem {
@@ -187,7 +185,7 @@ function AnimatedCounter({
   return (
     <dd
       ref={ref}
-      className="order-first font-heading text-3xl font-black tabular-nums text-content-primary sm:text-4xl"
+      className="order-first font-serif text-4xl font-normal leading-none tabular-nums text-ink sm:text-5xl"
     >
       {text}
     </dd>
@@ -258,67 +256,68 @@ export function HeroSection() {
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="relative overflow-hidden pb-20 pt-32 md:pb-28 md:pt-40"
+      className="relative isolate overflow-hidden bg-bg pb-20 pt-32 md:pb-28 md:pt-40"
     >
+      <div className="aurora-blob aurora-blob--gold -z-10" aria-hidden="true" />
+      <div className="aurora-blob aurora-blob--steel -z-10" aria-hidden="true" />
       <div className="hero-grid-bg pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
-      <div
-        className="animate-float-orb pointer-events-none absolute -top-28 right-1/4 -z-10 h-[28rem] w-[28rem] rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.24) 0%, transparent 70%)',
-        }}
+      <svg
+        className="hero-grain pointer-events-none absolute inset-0 -z-10 h-full w-full"
         aria-hidden="true"
-      />
-      <div
-        className="animate-float-orb pointer-events-none absolute bottom-0 left-10 -z-10 h-[22rem] w-[22rem] rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.10) 0%, transparent 70%)',
-          animationDelay: '-5s',
-        }}
-        aria-hidden="true"
-      />
+      >
+        <filter id="hero-grain-filter">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.9"
+            numOctaves={2}
+            stitchTiles="stitch"
+          />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#hero-grain-filter)" />
+      </svg>
 
-      <div className="mx-auto max-w-container px-6">
-        <div className="max-w-3xl">
-          <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5">
-            <span className="h-2 w-2 rounded-full bg-gold" aria-hidden="true" />
-            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold-light">
+      <div className="relative mx-auto max-w-container px-6">
+        <div className="max-w-4xl">
+          <div className="mb-6 flex items-center gap-3">
+            <span className="h-px w-8 bg-accent/70" aria-hidden="true" />
+            <span className="font-mono text-xs font-medium uppercase tracking-widest text-accent sm:text-sm">
               {t('hero.badge')}
             </span>
           </div>
 
           <h1
             id="hero-heading"
-            className="font-heading text-4xl font-extrabold leading-[1.08] tracking-tight text-content-primary sm:text-5xl lg:text-6xl"
+            className="font-serif text-5xl font-normal leading-[1.03] tracking-[-0.02em] text-ink sm:text-6xl lg:text-[5.25rem]"
           >
-            <span className="block">
+            <span className="block text-ink">
               {line1Words.map((word, idx) => (
                 <span
                   key={`${word}-${idx}`}
                   style={{ '--word-delay': `${idx * 65}ms` } as CSSProperties}
-                  className="hero-word mr-[0.26em]"
+                  className="hero-word mr-[0.22em]"
                 >
                   {word}
                 </span>
               ))}
             </span>
-            <span className="mt-2 block">
+            <em className="mt-1 block font-serif italic text-accent">
               {line2Words.map((word, idx) => (
                 <span
                   key={`${word}-${idx}`}
                   style={{ '--word-delay': `${(idx + line1Words.length) * 65}ms` } as CSSProperties}
-                  className="hero-word gradient-gold-text mr-[0.26em]"
+                  className="hero-word mr-[0.22em]"
                 >
                   {word}
                 </span>
               ))}
-            </span>
+            </em>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-content-secondary sm:text-xl">
+          <p className="mt-7 max-w-2xl font-body text-lg leading-relaxed text-ink-secondary sm:text-xl">
             {t('hero.subtitle')}
           </p>
 
-          <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="mt-10 flex flex-col gap-3.5 sm:flex-row sm:items-center">
             <a
               href={whatsappUrl}
               target="_blank"
@@ -329,31 +328,31 @@ export function HeroSection() {
                   language: i18n.language,
                 })
               }
-              className="btn-gold-primary inline-flex min-h-[3.25rem] items-center justify-center gap-2.5 rounded-xl px-7 py-3.5 text-base shadow-glow"
+              className="btn-whatsapp-primary inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full bg-whatsapp px-7 py-3.5 font-body text-[0.9375rem] font-semibold text-ink-inverse hover:bg-success"
             >
-              <WhatsAppIcon className="h-5 w-5" />
+              <WhatsAppIcon className="h-5 w-5 shrink-0" />
               <span>{t('hero.ctaPrimary')}</span>
             </a>
 
             <a
               href="#contacto"
-              className="group inline-flex min-h-[3.25rem] items-center justify-center gap-2 rounded-xl border border-white/15 bg-obsidian-surface px-7 py-3.5 font-heading text-base font-bold text-content-primary transition-transform duration-200 hover:-translate-y-0.5 hover:border-gold/40 hover:bg-obsidian-elevated"
+              className="group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full border border-line-strong bg-surface/60 px-7 py-3.5 font-body text-[0.9375rem] font-medium text-ink transition-transform duration-200 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-elevated"
             >
               <span>{t('hero.ctaSecondary')}</span>
-              <ArrowRightIcon className="h-4 w-4 text-gold transition-transform duration-200 group-hover:translate-x-1" />
+              <ArrowRightIcon className="h-4 w-4 text-ink transition-transform duration-200 group-hover:translate-x-1" />
             </a>
           </div>
 
-          <p className="mt-4 text-sm text-content-muted">{t('hero.microcopy')}</p>
+          <p className="mt-5 text-sm text-ink-muted">{t('hero.microcopy')}</p>
         </div>
 
         <dl
           aria-label={t('hero.statsAria')}
-          className="mt-16 grid grid-cols-2 gap-6 border-t border-white/10 pt-10 lg:grid-cols-4"
+          className="mt-16 grid grid-cols-2 gap-6 border-t border-line pt-10 lg:grid-cols-4"
         >
           {stats.map((stat) => (
-            <div key={stat.label} className="border-l-2 border-gold/40 pl-5">
-              <dt className="mt-1 text-sm text-content-muted">{stat.label}</dt>
+            <div key={stat.label} className="border-l border-accent/35 pl-5">
+              <dt className="mt-2 text-sm text-ink-secondary">{stat.label}</dt>
               <AnimatedCounter
                 displayValue={stat.displayValue}
                 numericTarget={stat.numericTarget}
@@ -373,15 +372,12 @@ export function TrustBarSection() {
   const credentials = t('trustBar.items', { returnObjects: true }) as string[];
 
   return (
-    <section
-      aria-label={t('trustBar.ariaLabel')}
-      className="border-y border-white/10 bg-obsidian-surface/80 py-6"
-    >
+    <section aria-label={t('trustBar.ariaLabel')} className="border-y border-line bg-surface py-6">
       <div className="mx-auto max-w-container px-6">
-        <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm font-medium text-content-secondary lg:justify-between">
+        <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm font-medium text-ink-secondary lg:justify-between">
           {credentials.map((item) => (
             <li key={item} className="flex items-center gap-2.5">
-              <ShieldCheckIcon className="h-5 w-5 shrink-0 text-gold" />
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
               <span>{item}</span>
             </li>
           ))}
@@ -400,42 +396,41 @@ export function ProblemSolutionSection() {
     <section
       id="problema"
       aria-labelledby="problema-heading"
-      className="scroll-mt-20 py-20 md:py-28"
+      className="scroll-mt-20 bg-bg py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
-        <RevealOnScroll className="mx-auto max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-3">
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
-            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
+        <RevealOnScroll className="max-w-3xl">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="h-px w-8 bg-accent/70" aria-hidden="true" />
+            <span className="font-mono text-xs font-medium uppercase tracking-widest text-accent sm:text-sm">
               {t('problemSolution.eyebrow')}
             </span>
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
           </div>
           <h2
             id="problema-heading"
-            className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
+            className="font-serif text-4xl font-normal leading-[1.06] tracking-[-0.015em] text-ink sm:text-5xl"
           >
             {t('problemSolution.headingPart1')}{' '}
-            <span className="gradient-gold-text">{t('problemSolution.headingHighlight')}</span>
+            <em className="italic text-accent">{t('problemSolution.headingHighlight')}</em>
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-content-secondary sm:text-lg">
+          <p className="mt-5 text-base leading-relaxed text-ink-secondary sm:text-lg">
             {t('problemSolution.subtitle')}
           </p>
         </RevealOnScroll>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-2">
+        <div className="mt-14 grid gap-6 lg:grid-cols-2">
           <RevealOnScroll delayMs={80}>
-            <article className="h-full rounded-2xl border border-white/10 bg-obsidian-surface p-7 sm:p-9">
-              <div className="inline-flex items-center gap-2 rounded-full border border-rose-500/30 bg-rose-500/10 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-rose-300">
+            <article className="h-full rounded-2xl border border-line bg-surface p-7 sm:p-9">
+              <div className="inline-flex items-center gap-2 rounded-full border border-danger/30 bg-danger/10 px-3.5 py-1 font-mono text-xs font-medium uppercase tracking-widest text-danger">
                 {t('problemSolution.problemBadge')}
               </div>
-              <h3 className="mt-4 font-heading text-2xl font-bold text-content-primary">
+              <h3 className="mt-4 font-heading text-xl font-semibold text-ink sm:text-2xl">
                 {t('problemSolution.problemTitle')}
               </h3>
               <ul className="mt-6 space-y-4">
                 {problems.map((problem) => (
-                  <li key={problem} className="flex items-start gap-3.5 text-content-secondary">
-                    <XCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-rose-400" />
+                  <li key={problem} className="flex items-start gap-3.5 text-ink-secondary">
+                    <XCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-danger" />
                     <span className="text-sm leading-relaxed sm:text-base">{problem}</span>
                   </li>
                 ))}
@@ -444,21 +439,21 @@ export function ProblemSolutionSection() {
           </RevealOnScroll>
 
           <RevealOnScroll delayMs={180}>
-            <article className="relative h-full overflow-hidden rounded-2xl border border-gold/35 bg-obsidian-elevated p-7 shadow-card sm:p-9">
+            <article className="relative h-full overflow-hidden rounded-2xl border border-accent/35 bg-elevated p-7 shadow-card sm:p-9">
               <div
-                className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent"
+                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent"
                 aria-hidden="true"
               />
-              <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/15 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-gold-light">
+              <div className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-3.5 py-1 font-mono text-xs font-medium uppercase tracking-widest text-accent-hi">
                 {t('problemSolution.solutionBadge')}
               </div>
-              <h3 className="mt-4 font-heading text-2xl font-bold text-content-primary">
+              <h3 className="mt-4 font-heading text-xl font-semibold text-ink sm:text-2xl">
                 {t('problemSolution.solutionTitle')}
               </h3>
               <ul className="mt-6 space-y-4">
                 {solutions.map((solution) => (
-                  <li key={solution} className="flex items-start gap-3.5 text-content-primary">
-                    <CheckCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
+                  <li key={solution} className="flex items-start gap-3.5 text-ink">
+                    <CheckCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
                     <span className="text-sm leading-relaxed sm:text-base">{solution}</span>
                   </li>
                 ))}
@@ -480,54 +475,50 @@ export function ServicesSection() {
     <section
       id="servicios"
       aria-labelledby="servicios-heading"
-      className="scroll-mt-20 border-t border-white/10 bg-obsidian-surface/40 py-20 md:py-28"
+      className="scroll-mt-20 border-t border-line bg-surface py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
-        <RevealOnScroll className="mx-auto max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-3">
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
-            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
+        <RevealOnScroll className="max-w-3xl">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="h-px w-8 bg-accent/70" aria-hidden="true" />
+            <span className="font-mono text-xs font-medium uppercase tracking-widest text-accent sm:text-sm">
               {t('services.eyebrow')}
             </span>
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
           </div>
           <h2
             id="servicios-heading"
-            className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
+            className="font-serif text-4xl font-normal leading-[1.06] tracking-[-0.015em] text-ink sm:text-5xl"
           >
             {t('services.headingPart1')}{' '}
-            <span className="gradient-gold-text">{t('services.headingHighlight')}</span>
+            <em className="italic text-accent">{t('services.headingHighlight')}</em>
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-content-secondary sm:text-lg">
+          <p className="mt-5 text-base leading-relaxed text-ink-secondary sm:text-lg">
             {t('services.subtitle')}
           </p>
         </RevealOnScroll>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-3">
+        <div className="mt-14 grid gap-6 lg:grid-cols-3">
           {serviceItems.map((service, idx) => {
             const IconComponent = icons[idx] ?? DesktopIcon;
             return (
               <RevealOnScroll key={service.title} delayMs={idx * 100}>
-                <TiltSpotlightCard className="h-full rounded-2xl border border-white/10 bg-obsidian-surface p-7 shadow-card hover:border-gold/35 sm:p-8">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-gold/25 bg-gold/10 text-gold">
-                    <IconComponent className="h-7 w-7" />
+                <TiltSpotlightCard className="h-full rounded-2xl border border-line bg-bg/85 p-7 shadow-card hover:border-accent/40 sm:p-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-accent/25 bg-accent/10 text-accent">
+                    <IconComponent className="h-6 w-6" />
                   </div>
 
-                  <h3 className="mt-6 font-heading text-xl font-bold text-content-primary">
+                  <h3 className="mt-6 font-heading text-xl font-semibold text-ink">
                     {service.title}
                   </h3>
 
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-content-secondary sm:text-base">
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-secondary sm:text-base">
                     {service.description}
                   </p>
 
-                  <ul className="mt-6 space-y-3 border-t border-white/10 pt-6">
+                  <ul className="mt-6 space-y-3 border-t border-line pt-6">
                     {service.features.map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-start gap-2.5 text-sm text-content-primary"
-                      >
-                        <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                      <li key={feature} className="flex items-start gap-2.5 text-sm text-ink">
+                        <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -549,7 +540,7 @@ export function TechMarqueeSection() {
   return (
     <section
       aria-label={t('marquee.ariaLabel')}
-      className="overflow-hidden border-y border-white/10 bg-obsidian-base py-5"
+      className="overflow-hidden border-y border-line bg-bg py-5"
     >
       <div className="animate-marquee flex w-max items-center">
         {[0, 1].map((copyIdx) => (
@@ -561,10 +552,10 @@ export function TechMarqueeSection() {
             {stackItems.map((item) => (
               <li
                 key={`${copyIdx}-${item}`}
-                className="flex items-center gap-10 whitespace-nowrap font-mono text-xs font-semibold uppercase tracking-widest text-content-muted"
+                className="flex items-center gap-10 whitespace-nowrap font-mono text-xs font-medium uppercase tracking-widest text-ink-secondary"
               >
                 <span>{item}</span>
-                <span className="h-1.5 w-1.5 rounded-full bg-gold/60" aria-hidden="true" />
+                <span className="h-1.5 w-1.5 rounded-full bg-accent/60" aria-hidden="true" />
               </li>
             ))}
           </ul>
@@ -580,24 +571,27 @@ export function ProcessSection() {
   const icons = [CompassIcon, PenToolIcon, CodeIcon, FlagIcon];
 
   return (
-    <section id="proceso" aria-labelledby="proceso-heading" className="scroll-mt-20 py-20 md:py-28">
+    <section
+      id="proceso"
+      aria-labelledby="proceso-heading"
+      className="scroll-mt-20 bg-surface py-20 md:py-28"
+    >
       <div className="mx-auto max-w-container px-6">
-        <RevealOnScroll className="mx-auto max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-3">
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
-            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
+        <RevealOnScroll className="max-w-3xl">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="h-px w-8 bg-accent/70" aria-hidden="true" />
+            <span className="font-mono text-xs font-medium uppercase tracking-widest text-accent sm:text-sm">
               {t('process.eyebrow')}
             </span>
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
           </div>
           <h2
             id="proceso-heading"
-            className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
+            className="font-serif text-4xl font-normal leading-[1.06] tracking-[-0.015em] text-ink sm:text-5xl"
           >
             {t('process.headingPart1')}{' '}
-            <span className="gradient-gold-text">{t('process.headingHighlight')}</span>
+            <em className="italic text-accent">{t('process.headingHighlight')}</em>
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-content-secondary sm:text-lg">
+          <p className="mt-5 text-base leading-relaxed text-ink-secondary sm:text-lg">
             {t('process.subtitle')}
           </p>
         </RevealOnScroll>
@@ -608,19 +602,19 @@ export function ProcessSection() {
             return (
               <li key={step.number}>
                 <RevealOnScroll delayMs={idx * 90} className="h-full">
-                  <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-obsidian-surface p-6 transition-transform duration-300 hover:-translate-y-1 hover:border-gold/35 sm:p-7">
+                  <div className="flex h-full flex-col rounded-2xl border border-line bg-bg/80 p-6 transition-transform duration-300 hover:-translate-y-1 hover:border-accent/35 sm:p-7">
                     <div className="flex items-center justify-between">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-xl border border-gold/25 bg-gold/10 text-gold">
-                        <IconComponent className="h-6 w-6" />
+                      <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent/25 bg-accent/10 text-accent">
+                        <IconComponent className="h-5 w-5" />
                       </span>
-                      <span className="font-mono text-sm font-bold text-gold-light">
+                      <span className="font-mono text-sm font-medium text-ink-muted">
                         {step.number}
                       </span>
                     </div>
-                    <h3 className="mt-6 font-heading text-xl font-bold text-content-primary">
+                    <h3 className="mt-6 font-heading text-xl font-semibold text-ink">
                       {step.title}
                     </h3>
-                    <p className="mt-2.5 text-sm leading-relaxed text-content-secondary">
+                    <p className="mt-2.5 text-sm leading-relaxed text-ink-secondary">
                       {step.description}
                     </p>
                   </div>
@@ -677,34 +671,33 @@ export function PortfolioSection() {
       ref={sectionRef}
       id="portafolio"
       aria-labelledby="portafolio-heading"
-      className="scroll-mt-20 border-t border-white/10 bg-obsidian-surface/40 py-20 md:py-28"
+      className="scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
-        <RevealOnScroll className="mx-auto max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-3">
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
-            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
+        <RevealOnScroll className="max-w-3xl">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="h-px w-8 bg-accent/70" aria-hidden="true" />
+            <span className="font-mono text-xs font-medium uppercase tracking-widest text-accent sm:text-sm">
               {t('portfolio.eyebrow')}
             </span>
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
           </div>
           <h2
             id="portafolio-heading"
-            className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
+            className="font-serif text-4xl font-normal leading-[1.06] tracking-[-0.015em] text-ink sm:text-5xl"
           >
             {t('portfolio.headingPart1')}{' '}
-            <span className="gradient-gold-text">{t('portfolio.headingHighlight')}</span>
+            <em className="italic text-accent">{t('portfolio.headingHighlight')}</em>
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-content-secondary sm:text-lg">
+          <p className="mt-5 text-base leading-relaxed text-ink-secondary sm:text-lg">
             {t('portfolio.subtitle')}
           </p>
         </RevealOnScroll>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-3">
+        <div className="mt-14 grid gap-6 lg:grid-cols-3">
           {projects.map((project, idx) => (
             <RevealOnScroll key={project.id} delayMs={idx * 100} className="h-full">
-              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-obsidian-surface shadow-card transition-transform duration-300 hover:-translate-y-1 hover:border-gold/35">
-                <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/10 bg-obsidian-elevated">
+              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-transform duration-300 hover:-translate-y-1 hover:border-accent/35">
+                <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-line bg-elevated">
                   <img
                     data-parallax-img
                     src={project.image}
@@ -720,8 +713,8 @@ export function PortfolioSection() {
                     }`}
                   />
                   {project.isPendingCapture && (
-                    <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-obsidian-base/90 via-obsidian-base/40 to-transparent p-4">
-                      <span className="rounded-md border border-dashed border-gold/50 bg-obsidian-base/90 px-3 py-1 font-mono text-xs text-gold-light">
+                    <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-bg/90 via-bg/40 to-transparent p-4">
+                      <span className="rounded-md border border-dashed border-accent/50 bg-bg/90 px-3 py-1 font-mono text-xs text-accent-hi">
                         {t('portfolio.labels.pendingCapture')}
                       </span>
                     </div>
@@ -729,54 +722,32 @@ export function PortfolioSection() {
                 </div>
 
                 <div className="flex flex-1 flex-col p-6 sm:p-7">
-                  <p className="font-mono text-xs font-semibold uppercase tracking-wider text-gold">
+                  <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
                     {project.category}
                   </p>
-                  <h3 className="mt-2 font-heading text-2xl font-bold text-content-primary">
+                  <h3 className="mt-2.5 font-serif text-3xl font-normal text-ink">
                     {project.title}
                   </h3>
 
                   <dl className="mt-5 flex-1 space-y-4 text-sm">
                     <div>
-                      <dt className="font-heading font-bold text-content-primary">
+                      <dt className="font-heading font-semibold text-ink">
                         {t('portfolio.labels.problem')}
                       </dt>
-                      <dd className="mt-1 leading-relaxed text-content-secondary">
-                        {project.problem}
-                      </dd>
+                      <dd className="mt-1 leading-relaxed text-ink-secondary">{project.problem}</dd>
                     </div>
                     <div>
-                      <dt className="font-heading font-bold text-content-primary">
+                      <dt className="font-heading font-semibold text-ink">
                         {t('portfolio.labels.solution')}
                       </dt>
-                      <dd className="mt-1 leading-relaxed text-content-secondary">
+                      <dd className="mt-1 leading-relaxed text-ink-secondary">
                         {project.solution}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="font-heading font-bold text-content-primary">
-                        {t('portfolio.labels.result')}
-                      </dt>
-                      <dd className="mt-1">
-                        <span className="inline-block rounded-lg border border-dashed border-gold/40 bg-gold/5 px-3 py-1.5 font-mono text-xs text-gold-light">
-                          {project.result}
-                        </span>
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="font-heading font-bold text-content-primary">
-                        {t('portfolio.labels.testimonial')}
-                      </dt>
-                      <dd className="mt-1">
-                        <span className="inline-block rounded-lg border border-dashed border-gold/40 bg-gold/5 px-3 py-1.5 font-mono text-xs text-gold-light">
-                          {project.testimonial}
-                        </span>
                       </dd>
                     </div>
                   </dl>
 
-                  <div className="mt-6 border-t border-white/10 pt-5">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-content-muted">
+                  <div className="mt-6 border-t border-line pt-5">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted">
                       {t('portfolio.labels.stack')}
                     </p>
                     <ul
@@ -786,7 +757,7 @@ export function PortfolioSection() {
                       {project.stack.map((tech) => (
                         <li
                           key={tech}
-                          className="rounded-full border border-gold/25 bg-gold/10 px-3 py-1 font-mono text-xs font-medium text-gold-light"
+                          className="rounded-full border border-line-strong bg-elevated/60 px-3 py-1 font-mono text-xs text-ink"
                         >
                           {tech}
                         </li>
@@ -805,13 +776,13 @@ export function PortfolioSection() {
                             language: i18n.language,
                           })
                         }
-                        className="mt-5 inline-flex items-center gap-2 font-heading text-sm font-bold text-gold-light hover:text-gold"
+                        className="mt-5 inline-flex items-center gap-2 font-body text-sm font-medium text-accent hover:text-accent-hi"
                       >
                         <span>{t('portfolio.labels.visitSite')}</span>
                         <ExternalLinkIcon className="h-4 w-4" />
                       </a>
                     ) : (
-                      <p className="mt-5 font-mono text-xs text-content-muted">
+                      <p className="mt-5 font-mono text-xs text-ink-muted">
                         {t('portfolio.labels.pendingUrl')}
                       </p>
                     )}
@@ -835,28 +806,28 @@ export function WhyUsSection() {
     <section
       id="por-que"
       aria-labelledby="por-que-heading"
-      className="scroll-mt-20 border-t border-white/10 py-20 md:py-28"
+      className="scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
           <RevealOnScroll className="lg:col-span-5">
-            <div className="mb-4 inline-flex items-center gap-3">
-              <span className="h-px w-8 bg-gold" aria-hidden="true" />
-              <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="h-px w-8 bg-accent/70" aria-hidden="true" />
+              <span className="font-mono text-xs font-medium uppercase tracking-widest text-accent sm:text-sm">
                 {t('whyUs.eyebrow')}
               </span>
             </div>
             <h2
               id="por-que-heading"
-              className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
+              className="font-serif text-4xl font-normal leading-[1.06] tracking-[-0.015em] text-ink sm:text-5xl"
             >
               {t('whyUs.headingPart1')}{' '}
-              <span className="gradient-gold-text">{t('whyUs.headingHighlight')}</span>
+              <em className="italic text-accent">{t('whyUs.headingHighlight')}</em>
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-content-secondary">
+            <p className="mt-5 text-base leading-relaxed text-ink-secondary">
               {t('whyUs.paragraph1')}
             </p>
-            <p className="mt-4 text-base leading-relaxed text-content-secondary">
+            <p className="mt-4 text-base leading-relaxed text-ink-secondary">
               {t('whyUs.paragraph2')}
             </p>
           </RevealOnScroll>
@@ -866,14 +837,14 @@ export function WhyUsSection() {
               const IconComponent = icons[idx] ?? BoltIcon;
               return (
                 <RevealOnScroll key={pillar.title} delayMs={idx * 90}>
-                  <article className="h-full rounded-2xl border border-white/10 bg-obsidian-surface p-6 shadow-card transition-transform duration-300 hover:-translate-y-1 hover:border-gold/35">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-gold/25 bg-gold/10 text-gold">
+                  <article className="h-full rounded-2xl border border-line bg-surface p-6 shadow-card transition-transform duration-300 hover:-translate-y-1 hover:border-accent/35">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-accent/25 bg-accent/10 text-accent">
                       <IconComponent className="h-6 w-6" />
                     </div>
-                    <h3 className="mt-5 font-heading text-lg font-bold text-content-primary">
+                    <h3 className="mt-5 font-heading text-lg font-semibold text-ink">
                       {pillar.title}
                     </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-content-secondary">
+                    <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
                       {pillar.description}
                     </p>
                   </article>
@@ -895,40 +866,39 @@ export function FaqSection() {
     <section
       id="faq"
       aria-labelledby="faq-heading"
-      className="scroll-mt-20 border-t border-white/10 bg-obsidian-surface/40 py-20 md:py-28"
+      className="scroll-mt-20 border-t border-line bg-surface py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
-        <RevealOnScroll className="mx-auto max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-3">
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
-            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
+        <RevealOnScroll className="max-w-3xl">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="h-px w-8 bg-accent/70" aria-hidden="true" />
+            <span className="font-mono text-xs font-medium uppercase tracking-widest text-accent sm:text-sm">
               {t('faq.eyebrow')}
             </span>
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
           </div>
           <h2
             id="faq-heading"
-            className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
+            className="font-serif text-4xl font-normal leading-[1.06] tracking-[-0.015em] text-ink sm:text-5xl"
           >
             {t('faq.headingPart1')}{' '}
-            <span className="gradient-gold-text">{t('faq.headingHighlight')}</span>
+            <em className="italic text-accent">{t('faq.headingHighlight')}</em>
           </h2>
         </RevealOnScroll>
 
         <RevealOnScroll delayMs={100}>
-          <div className="mx-auto mt-12 max-w-3xl divide-y divide-white/10 rounded-2xl border border-white/10 bg-obsidian-surface">
+          <div className="mt-12 max-w-3xl divide-y divide-line rounded-2xl border border-line bg-bg/80">
             {faqs.map((faq) => (
               <details key={faq.question} className="group p-6">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-heading text-base font-bold text-content-primary sm:text-lg">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-heading text-base font-medium text-ink sm:text-lg">
                   <span>{faq.question}</span>
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gold/30 bg-gold/10 text-gold transition-transform duration-200 group-open:rotate-45">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line-strong text-accent transition-transform duration-200 group-open:rotate-45">
                     <PlusIcon className="h-4 w-4" />
                   </span>
                 </summary>
-                <div className="mt-4 space-y-3 text-sm leading-relaxed text-content-secondary sm:text-base">
+                <div className="mt-4 space-y-3 text-sm leading-relaxed text-ink-secondary sm:text-base">
                   <p>{faq.answer}</p>
                   {faq.pendingNote && (
-                    <p className="inline-block rounded-lg border border-dashed border-gold/40 bg-gold/5 px-3 py-1.5 font-mono text-xs text-gold-light">
+                    <p className="inline-block rounded-lg border border-dashed border-accent/40 bg-accent/5 px-3 py-1.5 font-mono text-xs text-accent-hi">
                       {faq.pendingNote}
                     </p>
                   )}
@@ -947,28 +917,22 @@ export function FinalCtaSection() {
   const whatsappUrl = t('whatsapp.url');
 
   return (
-    <section aria-labelledby="final-cta-heading" className="py-20 md:py-24">
+    <section aria-labelledby="final-cta-heading" className="bg-bg py-20 md:py-24">
       <div className="mx-auto max-w-container px-6">
         <RevealOnScroll>
-          <div className="relative overflow-hidden rounded-3xl border border-gold/35 bg-gradient-to-br from-obsidian-elevated via-obsidian-surface to-obsidian-base px-6 py-14 text-center shadow-card sm:px-12 sm:py-20">
-            <div
-              className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full opacity-25"
-              style={{
-                background: 'radial-gradient(circle, rgba(212, 175, 55, 0.4), transparent 70%)',
-              }}
-              aria-hidden="true"
-            />
+          <div className="relative overflow-hidden rounded-[2rem] border border-accent/30 bg-surface px-6 py-14 text-center shadow-card sm:px-14 sm:py-20">
+            <div className="cta-glow pointer-events-none absolute inset-0" aria-hidden="true" />
             <h2
               id="final-cta-heading"
-              className="mx-auto max-w-2xl font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
+              className="relative mx-auto max-w-2xl font-serif text-4xl font-normal leading-[1.06] tracking-[-0.015em] text-ink sm:text-5xl"
             >
               {t('finalCta.headingPart1')}{' '}
-              <span className="gradient-gold-text">{t('finalCta.headingHighlight')}</span>
+              <em className="italic text-accent">{t('finalCta.headingHighlight')}</em>
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-content-secondary sm:text-lg">
+            <p className="relative mx-auto mt-5 max-w-xl text-base leading-relaxed text-ink-secondary sm:text-lg">
               {t('finalCta.subtitle')}
             </p>
-            <div className="mt-9 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center">
+            <div className="relative mt-10 flex flex-col items-stretch justify-center gap-3.5 sm:flex-row sm:items-center">
               <a
                 href={whatsappUrl}
                 target="_blank"
@@ -979,17 +943,17 @@ export function FinalCtaSection() {
                     language: i18n.language,
                   })
                 }
-                className="btn-gold-primary inline-flex min-h-[3.25rem] items-center justify-center gap-2.5 rounded-xl px-7 py-3.5 text-base shadow-glow"
+                className="btn-whatsapp-primary inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full bg-whatsapp px-7 py-3.5 font-body text-[0.9375rem] font-semibold text-ink-inverse hover:bg-success"
               >
-                <WhatsAppIcon className="h-5 w-5" />
+                <WhatsAppIcon className="h-5 w-5 shrink-0" />
                 <span>{t('finalCta.ctaPrimary')}</span>
               </a>
               <a
                 href="#contacto"
-                className="inline-flex min-h-[3.25rem] items-center justify-center gap-2 rounded-xl border border-white/15 bg-obsidian-base/80 px-7 py-3.5 font-heading text-base font-bold text-content-primary transition-transform duration-200 hover:-translate-y-0.5 hover:border-gold/40"
+                className="group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full border border-line-strong bg-elevated/60 px-7 py-3.5 font-body text-[0.9375rem] font-medium text-ink transition-transform duration-200 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-elevated"
               >
                 <span>{t('finalCta.ctaSecondary')}</span>
-                <ArrowRightIcon className="h-4 w-4 text-gold" />
+                <ArrowRightIcon className="h-4 w-4 text-ink transition-transform duration-200 group-hover:translate-x-1" />
               </a>
             </div>
           </div>

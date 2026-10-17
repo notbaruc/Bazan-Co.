@@ -89,7 +89,7 @@ export function Navbar() {
     <>
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-gold focus:px-4 focus:py-2.5 focus:font-heading focus:text-sm focus:font-bold focus:text-content-inverse focus:shadow-glow"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-accent focus:px-5 focus:py-2.5 focus:font-body focus:text-sm focus:font-semibold focus:text-ink-inverse focus:shadow-glow"
       >
         {t('nav.skipToContent')}
       </a>
@@ -97,8 +97,8 @@ export function Navbar() {
       <header className="fixed inset-x-0 top-0 z-50">
         <div
           aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 border-b border-white/10 bg-obsidian-base/90 backdrop-blur-xl transition-opacity duration-300 ${
-            scrolled || mobileMenuOpen ? 'opacity-100 shadow-md' : 'opacity-65'
+          className={`pointer-events-none absolute inset-0 border-b border-line bg-bg/85 backdrop-blur-xl transition-opacity duration-300 ${
+            scrolled || mobileMenuOpen ? 'opacity-100 shadow-md' : 'opacity-75'
           }`}
         />
 
@@ -108,15 +108,18 @@ export function Navbar() {
             scrolled ? 'scale-[0.985]' : 'scale-100'
           }`}
         >
-          <a href="#hero" className="group inline-flex shrink-0 items-center gap-3 rounded-lg py-1">
+          <a
+            href="#hero"
+            className="group inline-flex shrink-0 items-center gap-2.5 rounded-lg py-1"
+          >
             <span
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-gold-light to-gold-dark font-heading text-base font-black text-content-inverse shadow-sm transition-transform duration-300 group-hover:scale-105"
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-accent-hi to-accent-lo font-body text-sm font-extrabold text-ink-inverse shadow-sm transition-transform duration-300 group-hover:scale-105"
               aria-hidden="true"
             >
               B
             </span>
-            <span className="font-heading text-lg font-extrabold tracking-tight text-content-primary">
-              Bazan <span className="text-gold">&amp;</span> Co.
+            <span className="font-body text-lg font-semibold tracking-tight text-ink">
+              Bazan <span className="text-accent">&amp;</span> Co.
             </span>
           </a>
 
@@ -128,16 +131,14 @@ export function Navbar() {
                   <a
                     href={`#${item.id}`}
                     aria-current={isActive ? 'location' : undefined}
-                    className={`relative whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-opacity ${
-                      isActive
-                        ? 'text-gold-light opacity-100'
-                        : 'text-content-secondary opacity-85 hover:text-content-primary hover:opacity-100'
+                    className={`relative whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium transition-opacity ${
+                      isActive ? 'text-ink opacity-100' : 'text-ink-secondary hover:text-ink'
                     }`}
                   >
                     {t(`nav.items.${item.key}`)}
                     <span
                       className={`
-                        absolute inset-x-3 bottom-0.5 h-0.5 origin-left rounded-full bg-gold transition-transform duration-300
+                        absolute inset-x-3.5 bottom-0.5 h-px origin-left rounded-full bg-accent transition-transform duration-300
                         ${isActive ? 'scale-x-100' : 'scale-x-0'}
                       `}
                       aria-hidden="true"
@@ -152,17 +153,17 @@ export function Navbar() {
             <div
               role="group"
               aria-label={t('nav.langSwitcherAria')}
-              className="inline-flex h-10 items-center rounded-xl border border-white/10 bg-obsidian-surface p-1"
+              className="inline-flex h-10 items-center rounded-full border border-line-strong bg-surface p-1"
             >
-              <GlobeIcon className="ml-2 mr-1.5 h-4 w-4 text-gold" />
+              <GlobeIcon className="ml-2 mr-1 h-4 w-4 text-accent" />
               <button
                 type="button"
                 onClick={() => handleLanguageSwitch('es')}
                 aria-pressed={currentLang === 'es'}
-                className={`w-9 rounded-lg py-1 font-mono text-xs font-bold transition-opacity ${
+                className={`w-9 rounded-full py-1 font-mono text-xs font-semibold transition-opacity ${
                   currentLang === 'es'
-                    ? 'bg-gold text-content-inverse shadow-sm'
-                    : 'text-content-secondary hover:text-content-primary'
+                    ? 'bg-elevated text-ink shadow-sm'
+                    : 'text-ink-secondary hover:text-ink'
                 }`}
               >
                 ES
@@ -171,10 +172,10 @@ export function Navbar() {
                 type="button"
                 onClick={() => handleLanguageSwitch('en')}
                 aria-pressed={currentLang === 'en'}
-                className={`w-9 rounded-lg py-1 font-mono text-xs font-bold transition-opacity ${
+                className={`w-9 rounded-full py-1 font-mono text-xs font-semibold transition-opacity ${
                   currentLang === 'en'
-                    ? 'bg-gold text-content-inverse shadow-sm'
-                    : 'text-content-secondary hover:text-content-primary'
+                    ? 'bg-elevated text-ink shadow-sm'
+                    : 'text-ink-secondary hover:text-ink'
                 }`}
               >
                 EN
@@ -183,10 +184,9 @@ export function Navbar() {
 
             <a
               href="#contacto"
-              className="btn-gold-primary inline-flex min-w-[11.5rem] items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm"
+              className="btn-gold-primary inline-flex min-h-11 min-w-[11.5rem] items-center justify-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-ink-inverse shadow-glow hover:bg-accent-hi"
             >
               <span>{t('nav.ctaDesktop')}</span>
-              <ArrowRightIcon className="h-4 w-4" />
             </a>
           </div>
 
@@ -194,16 +194,16 @@ export function Navbar() {
             <div
               role="group"
               aria-label={t('nav.langSwitcherAria')}
-              className="inline-flex h-10 items-center rounded-xl border border-white/10 bg-obsidian-surface p-1"
+              className="inline-flex h-10 items-center rounded-full border border-line-strong bg-surface p-1"
             >
               <button
                 type="button"
                 onClick={() => handleLanguageSwitch('es')}
                 aria-pressed={currentLang === 'es'}
-                className={`w-8 rounded-lg py-1 font-mono text-xs font-bold ${
+                className={`w-8 rounded-full py-1 font-mono text-xs font-semibold ${
                   currentLang === 'es'
-                    ? 'bg-gold text-content-inverse'
-                    : 'text-content-secondary hover:text-content-primary'
+                    ? 'bg-elevated text-ink'
+                    : 'text-ink-secondary hover:text-ink'
                 }`}
               >
                 ES
@@ -212,10 +212,10 @@ export function Navbar() {
                 type="button"
                 onClick={() => handleLanguageSwitch('en')}
                 aria-pressed={currentLang === 'en'}
-                className={`w-8 rounded-lg py-1 font-mono text-xs font-bold ${
+                className={`w-8 rounded-full py-1 font-mono text-xs font-semibold ${
                   currentLang === 'en'
-                    ? 'bg-gold text-content-inverse'
-                    : 'text-content-secondary hover:text-content-primary'
+                    ? 'bg-elevated text-ink'
+                    : 'text-ink-secondary hover:text-ink'
                 }`}
               >
                 EN
@@ -228,12 +228,12 @@ export function Navbar() {
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav-menu"
               aria-label={mobileMenuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 text-content-primary hover:border-gold/40"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong text-ink hover:border-accent/50"
             >
               {mobileMenuOpen ? (
-                <CloseIcon className="h-6 w-6" />
+                <CloseIcon className="h-5 w-5" />
               ) : (
-                <MenuIcon className="h-6 w-6" />
+                <MenuIcon className="h-5 w-5" />
               )}
             </button>
           </div>
@@ -242,7 +242,7 @@ export function Navbar() {
         {mobileMenuOpen && (
           <div
             id="mobile-nav-menu"
-            className="relative border-t border-white/10 bg-obsidian-surface/95 px-6 py-5 backdrop-blur-xl lg:hidden"
+            className="relative border-t border-line bg-bg/95 px-6 py-5 backdrop-blur-xl lg:hidden"
           >
             <ul className="flex flex-col gap-1">
               {SECTION_KEYS.map((item) => {
@@ -253,10 +253,8 @@ export function Navbar() {
                       href={`#${item.id}`}
                       onClick={() => setMobileMenuOpen(false)}
                       aria-current={isActive ? 'location' : undefined}
-                      className={`flex min-h-[2.75rem] items-center rounded-lg px-3 text-base font-medium ${
-                        isActive
-                          ? 'bg-gold/10 text-gold-light'
-                          : 'text-content-secondary hover:text-content-primary'
+                      className={`flex min-h-[2.75rem] items-center rounded-xl px-3 text-base font-medium ${
+                        isActive ? 'bg-accent/10 text-accent' : 'text-ink-secondary hover:text-ink'
                       }`}
                     >
                       {t(`nav.items.${item.key}`)}
@@ -265,11 +263,11 @@ export function Navbar() {
                 );
               })}
             </ul>
-            <div className="mt-4 border-t border-white/10 pt-4">
+            <div className="mt-4 border-t border-line pt-4">
               <a
                 href="#contacto"
                 onClick={() => setMobileMenuOpen(false)}
-                className="btn-gold-primary flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl px-5 text-sm"
+                className="btn-gold-primary flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-ink-inverse shadow-glow"
               >
                 <span>{t('nav.ctaMobile')}</span>
                 <ArrowRightIcon className="h-4 w-4" />

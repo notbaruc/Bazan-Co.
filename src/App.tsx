@@ -85,7 +85,7 @@ function CustomDesktopCursor() {
     <div
       ref={ringRef}
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[80] hidden h-8 w-8 rounded-full border border-gold/60 opacity-0 transition-opacity duration-200 lg:block"
+      className="cursor-ring pointer-events-none fixed left-0 top-0 z-[80] hidden h-8 w-8 rounded-full opacity-0 transition-opacity duration-200 lg:block"
       style={{ willChange: 'transform, opacity' }}
     />
   );
@@ -181,7 +181,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-obsidian-base text-content-secondary">
+    <div className="min-h-screen bg-bg text-ink-secondary">
       <CustomDesktopCursor />
       <Navbar />
 

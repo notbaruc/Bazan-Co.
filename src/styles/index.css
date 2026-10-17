@@ -1,5 +1,3 @@
-@import '@fontsource-variable/plus-jakarta-sans';
-@import '@fontsource-variable/inter';
 @import './tokens.css';
 
 @tailwind base;
@@ -9,8 +7,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: var(--bg-base);
-    color: var(--text-secondary);
+    background-color: var(--color-bg);
+    color: var(--color-ink-secondary);
     font-family: var(--font-body);
     overflow-x: hidden;
   }
@@ -25,87 +23,95 @@
   }
 
   body {
-    background-color: var(--bg-base);
-    color: var(--text-secondary);
+    background-color: var(--color-bg);
+    color: var(--color-ink-secondary);
     font-family: var(--font-body);
     overflow-x: hidden;
     min-height: 100vh;
   }
 
   h1,
-  h2,
+  h2 {
+    font-family: var(--font-serif);
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+  }
+
   h3,
   h4,
   h5,
   h6 {
     font-family: var(--font-heading);
-    color: var(--text-primary);
-    letter-spacing: -0.025em;
+    color: var(--color-ink);
+    letter-spacing: -0.015em;
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent-light);
+    outline: 2px solid var(--color-accent-hi);
     outline-offset: 3px;
-    border-radius: 0.375rem;
   }
 }
 
 .gradient-gold-text {
-  background: linear-gradient(
-    135deg,
-    var(--accent-light) 0%,
-    var(--accent) 52%,
-    var(--accent-dark) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-accent);
 }
 
-/* Micro-interacción en botones primarios usando solo transform y opacity */
+.cursor-ring {
+  border: 1px solid rgb(217 180 90 / 0.6);
+}
+
+/* Botón Dorado Header / Formulario */
 .btn-gold-primary {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    var(--accent-light) 0%,
-    var(--accent) 55%,
-    var(--accent-dark) 100%
-  );
-  color: var(--text-inverse);
-  font-family: var(--font-heading);
-  font-weight: 700;
+  background-color: var(--color-accent);
+  color: var(--color-ink-inverse);
+  font-family: var(--font-body);
+  font-weight: 600;
+  box-shadow: var(--shadow-glow);
   transition:
     transform 260ms var(--ease-out),
     opacity 260ms var(--ease-out);
 }
 
-.btn-gold-primary::after {
+.btn-gold-primary::after,
+.btn-whatsapp-primary::after {
   content: '';
   position: absolute;
   inset: 0;
   width: 45%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.35) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 0.35) 50%, transparent 100%);
   transform: translate3d(-160%, 0, 0) skewX(-20deg);
   transition: transform 650ms var(--ease-out);
   pointer-events: none;
 }
 
-.btn-gold-primary:hover {
+.btn-gold-primary:hover,
+.btn-whatsapp-primary:hover {
   transform: translate3d(0, -2px, 0);
 }
 
-.btn-gold-primary:hover::after {
+.btn-gold-primary:hover::after,
+.btn-whatsapp-primary:hover::after {
   transform: translate3d(320%, 0, 0) skewX(-20deg);
 }
 
-.btn-gold-primary:active {
+.btn-gold-primary:active,
+.btn-whatsapp-primary:active {
   transform: translate3d(0, 0, 0) scale(0.98);
+}
+
+/* Botón Principal de WhatsApp */
+.btn-whatsapp-primary {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-whatsapp);
+  color: var(--color-ink-inverse);
+  font-family: var(--font-body);
+  font-weight: 600;
+  transition:
+    transform 260ms var(--ease-out),
+    opacity 260ms var(--ease-out);
 }
 
 /* Hero word reveal (GPU transform para LCP instantáneo y contraste 100% desde frame 0) */
@@ -124,7 +130,7 @@
   animation-delay: var(--word-delay, 0ms);
 }
 
-/* Scroll reveal escalonado (solo transform para preservar contraste 100% en auditorías automatizadas) */
+/* Scroll reveal escalonado */
 .reveal-item {
   transition:
     opacity 600ms var(--ease-out),
@@ -158,20 +164,76 @@
   border-radius: inherit;
   background: radial-gradient(
     360px circle at var(--spot-x, 50%) var(--spot-y, 50%),
-    rgba(212, 175, 55, 0.16),
+    rgb(217 180 90 / 0.16),
     transparent 70%
   );
   opacity: var(--spot-opacity, 0);
   transition: opacity 300ms var(--ease-out);
 }
 
-/* Fondo animado ligero del Hero (GPU-only) */
+/* Efecto del hero ("Aurora") y capas extra */
+.aurora-blob {
+  position: absolute;
+  width: 80vmax;
+  height: 80vmax;
+  border-radius: 9999px;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.aurora-blob--gold {
+  top: -45vmax;
+  right: -30vmax;
+  background: radial-gradient(closest-side, rgb(217 180 90 / 0.2), transparent);
+}
+
+.aurora-blob--steel {
+  top: -15vmax;
+  left: -45vmax;
+  background: radial-gradient(closest-side, rgb(91 123 181 / 0.2), transparent);
+}
+
+@keyframes drift-gold {
+  to {
+    transform: translate(-12vmax, 10vmax) scale(1.15);
+  }
+}
+
+@keyframes drift-steel {
+  to {
+    transform: translate(14vmax, -6vmax) scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
+  .aurora-blob--gold {
+    animation: drift-gold 26s cubic-bezier(0.65, 0, 0.35, 1) infinite alternate;
+  }
+
+  .aurora-blob--steel {
+    animation: drift-steel 32s cubic-bezier(0.65, 0, 0.35, 1) infinite alternate;
+  }
+}
+
+/* Patrón de cuadrícula técnica tenue con máscara de viñeta radial sutil */
 .hero-grid-bg {
   background-image:
-    linear-gradient(rgba(212, 175, 55, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(212, 175, 55, 0.045) 1px, transparent 1px);
+    linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 75%);
+}
+
+/* Grano SVG feTurbulence */
+.hero-grain {
+  opacity: 0.07;
+}
+
+/* Glow del CTA final */
+.cta-glow {
+  background:
+    radial-gradient(50% 80% at 50% 0%, rgb(217 180 90 / 0.16), transparent 70%),
+    radial-gradient(40% 60% at 100% 100%, rgb(91 123 181 / 0.14), transparent 70%);
 }
 
 @keyframes pulse-ring {
@@ -194,18 +256,6 @@
   }
 }
 
-@keyframes float-orb {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-    opacity: 0.24;
-  }
-  50% {
-    transform: translate3d(20px, -16px, 0) scale(1.08);
-    opacity: 0.38;
-  }
-}
-
 .animate-pulse-ring {
   animation: pulse-ring 2.2s var(--ease-out) infinite;
 }
@@ -216,10 +266,6 @@
 
 .animate-marquee:hover {
   animation-play-state: paused;
-}
-
-.animate-float-orb {
-  animation: float-orb 12s ease-in-out infinite;
 }
 
 /* Respeto estricto a prefers-reduced-motion */
@@ -236,15 +282,15 @@
   .hero-word,
   .reveal-item,
   .reveal-item.is-hidden,
-  .tilt-card {
+  .tilt-card,
+  .aurora-blob {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
   }
 
   .animate-pulse-ring,
-  .animate-marquee,
-  .animate-float-orb {
+  .animate-marquee {
     animation: none !important;
   }
 }

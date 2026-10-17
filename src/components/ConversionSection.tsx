@@ -113,25 +113,25 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
     <section
       id="contacto"
       aria-labelledby="contacto-heading"
-      className="scroll-mt-20 border-t border-white/10 py-20 md:py-28"
+      className="scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <div className="mb-4 inline-flex items-center gap-3">
-              <span className="h-px w-8 bg-gold" aria-hidden="true" />
-              <span className="font-mono text-xs font-semibold uppercase tracking-widest text-gold">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="h-px w-8 bg-accent/70" aria-hidden="true" />
+              <span className="font-mono text-xs font-medium uppercase tracking-widest text-accent sm:text-sm">
                 {t('contact.eyebrow')}
               </span>
             </div>
             <h2
               id="contacto-heading"
-              className="font-heading text-3xl font-extrabold tracking-tight text-content-primary sm:text-4xl"
+              className="font-serif text-4xl font-normal leading-[1.06] tracking-[-0.015em] text-ink sm:text-5xl"
             >
               {t('contact.headingPart1')}{' '}
-              <span className="gradient-gold-text">{t('contact.headingHighlight')}</span>
+              <em className="italic text-accent">{t('contact.headingHighlight')}</em>
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-content-secondary">
+            <p className="mt-5 text-base leading-relaxed text-ink-secondary">
               {t('contact.subtitle')}
             </p>
 
@@ -146,16 +146,16 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                     language: i18n.language,
                   })
                 }
-                className="flex items-start gap-4 rounded-2xl border border-white/10 bg-obsidian-surface p-4 hover:border-gold/40"
+                className="flex items-start gap-4 rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-whatsapp/50"
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-whatsapp/15 text-whatsapp">
                   <WhatsAppIcon className="h-5 w-5" />
                 </span>
                 <div>
-                  <div className="font-heading text-sm font-bold text-content-primary">
+                  <div className="font-heading text-sm font-medium text-ink-secondary">
                     {t('contact.channels.whatsappTitle')}
                   </div>
-                  <div className="mt-0.5 text-sm text-content-secondary">
+                  <div className="mt-0.5 text-base font-medium text-ink">
                     {t('contact.channels.whatsappNumber')}
                   </div>
                 </div>
@@ -163,30 +163,30 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
 
               <a
                 href={`mailto:${t('contact.channels.emailAddress')}`}
-                className="flex items-start gap-4 rounded-2xl border border-white/10 bg-obsidian-surface p-4 hover:border-gold/40"
+                className="flex items-start gap-4 rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-accent/50"
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gold/10 text-gold">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">
                   <MailIcon className="h-5 w-5" />
                 </span>
                 <div>
-                  <div className="font-heading text-sm font-bold text-content-primary">
+                  <div className="font-heading text-sm font-medium text-ink-secondary">
                     {t('contact.channels.emailTitle')}
                   </div>
-                  <div className="mt-0.5 text-sm text-content-secondary">
+                  <div className="mt-0.5 text-base font-medium text-ink">
                     {t('contact.channels.emailAddress')}
                   </div>
                 </div>
               </a>
 
-              <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-obsidian-surface p-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gold/10 text-gold">
+              <div className="flex items-start gap-4 rounded-2xl border border-line bg-surface p-4">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">
                   <MapPinIcon className="h-5 w-5" />
                 </span>
                 <div>
-                  <div className="font-heading text-sm font-bold text-content-primary">
+                  <div className="font-heading text-sm font-medium text-ink-secondary">
                     {t('contact.channels.locationTitle')}
                   </div>
-                  <p className="mt-0.5 text-sm text-content-secondary">
+                  <p className="mt-0.5 text-base font-medium text-ink">
                     {t('contact.channels.locationText')}
                   </p>
                 </div>
@@ -202,7 +202,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
               netlify-honeypot="bot-field"
               noValidate
               onSubmit={handleSubmit}
-              className="rounded-2xl border border-white/10 bg-obsidian-surface p-6 shadow-card sm:p-9"
+              className="rounded-2xl border border-line bg-surface p-6 shadow-card sm:p-9"
             >
               <input type="hidden" name="form-name" value="contact" />
               <div className="sr-only" aria-hidden="true">
@@ -222,19 +222,19 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
 
               {status === 'success' ? (
                 <div role="status" aria-live="polite" className="py-10 text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-success/15 text-success">
                     <CheckIcon className="h-7 w-7" />
                   </div>
-                  <h3 className="mt-4 font-heading text-2xl font-bold text-content-primary">
+                  <h3 className="mt-4 font-serif text-3xl font-normal text-ink">
                     {t('contact.form.successTitle')}
                   </h3>
-                  <p className="mx-auto mt-2 max-w-md text-sm text-content-secondary">
+                  <p className="mx-auto mt-2 max-w-md text-sm text-ink-secondary">
                     {t('contact.form.successText')}
                   </p>
                   <button
                     type="button"
                     onClick={() => setStatus('idle')}
-                    className="mt-6 rounded-xl border border-white/15 px-5 py-2.5 text-sm font-semibold text-content-primary hover:border-gold/40"
+                    className="mt-6 rounded-full border border-line-strong bg-elevated/60 px-6 py-2.5 text-sm font-medium text-ink hover:border-accent/40"
                   >
                     {t('contact.form.sendAnother')}
                   </button>
@@ -243,11 +243,8 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                 <>
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div>
-                      <label
-                        htmlFor="contact-name"
-                        className="block text-sm font-medium text-content-primary"
-                      >
-                        {t('contact.form.nameLabel')} <span className="text-gold">*</span>
+                      <label htmlFor="contact-name" className="block text-sm font-medium text-ink">
+                        {t('contact.form.nameLabel')} <span className="text-accent">*</span>
                       </label>
                       <input
                         id="contact-name"
@@ -263,21 +260,18 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                         }}
                         aria-invalid={Boolean(errors.name)}
                         aria-describedby={errors.name ? 'error-name' : undefined}
-                        className="mt-2 w-full rounded-xl border border-white/15 bg-obsidian-base px-4 py-3 text-sm text-content-primary placeholder:text-content-muted focus:border-gold"
+                        className="mt-2 w-full rounded-xl border border-line-strong bg-bg px-4 py-3 text-sm text-ink placeholder:text-ink-muted focus:border-accent"
                       />
                       {errors.name && (
-                        <p id="error-name" role="alert" className="mt-1.5 text-xs text-rose-400">
+                        <p id="error-name" role="alert" className="mt-1.5 text-xs text-danger">
                           {errors.name}
                         </p>
                       )}
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="contact-email"
-                        className="block text-sm font-medium text-content-primary"
-                      >
-                        {t('contact.form.emailLabel')} <span className="text-gold">*</span>
+                      <label htmlFor="contact-email" className="block text-sm font-medium text-ink">
+                        {t('contact.form.emailLabel')} <span className="text-accent">*</span>
                       </label>
                       <input
                         id="contact-email"
@@ -293,10 +287,10 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                         }}
                         aria-invalid={Boolean(errors.email)}
                         aria-describedby={errors.email ? 'error-email' : undefined}
-                        className="mt-2 w-full rounded-xl border border-white/15 bg-obsidian-base px-4 py-3 text-sm text-content-primary placeholder:text-content-muted focus:border-gold"
+                        className="mt-2 w-full rounded-xl border border-line-strong bg-bg px-4 py-3 text-sm text-ink placeholder:text-ink-muted focus:border-accent"
                       />
                       {errors.email && (
-                        <p id="error-email" role="alert" className="mt-1.5 text-xs text-rose-400">
+                        <p id="error-email" role="alert" className="mt-1.5 text-xs text-danger">
                           {errors.email}
                         </p>
                       )}
@@ -304,11 +298,8 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                   </div>
 
                   <div className="mt-5">
-                    <label
-                      htmlFor="contact-service"
-                      className="block text-sm font-medium text-content-primary"
-                    >
-                      {t('contact.form.serviceLabel')} <span className="text-gold">*</span>
+                    <label htmlFor="contact-service" className="block text-sm font-medium text-ink">
+                      {t('contact.form.serviceLabel')} <span className="text-accent">*</span>
                     </label>
                     <select
                       id="contact-service"
@@ -321,7 +312,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                       }}
                       aria-invalid={Boolean(errors.service)}
                       aria-describedby={errors.service ? 'error-service' : undefined}
-                      className="mt-2 w-full rounded-xl border border-white/15 bg-obsidian-base px-4 py-3 text-sm text-content-primary focus:border-gold"
+                      className="mt-2 w-full rounded-xl border border-line-strong bg-bg px-4 py-3 text-sm text-ink focus:border-accent"
                     >
                       <option value="" disabled>
                         {t('contact.form.servicePlaceholder')}
@@ -332,18 +323,15 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                       <option value="otro">{t('contact.form.services.other')}</option>
                     </select>
                     {errors.service && (
-                      <p id="error-service" role="alert" className="mt-1.5 text-xs text-rose-400">
+                      <p id="error-service" role="alert" className="mt-1.5 text-xs text-danger">
                         {errors.service}
                       </p>
                     )}
                   </div>
 
                   <div className="mt-5">
-                    <label
-                      htmlFor="contact-message"
-                      className="block text-sm font-medium text-content-primary"
-                    >
-                      {t('contact.form.messageLabel')} <span className="text-gold">*</span>
+                    <label htmlFor="contact-message" className="block text-sm font-medium text-ink">
+                      {t('contact.form.messageLabel')} <span className="text-accent">*</span>
                     </label>
                     <textarea
                       id="contact-message"
@@ -358,10 +346,10 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                       }}
                       aria-invalid={Boolean(errors.message)}
                       aria-describedby={errors.message ? 'error-message' : undefined}
-                      className="mt-2 w-full rounded-xl border border-white/15 bg-obsidian-base px-4 py-3 text-sm text-content-primary placeholder:text-content-muted focus:border-gold"
+                      className="mt-2 w-full rounded-xl border border-line-strong bg-bg px-4 py-3 text-sm text-ink placeholder:text-ink-muted focus:border-accent"
                     />
                     {errors.message && (
-                      <p id="error-message" role="alert" className="mt-1.5 text-xs text-rose-400">
+                      <p id="error-message" role="alert" className="mt-1.5 text-xs text-danger">
                         {errors.message}
                       </p>
                     )}
@@ -370,7 +358,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                   {status === 'error' && (
                     <div
                       role="alert"
-                      className="mt-4 rounded-xl border border-rose-500/40 bg-rose-500/10 p-3 text-xs text-rose-300"
+                      className="mt-4 rounded-xl border border-danger/40 bg-danger/10 p-3 text-xs text-danger"
                     >
                       {t('contact.form.errorBanner')}
                     </div>
@@ -379,7 +367,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="btn-gold-primary mt-6 flex min-h-[3.25rem] w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-base disabled:opacity-60"
+                    className="btn-gold-primary mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 font-body text-[0.9375rem] font-semibold text-ink-inverse shadow-glow hover:bg-accent-hi disabled:opacity-60"
                   >
                     <span>
                       {status === 'submitting'
@@ -389,12 +377,12 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                     <ArrowRightIcon className="h-4 w-4" />
                   </button>
 
-                  <p className="mt-4 text-center text-xs text-content-muted">
+                  <p className="mt-4 text-center text-xs text-ink-muted">
                     {t('contact.form.privacyPrefix')}{' '}
                     <button
                       type="button"
                       onClick={onOpenPrivacy}
-                      className="font-medium text-gold-light underline underline-offset-2 hover:text-gold"
+                      className="font-medium text-accent-hi underline underline-offset-2 hover:text-accent"
                     >
                       {t('contact.form.privacyLink')}
                     </button>
@@ -420,44 +408,44 @@ export function FooterSection({
   const { t } = useTranslation();
 
   return (
-    <footer className="border-t border-white/10 bg-obsidian-surface py-12">
+    <footer className="border-t border-line bg-surface py-12">
       <div className="mx-auto flex max-w-container flex-col items-center justify-between gap-6 px-6 md:flex-row">
         <a href="#hero" className="inline-flex items-center gap-2.5">
           <span
-            className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-gold-light to-gold-dark font-heading text-xs font-black text-content-inverse"
+            className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-accent-hi to-accent-lo font-body text-xs font-extrabold text-ink-inverse"
             aria-hidden="true"
           >
             B
           </span>
-          <span className="font-heading text-base font-bold text-content-primary">
-            Bazan <span className="text-gold">&amp;</span> Co.
+          <span className="font-body text-base font-semibold text-ink">
+            Bazan <span className="text-accent">&amp;</span> Co.
           </span>
         </a>
 
         <nav aria-label={t('footer.navAria')}>
-          <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-content-secondary">
+          <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-secondary">
             <li>
-              <a href="#servicios" className="hover:text-gold-light">
+              <a href="#servicios" className="hover:text-ink">
                 {t('nav.items.servicios')}
               </a>
             </li>
             <li>
-              <a href="#proceso" className="hover:text-gold-light">
+              <a href="#proceso" className="hover:text-ink">
                 {t('nav.items.proceso')}
               </a>
             </li>
             <li>
-              <a href="#portafolio" className="hover:text-gold-light">
+              <a href="#portafolio" className="hover:text-ink">
                 {t('nav.items.portafolio')}
               </a>
             </li>
             <li>
-              <a href="#faq" className="hover:text-gold-light">
+              <a href="#faq" className="hover:text-ink">
                 {t('nav.items.faq')}
               </a>
             </li>
             <li>
-              <a href="#contacto" className="hover:text-gold-light">
+              <a href="#contacto" className="hover:text-ink">
                 {t('nav.items.contacto')}
               </a>
             </li>
@@ -465,7 +453,7 @@ export function FooterSection({
               <button
                 type="button"
                 onClick={onOpenPrivacy}
-                className="text-content-secondary hover:text-gold-light"
+                className="text-ink-secondary hover:text-ink"
               >
                 {t('footer.privacyLink')}
               </button>
@@ -474,7 +462,7 @@ export function FooterSection({
               <button
                 type="button"
                 onClick={onOpenCookies}
-                className="text-content-secondary hover:text-gold-light"
+                className="text-ink-secondary hover:text-ink"
               >
                 {t('footer.cookiesLink')}
               </button>
@@ -482,7 +470,7 @@ export function FooterSection({
           </ul>
         </nav>
 
-        <p className="text-xs text-content-muted">{t('footer.copyright')}</p>
+        <p className="text-xs text-ink-muted">{t('footer.copyright')}</p>
       </div>
     </footer>
   );
@@ -503,7 +491,7 @@ export function WhatsAppFab() {
           language: i18n.language,
         })
       }
-      className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-[#07080C] shadow-lg hover:scale-105"
+      className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-whatsapp text-ink-inverse shadow-lg transition-transform duration-200 hover:scale-105"
     >
       <WhatsAppIcon className="h-7 w-7" />
     </a>
@@ -528,31 +516,31 @@ export function CookieBanner({
   return (
     <aside
       aria-label={t('cookieBanner.ariaLabel')}
-      className="fixed bottom-4 left-4 right-20 z-50 max-w-md rounded-2xl border border-white/15 bg-obsidian-elevated/95 p-4 shadow-card backdrop-blur-md sm:left-6 sm:right-auto"
+      className="fixed bottom-4 left-4 right-20 z-50 max-w-md rounded-2xl border border-line-strong bg-surface/95 p-4 shadow-card backdrop-blur-md sm:left-6 sm:right-auto"
     >
-      <p className="text-xs leading-relaxed text-content-secondary sm:text-sm">
+      <p className="text-xs leading-relaxed text-ink-secondary sm:text-sm">
         {t('cookieBanner.textPrefix')}{' '}
         <button
           type="button"
           onClick={onOpenPrivacy}
-          className="font-semibold text-gold-light underline underline-offset-2 hover:text-gold"
+          className="font-semibold text-accent-hi underline underline-offset-2 hover:text-accent"
         >
           {t('cookieBanner.privacyLink')}
         </button>
         .
       </p>
-      <div className="mt-3 flex items-center gap-2.5">
+      <div className="mt-3.5 flex items-center gap-2.5">
         <button
           type="button"
           onClick={onAccept}
-          className="btn-gold-primary flex-1 rounded-lg px-3.5 py-2 text-xs font-bold"
+          className="btn-gold-primary flex-1 rounded-full bg-accent px-4 py-2 text-xs font-semibold text-ink-inverse"
         >
           {t('cookieBanner.accept')}
         </button>
         <button
           type="button"
           onClick={onReject}
-          className="flex-1 rounded-lg border border-white/15 bg-obsidian-base px-3.5 py-2 text-xs font-semibold text-content-secondary hover:border-white/30 hover:text-content-primary"
+          className="flex-1 rounded-full border border-line-strong bg-elevated/60 px-4 py-2 text-xs font-medium text-ink hover:border-accent/40"
         >
           {t('cookieBanner.reject')}
         </button>
@@ -580,57 +568,54 @@ export function PrivacyModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       role="dialog"
       aria-modal="true"
       aria-labelledby="privacy-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-bg/80 p-4 backdrop-blur-sm"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="max-h-[85vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-white/15 bg-obsidian-surface p-6 shadow-card sm:p-8">
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
-          <h2
-            id="privacy-modal-title"
-            className="font-heading text-xl font-bold text-content-primary"
-          >
+      <div className="max-h-[85vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-line-strong bg-surface p-6 shadow-card sm:p-8">
+        <div className="flex items-center justify-between border-b border-line pb-4">
+          <h2 id="privacy-modal-title" className="font-serif text-2xl font-normal text-ink">
             {t('privacyModal.title')}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label={t('privacyModal.closeAria')}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-content-secondary hover:text-content-primary"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line-strong text-ink-secondary hover:text-ink"
           >
             <CloseIcon className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="mt-4 space-y-4 text-sm leading-relaxed text-content-secondary">
+        <div className="mt-4 space-y-4 text-sm leading-relaxed text-ink-secondary">
           <p>
-            <strong className="text-content-primary">{t('privacyModal.controllerLabel')}</strong>{' '}
+            <strong className="text-ink">{t('privacyModal.controllerLabel')}</strong>{' '}
             {t('privacyModal.controllerText')}{' '}
-            <a href="mailto:contacto@bazanco.com" className="text-gold-light underline">
+            <a href="mailto:contacto@bazanco.com" className="text-accent-hi underline">
               contacto@bazanco.com
             </a>
             ).{' '}
-            <span className="font-mono text-xs text-gold-light">
+            <span className="font-mono text-xs text-accent-hi">
               {t('privacyModal.pendingLegal')}
             </span>
           </p>
           <p>
-            <strong className="text-content-primary">{t('privacyModal.section1Title')}</strong>{' '}
+            <strong className="text-ink">{t('privacyModal.section1Title')}</strong>{' '}
             {t('privacyModal.section1Text')}
           </p>
           <p>
-            <strong className="text-content-primary">{t('privacyModal.section2Title')}</strong>{' '}
+            <strong className="text-ink">{t('privacyModal.section2Title')}</strong>{' '}
             {t('privacyModal.section2Text')}
           </p>
           <p>
-            <strong className="text-content-primary">{t('privacyModal.section3Title')}</strong>{' '}
+            <strong className="text-ink">{t('privacyModal.section3Title')}</strong>{' '}
             {t('privacyModal.section3Text')}
           </p>
           <p>
-            <strong className="text-content-primary">{t('privacyModal.section4Title')}</strong>{' '}
+            <strong className="text-ink">{t('privacyModal.section4Title')}</strong>{' '}
             {t('privacyModal.section4Text')}{' '}
-            <a href="mailto:contacto@bazanco.com" className="text-gold-light underline">
+            <a href="mailto:contacto@bazanco.com" className="text-accent-hi underline">
               contacto@bazanco.com
             </a>
             .

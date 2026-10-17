@@ -4,25 +4,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        obsidian: {
-          base: 'var(--bg-base)',
-          surface: 'var(--bg-surface)',
-          elevated: 'var(--bg-elevated)',
-          hover: 'var(--bg-hover)',
+        bg: '#07090f',
+        surface: '#0e121b',
+        elevated: '#151a26',
+        line: 'rgb(255 255 255 / 0.08)',
+        'line-strong': 'rgb(255 255 255 / 0.14)',
+        ink: {
+          DEFAULT: '#f3f1ea',
+          secondary: '#a9aebb',
+          muted: '#878d9c',
+          inverse: '#07090f',
         },
-        gold: {
-          DEFAULT: 'var(--accent)',
-          light: 'var(--accent-light)',
-          dark: 'var(--accent-dark)',
+        accent: {
+          DEFAULT: '#d9b45a',
+          hi: '#edd08a',
+          lo: '#b8932f',
         },
-        content: {
-          primary: 'var(--text-primary)',
-          secondary: 'var(--text-secondary)',
-          muted: 'var(--text-muted)',
-          inverse: 'var(--text-inverse)',
-        },
+        support: '#5b7bb5',
+        whatsapp: '#25d366',
+        success: '#4ade80',
+        danger: '#f87171',
       },
       fontFamily: {
+        serif: ['var(--font-serif)'],
         heading: ['var(--font-heading)'],
         body: ['var(--font-body)'],
         mono: ['var(--font-mono)'],

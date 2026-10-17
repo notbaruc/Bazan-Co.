@@ -5,9 +5,14 @@
 [build.environment]
   NODE_VERSION = "20"
 
-# Cache inmutable para assets con hash de Vite
+# Cache inmutable para assets con hash de Vite y fuentes locales
 [[headers]]
   for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 

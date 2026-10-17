@@ -13,8 +13,8 @@
     "langSwitcherAria": "Cambiar idioma del sitio",
     "openMenu": "Abrir menú de navegación",
     "closeMenu": "Cerrar menú de navegación",
-    "ctaDesktop": "Agenda una Consulta",
-    "ctaMobile": "Agenda una Consulta Técnica",
+    "ctaDesktop": "Agenda una consulta",
+    "ctaMobile": "Agenda una consulta",
     "items": {
       "problema": "El Problema",
       "servicios": "Servicios",
@@ -26,12 +26,12 @@
     }
   },
   "hero": {
-    "badge": "Ingeniería Web de Alto Nivel · Chihuahua, México",
+    "badge": "Ingeniería Web · Chihuahua, México",
     "line1Words": ["No", "construimos", "páginas", "web."],
     "line2Words": ["Diseñamos", "máquinas", "de", "conversión."],
     "subtitle": "Somos una firma de ingeniería de software en Chihuahua, México (con servicio remoto global) especializada en crear experiencias digitales rápidas, bilingües y orientadas a resultados para negocios locales y PYMEs. Tu sitio web no es un gasto — es tu activo digital más rentable.",
-    "ctaPrimary": "Escribir por WhatsApp",
-    "ctaSecondary": "Agenda una Consulta Técnica",
+    "ctaPrimary": "Escríbenos por WhatsApp",
+    "ctaSecondary": "Agenda una consulta",
     "microcopy": "Atención directa del ingeniero a cargo · Sin intermediarios · Diagnóstico inicial sin costo",
     "statsAria": "Indicadores técnicos verificables",
     "stats": [
@@ -60,17 +60,17 @@
         "displayValue": "1:1",
         "prefix": "",
         "suffix": "",
-        "label": "Trato directo con el ingeniero"
+        "label": "Trato directo"
       }
     ]
   },
   "trustBar": {
     "ariaLabel": "Barra de confianza y credenciales",
     "items": [
-      "Ingeniería en Desarrollo de Software (UTCH BIS)",
-      "Inglés avanzado (iTEP Academic Plus)",
-      "Carga objetivo <2s y Core Web Vitals óptimos",
-      "Arquitectura 100% a medida (0% plantillas genéricas)",
+      "Ingeniería en Desarrollo de Software",
+      "Inglés avanzado",
+      "Carga objetivo <2s",
+      "Arquitectura 100% a medida",
       "Chihuahua, México · Servicio remoto global"
     ]
   },
@@ -186,8 +186,6 @@
     "labels": {
       "problem": "Problema",
       "solution": "Solución",
-      "result": "Resultado",
-      "testimonial": "Testimonio",
       "stack": "Stack Técnico",
       "stackAriaPrefix": "Stack de",
       "visitSite": "Ver proyecto en vivo",
@@ -199,40 +197,34 @@
         "id": "soldaduras-y-equipos",
         "title": "Soldaduras y Equipos",
         "category": "Landing Page · Suministros Industriales",
-        "image": "/img/Consumbiles.webp",
+        "image": "/img/SE.webp",
         "imageAlt": "Catálogo de equipos de soldadura, careta electrónica y consumibles industriales de Soldaduras y Equipos",
         "url": "https://soldadurasequipos.netlify.app/",
         "problem": "Empresa comercializadora de consumibles, gases industriales y servicio técnico para soldadura que requería presencia digital propia para exhibir su catálogo y captar cotizaciones de talleres.",
         "solution": "Landing page de carga rápida con presentación clara de líneas de producto, sección de mantenimiento de equipos, mapa de ubicación y botón de contacto directo vía WhatsApp.",
-        "stack": ["HTML5", "CSS3", "JavaScript", "SEO Local"],
-        "result": "[PENDIENTE USUARIO: Métrica verificable de solicitudes de cotización o visitas]",
-        "testimonial": "[PENDIENTE USUARIO: Testimonio autorizado del cliente en Soldaduras y Equipos]"
+        "stack": ["HTML5", "Tailwind CSS", "JavaScript", "Diseño Responsivo", "SEO Local"]
       },
       {
         "id": "ries-chihuahua",
         "title": "RIES Chihuahua",
         "category": "Sitio Corporativo B2B · Industria y Maquila",
-        "image": "/img/RIES_Logo_BW.webp",
+        "image": "/img/RIES.webp",
         "imageAlt": "Logotipo industrial de RIES Chihuahua con emblema de soldador especializado para el sector maquilador",
         "url": "https://rieschihuahua.com/",
         "problem": "Proveedor de suministros y equipos de soldadura enfocado en el sector maquilador de Chihuahua que necesitaba proyectar solidez corporativa B2B y facilitar el contacto de compradores industriales.",
         "solution": "Sitio web especializado con enfoque en atención a industria maquiladora, presentación de capacidades de suministro técnico y canal directo de atención comercial.",
-        "stack": ["HTML5", "CSS3", "JavaScript", "SEO Técnico B2B"],
-        "result": "[PENDIENTE USUARIO: Métrica verificable de prospectos industriales captados]",
-        "testimonial": "[PENDIENTE USUARIO: Testimonio autorizado del cliente en RIES Chihuahua]"
+        "stack": ["HTML5", "Tailwind CSS", "JavaScript", "Diseño Responsivo", "SEO Técnico"]
       },
       {
         "id": "gech",
         "title": "GECH",
         "category": "Proyecto Web · Chihuahua, México",
-        "image": "/img/bazancologo.webp",
-        "imageAlt": "Vista previa institucional reservada para el caso de estudio de GECH desarrollado por Bazan & Co.",
-        "isPendingCapture": true,
+        "image": "/img/GECH.webp",
+        "imageAlt": "Captura del sitio de GECH desarrollado por Bazan & Co.",
+        "url": "https://gechmexico.com/",
         "problem": "Organización en Chihuahua que requería estructurar y modernizar su presencia digital con una plataforma rápida, accesible en dispositivos móviles y orientada a la generación de confianza. [PENDIENTE USUARIO: Confirmar detalle específico del reto de GECH]",
         "solution": "Desarrollo de interfaz web a medida con arquitectura limpia, navegación clara por servicios, optimización para buscadores y puntos de contacto directo. [PENDIENTE USUARIO: Confirmar alcance final entregado a GECH]",
-        "stack": ["HTML5 / CSS3", "JavaScript", "Diseño Responsivo", "SEO Técnico"],
-        "result": "[PENDIENTE USUARIO: Métrica verificable de impacto del proyecto GECH]",
-        "testimonial": "[PENDIENTE USUARIO: Testimonio autorizado del cliente en GECH]"
+        "stack": ["HTML5 / Tailwind CSS", "JavaScript", "Diseño Responsivo", "SEO Técnico"]
       }
     ]
   },
