@@ -642,48 +642,13 @@ export function ProcessSection() {
 
 export function PortfolioSection() {
   const { t, i18n } = useTranslation();
-  const sectionRef = useRef<HTMLElement | null>(null);
   const projects = t('portfolio.projects', { returnObjects: true }) as PortfolioProjectItem[];
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    let ticking = false;
-
-    const updateParallax = () => {
-      const container = sectionRef.current;
-      if (!container) return;
-      const images = container.querySelectorAll<HTMLElement>('[data-parallax-img]');
-      const viewportHeight = window.innerHeight;
-
-      images.forEach((img) => {
-        const rect = img.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > viewportHeight) return;
-        const progress = (rect.top + rect.height / 2 - viewportHeight / 2) / (viewportHeight / 2);
-        const shift = Math.max(-12, Math.min(12, progress * -10));
-        img.style.transform = `translate3d(0, ${shift.toFixed(1)}px, 0) scale(1.06)`;
-      });
-    };
-
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          updateParallax();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   return (
     <section
-      ref={sectionRef}
       id="portafolio"
       aria-labelledby="portafolio-heading"
-      className="scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
+      className="cv-section scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
         <RevealOnScroll className="max-w-3xl">
@@ -707,21 +672,20 @@ export function PortfolioSection() {
 
         <div className="mt-14 grid gap-6 lg:grid-cols-3">
           {projects.map((project, idx) => (
-            <RevealOnScroll key={project.id} delayMs={idx * 100} className="h-full">
-              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-transform duration-300 hover:-translate-y-1 hover:border-accent/35">
+            <RevealOnScroll key={project.id} delayMs={idx * 80} className="h-full">
+              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-transform duration-500 hover:-translate-y-1 hover:border-accent/35">
                 <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-line bg-elevated">
                   <img
-                    data-parallax-img
                     src={project.image}
                     alt={project.imageAlt}
                     width={800}
                     height={500}
                     loading="lazy"
                     decoding="async"
-                    className={`h-full w-full transition-transform duration-300 ${
+                    className={`h-full w-full transition-transform duration-700 ${
                       project.isPendingCapture
                         ? 'object-contain p-10 opacity-40'
-                        : 'object-cover object-center'
+                        : 'object-cover object-center group-hover:scale-[1.03]'
                     }`}
                   />
                   {project.isPendingCapture && (
