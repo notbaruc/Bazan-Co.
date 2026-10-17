@@ -128,46 +128,6 @@ export default function App() {
     }
   }, []);
 
-  useEffect(() => {
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const finePointer = window.matchMedia('(pointer: fine)').matches;
-    if (reducedMotion || !finePointer) return;
-
-    let rafId = 0;
-    let isCancelled = false;
-    let cleanupLenis: (() => void) | undefined;
-
-    const timer = window.setTimeout(async () => {
-      try {
-        const { default: Lenis } = await import('lenis');
-        if (isCancelled) return;
-        const lenis = new Lenis({
-          duration: 1.05,
-          smoothWheel: true,
-        });
-
-        const raf = (time: number) => {
-          lenis.raf(time);
-          rafId = window.requestAnimationFrame(raf);
-        };
-        rafId = window.requestAnimationFrame(raf);
-
-        cleanupLenis = () => {
-          window.cancelAnimationFrame(rafId);
-          lenis.destroy();
-        };
-      } catch {
-        // Fallback a smooth scroll nativo en caso de error
-      }
-    }, 350);
-
-    return () => {
-      isCancelled = true;
-      window.clearTimeout(timer);
-      if (cleanupLenis) cleanupLenis();
-    };
-  }, []);
-
   const handleCookieChoice = (choice: 'accepted' | 'rejected') => {
     try {
       localStorage.setItem(COOKIE_STORAGE_KEY, choice);

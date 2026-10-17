@@ -10,23 +10,14 @@
     background-color: var(--color-bg);
     color: var(--color-ink-secondary);
     font-family: var(--font-body);
-    overflow-x: hidden;
-  }
-
-  html.lenis,
-  html.lenis body {
-    height: auto;
-  }
-
-  .lenis.lenis-smooth {
-    scroll-behavior: auto !important;
+    overflow-x: clip;
   }
 
   body {
     background-color: var(--color-bg);
     color: var(--color-ink-secondary);
     font-family: var(--font-body);
-    overflow-x: hidden;
+    overflow-x: clip;
     min-height: 100vh;
   }
 
