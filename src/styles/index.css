@@ -168,7 +168,6 @@
   width: 80vmax;
   height: 80vmax;
   border-radius: 9999px;
-  will-change: transform;
   pointer-events: none;
 }
 
@@ -197,6 +196,10 @@
 }
 
 @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
+  .aurora-blob {
+    will-change: transform;
+  }
+
   .aurora-blob--gold {
     animation: drift-gold 26s cubic-bezier(0.65, 0, 0.35, 1) infinite alternate;
   }

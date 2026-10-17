@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { applyLanguageChange, type SupportedLanguage } from '../i18n/config';
 import { trackEvent } from '../utils/analytics';
@@ -19,6 +19,7 @@ export function Navbar() {
   const [activeId, setActiveId] = useState<string>('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const scrollSentinelRef = useRef<HTMLDivElement | null>(null);
 
   const currentLang: SupportedLanguage = i18n.language?.startsWith('en') ? 'en' : 'es';
 
@@ -32,19 +33,21 @@ export function Navbar() {
   };
 
   useEffect(() => {
-    let ticking = false;
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 28);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const sentinel = scrollSentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry) {
+          setScrolled(!entry.isIntersecting);
+        }
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -87,6 +90,12 @@ export function Navbar() {
 
   return (
     <>
+      <div
+        ref={scrollSentinelRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-7"
+      />
+
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-accent focus:px-5 focus:py-2.5 focus:font-body focus:text-sm focus:font-semibold focus:text-ink-inverse focus:shadow-glow"
@@ -94,19 +103,17 @@ export function Navbar() {
         {t('nav.skipToContent')}
       </a>
 
-      <header className="fixed inset-x-0 top-0 z-50">
+      <header className="fixed inset-x-0 top-0 z-50 transform-gpu">
         <div
           aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 border-b border-line bg-bg/85 backdrop-blur-xl transition-opacity duration-300 ${
-            scrolled || mobileMenuOpen ? 'opacity-100 shadow-md' : 'opacity-75'
+          className={`pointer-events-none absolute inset-0 border-b border-line bg-bg/90 backdrop-blur-md transition-opacity duration-500 ${
+            scrolled || mobileMenuOpen ? 'opacity-100 shadow-md' : 'opacity-80'
           }`}
         />
 
         <nav
           aria-label={t('nav.mainAria')}
-          className={`relative mx-auto flex h-[4.5rem] max-w-container items-center justify-between px-6 transition-transform duration-300 ${
-            scrolled ? 'scale-[0.985]' : 'scale-100'
-          }`}
+          className="relative mx-auto flex h-[4.5rem] max-w-container items-center justify-between px-6"
         >
           <a
             href="#hero"

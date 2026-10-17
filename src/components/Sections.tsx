@@ -258,23 +258,35 @@ export function HeroSection() {
       aria-labelledby="hero-heading"
       className="relative isolate overflow-hidden bg-bg pb-20 pt-32 md:pb-28 md:pt-40"
     >
-      <div className="aurora-blob aurora-blob--gold -z-10" aria-hidden="true" />
-      <div className="aurora-blob aurora-blob--steel -z-10" aria-hidden="true" />
-      <div className="hero-grid-bg pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
-      <svg
-        className="hero-grain pointer-events-none absolute inset-0 -z-10 h-full w-full"
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden [contain:strict]"
         aria-hidden="true"
       >
-        <filter id="hero-grain-filter">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.9"
-            numOctaves={2}
-            stitchTiles="stitch"
-          />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#hero-grain-filter)" />
-      </svg>
+        <div className="aurora-blob aurora-blob--gold" />
+        <div className="aurora-blob aurora-blob--steel" />
+        <div className="hero-grid-bg absolute inset-0" />
+        <svg className="hero-grain absolute inset-0 h-full w-full">
+          <defs>
+            <filter id="hero-grain-filter" x="0%" y="0%" width="100%" height="100%">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.9"
+                numOctaves={2}
+                stitchTiles="stitch"
+              />
+            </filter>
+            <pattern
+              id="hero-grain-pattern"
+              width="128"
+              height="128"
+              patternUnits="userSpaceOnUse"
+            >
+              <rect width="128" height="128" filter="url(#hero-grain-filter)" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hero-grain-pattern)" />
+        </svg>
+      </div>
 
       <div className="relative mx-auto max-w-container px-6">
         <div className="max-w-4xl">
