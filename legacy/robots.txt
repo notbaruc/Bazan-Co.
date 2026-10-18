@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://bazanconsultoria.netlify.app/sitemap.xml

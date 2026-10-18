@@ -594,13 +594,13 @@ export function PrivacyModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           <p>
             <strong className="text-ink">{t('privacyModal.controllerLabel')}</strong>{' '}
             {t('privacyModal.controllerText')}{' '}
-            <a href="mailto:contacto@bazanco.com" className="text-accent-hi underline">
-              contacto@bazanco.com
+            <a
+              href={`mailto:${t('contact.channels.emailAddress')}`}
+              className="text-accent-hi underline"
+            >
+              {t('contact.channels.emailAddress')}
             </a>
             ).{' '}
-            <span className="font-mono text-xs text-accent-hi">
-              {t('privacyModal.pendingLegal')}
-            </span>
           </p>
           <p>
             <strong className="text-ink">{t('privacyModal.section1Title')}</strong>{' '}
@@ -617,8 +617,11 @@ export function PrivacyModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           <p>
             <strong className="text-ink">{t('privacyModal.section4Title')}</strong>{' '}
             {t('privacyModal.section4Text')}{' '}
-            <a href="mailto:contacto@bazanco.com" className="text-accent-hi underline">
-              contacto@bazanco.com
+            <a
+              href={`mailto:${t('contact.channels.emailAddress')}`}
+              className="text-accent-hi underline"
+            >
+              {t('contact.channels.emailAddress')}
             </a>
             .
           </p>

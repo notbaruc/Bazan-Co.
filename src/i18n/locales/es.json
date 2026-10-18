@@ -260,17 +260,11 @@
     "items": [
       {
         "question": "¿Cuánto cuesta desarrollar un sitio web o landing page?",
-        "answer": "La inversión depende del alcance del proyecto (landing page de conversión, sitio corporativo multipágina o integración bilingüe ES/EN). Tras una breve llamada de diagnóstico sin costo, entregamos una propuesta cerrada por escrito sin cargos ocultos.",
-        "pendingNote": "[PENDIENTE USUARIO: Rangos de inversión orientativos por paquete si desea publicarlos]"
+        "answer": "La inversión depende del alcance del proyecto (landing page de conversión, sitio corporativo multipágina o integración bilingüe ES/EN). Tras una breve llamada de diagnóstico sin costo, entregamos una propuesta cerrada por escrito sin cargos ocultos."
       },
       {
         "question": "¿En cuánto tiempo estará listo mi sitio web?",
-        "answer": "Trabajamos por hitos semanales claros (Diagnóstico, Diseño, Desarrollo y Lanzamiento) para que puedas revisar avances reales desde la primera semana.",
-        "pendingNote": "[PENDIENTE USUARIO: Tiempo estimado promedio de entrega en semanas]"
-      },
-      {
-        "question": "¿Necesito saber de programación o tecnología para trabajar con ustedes?",
-        "answer": "En absoluto. Nos encargamos del 100% de la complejidad técnica (dominio, hosting, certificado SSL, velocidad, SEO y analítica) y te hablamos siempre en términos de negocio y resultados."
+        "answer": "Trabajamos por hitos semanales claros (Diagnóstico, Diseño, Desarrollo y Lanzamiento) para que puedas revisar avances reales desde la primera semana. El tiempo total depende del alcance y la complejidad del proyecto, pero típicamente un sitio corporativo completo se entrega en 7 a 14 días hábiles."
       },
       {
         "question": "¿Trabajan solo en Chihuahua o atienden a negocios de otras ciudades y países?",
@@ -282,8 +276,7 @@
       },
       {
         "question": "¿Ofrecen mantenimiento o actualizaciones después del lanzamiento?",
-        "answer": "Tu sitio queda completamente funcional, documentado y con Google Analytics 4 y Search Console activos. Además, contamos con acompañamiento técnico directo cuando tu negocio requiera nuevas secciones o ajustes.",
-        "pendingNote": "[PENDIENTE USUARIO: Detalles de póliza o esquema de soporte mensual post-lanzamiento]"
+        "answer": "Tu sitio queda completamente funcional, documentado y con Google Analytics 4 y Search Console activos. Además, contamos con acompañamiento técnico directo cuando tu negocio requiera nuevas secciones o ajustes."
       }
     ]
   },
@@ -303,7 +296,7 @@
       "whatsappTitle": "WhatsApp Directo",
       "whatsappNumber": "+52 1 614 343 6765",
       "emailTitle": "Email",
-      "emailAddress": "contacto@bazanco.com",
+      "emailAddress": "barucbazan7@gmail.com",
       "locationTitle": "Ubicación",
       "locationText": "Chihuahua, México — Servicio remoto a nivel global"
     },
@@ -358,7 +351,6 @@
     "closeAria": "Cerrar aviso de privacidad",
     "controllerLabel": "Responsable:",
     "controllerText": "Bazan & Co. (Chihuahua, Chihuahua, México · Correo de contacto:",
-    "pendingLegal": "[PENDIENTE USUARIO: Razón social o nombre completo del titular legal si desea especificarlo]",
     "section1Title": "1. Formulario de Contacto (Netlify Forms):",
     "section1Text": "Los datos que nos proporcionas voluntariamente en el formulario de contacto (nombre, correo electrónico, servicio de interés y mensaje) se procesan a través de Netlify Forms con la única finalidad de responder a tu solicitud de consulta técnica o cotización. No vendemos ni cedemos tus datos a terceros.",
     "section2Title": "2. Analítica Web (Google Analytics 4):",

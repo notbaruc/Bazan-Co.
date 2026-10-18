@@ -2,24 +2,11 @@ import { type CSSProperties, type PointerEvent, type ReactNode, useEffect, useRe
 import { useTranslation } from 'react-i18next';
 import { trackEvent } from '../utils/analytics';
 import {
-  AcademicCapIcon,
   ArrowRightIcon,
-  BoltIcon,
-  ChartBarIcon,
-  CheckCircleIcon,
   CheckIcon,
-  CodeIcon,
-  CompassIcon,
-  DesktopIcon,
   ExternalLinkIcon,
-  FlagIcon,
-  GlobeIcon,
-  PenToolIcon,
   PlusIcon,
-  RocketIcon,
-  ShieldCheckIcon,
   WhatsAppIcon,
-  XCircleIcon,
 } from './ui/Icons';
 
 interface StatItem {
@@ -461,16 +448,17 @@ export function ProblemSolutionSection() {
         <div className="mt-14 grid gap-6 lg:grid-cols-2">
           <RevealOnScroll delayMs={80}>
             <article className="h-full rounded-2xl border border-line bg-surface p-7 sm:p-9">
-              <div className="inline-flex items-center gap-2 rounded-full border border-danger/30 bg-danger/10 px-3.5 py-1 font-mono text-xs font-medium uppercase tracking-widest text-danger">
-                {t('problemSolution.problemBadge')}
-              </div>
-              <h3 className="mt-4 font-heading text-xl font-semibold text-ink sm:text-2xl">
+              <p className="font-body text-sm text-ink-muted">{t('problemSolution.problemBadge')}</p>
+              <h3 className="mt-3 font-heading text-xl font-semibold text-ink-secondary sm:text-2xl">
                 {t('problemSolution.problemTitle')}
               </h3>
-              <ul className="mt-6 space-y-4">
+              <ul className="mt-6 divide-y divide-line/60">
                 {problems.map((problem) => (
-                  <li key={problem} className="flex items-start gap-3.5 text-ink-secondary">
-                    <XCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-danger" />
+                  <li key={problem} className="flex items-start gap-3.5 py-3.5 text-ink-secondary">
+                    <span
+                      className="mt-[0.8em] h-px w-3 shrink-0 bg-ink-muted/60"
+                      aria-hidden="true"
+                    />
                     <span className="text-sm leading-relaxed sm:text-base">{problem}</span>
                   </li>
                 ))}
@@ -484,16 +472,14 @@ export function ProblemSolutionSection() {
                 className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent"
                 aria-hidden="true"
               />
-              <div className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-3.5 py-1 font-mono text-xs font-medium uppercase tracking-widest text-accent-hi">
-                {t('problemSolution.solutionBadge')}
-              </div>
-              <h3 className="mt-4 font-heading text-xl font-semibold text-ink sm:text-2xl">
+              <p className="font-body text-sm text-accent-hi">{t('problemSolution.solutionBadge')}</p>
+              <h3 className="mt-3 font-heading text-xl font-semibold text-ink sm:text-2xl">
                 {t('problemSolution.solutionTitle')}
               </h3>
-              <ul className="mt-6 space-y-4">
+              <ul className="mt-6 divide-y divide-line/60">
                 {solutions.map((solution) => (
-                  <li key={solution} className="flex items-start gap-3.5 text-ink">
-                    <CheckCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+                  <li key={solution} className="flex items-start gap-3.5 py-3.5 text-ink">
+                    <span className="mt-[0.8em] h-px w-3 shrink-0 bg-accent" aria-hidden="true" />
                     <span className="text-sm leading-relaxed sm:text-base">{solution}</span>
                   </li>
                 ))}
@@ -509,7 +495,6 @@ export function ProblemSolutionSection() {
 export function ServicesSection() {
   const { t } = useTranslation();
   const serviceItems = t('services.items', { returnObjects: true }) as ServiceItem[];
-  const icons = [DesktopIcon, ChartBarIcon, RocketIcon];
 
   return (
     <section
@@ -538,35 +523,26 @@ export function ServicesSection() {
         </RevealOnScroll>
 
         <div className="mt-14 grid gap-6 lg:grid-cols-3">
-          {serviceItems.map((service, idx) => {
-            const IconComponent = icons[idx] ?? DesktopIcon;
-            return (
-              <RevealOnScroll key={service.title} delayMs={idx * 100}>
-                <TiltSpotlightCard className="h-full rounded-2xl border border-line bg-bg/85 p-7 shadow-card hover:border-accent/40 sm:p-8">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-accent/25 bg-accent/10 text-accent">
-                    <IconComponent className="h-6 w-6" />
-                  </div>
+          {serviceItems.map((service, idx) => (
+            <RevealOnScroll key={service.title} delayMs={idx * 100}>
+              <TiltSpotlightCard className="h-full rounded-2xl border border-line bg-bg/85 p-7 shadow-card hover:border-accent/40 sm:p-8">
+                <h3 className="font-heading text-xl font-semibold text-ink">{service.title}</h3>
 
-                  <h3 className="mt-6 font-heading text-xl font-semibold text-ink">
-                    {service.title}
-                  </h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-secondary sm:text-base">
+                  {service.description}
+                </p>
 
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-secondary sm:text-base">
-                    {service.description}
-                  </p>
-
-                  <ul className="mt-6 space-y-3 border-t border-line pt-6">
-                    {service.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2.5 text-sm text-ink">
-                        <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </TiltSpotlightCard>
-              </RevealOnScroll>
-            );
-          })}
+                <ul className="mt-6 space-y-3 border-t border-line pt-6">
+                  {service.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2.5 text-sm text-ink">
+                      <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </TiltSpotlightCard>
+            </RevealOnScroll>
+          ))}
         </div>
       </div>
     </section>
@@ -608,7 +584,6 @@ export function TechMarqueeSection() {
 export function ProcessSection() {
   const { t } = useTranslation();
   const steps = t('process.steps', { returnObjects: true }) as ProcessStepItem[];
-  const icons = [CompassIcon, PenToolIcon, CodeIcon, FlagIcon];
 
   return (
     <section
@@ -637,31 +612,19 @@ export function ProcessSection() {
         </RevealOnScroll>
 
         <ol className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {steps.map((step, idx) => {
-            const IconComponent = icons[idx] ?? CompassIcon;
-            return (
-              <li key={step.number}>
-                <RevealOnScroll delayMs={idx * 90} className="h-full">
-                  <div className="flex h-full flex-col rounded-2xl border border-line bg-bg/80 p-6 transition-transform duration-300 hover:-translate-y-1 hover:border-accent/35 sm:p-7">
-                    <div className="flex items-center justify-between">
-                      <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent/25 bg-accent/10 text-accent">
-                        <IconComponent className="h-5 w-5" />
-                      </span>
-                      <span className="font-mono text-sm font-medium text-ink-muted">
-                        {step.number}
-                      </span>
-                    </div>
-                    <h3 className="mt-6 font-heading text-xl font-semibold text-ink">
-                      {step.title}
-                    </h3>
-                    <p className="mt-2.5 text-sm leading-relaxed text-ink-secondary">
-                      {step.description}
-                    </p>
-                  </div>
-                </RevealOnScroll>
-              </li>
-            );
-          })}
+          {steps.map((step, idx) => (
+            <li key={step.number}>
+              <RevealOnScroll delayMs={idx * 90} className="h-full">
+                <div className="flex h-full flex-col rounded-2xl border border-line bg-bg/80 p-6 transition-transform duration-300 hover:-translate-y-1 hover:border-accent/35 sm:p-7">
+                  <span className="font-mono text-sm font-medium text-ink-muted">{step.number}</span>
+                  <h3 className="mt-4 font-heading text-xl font-semibold text-ink">{step.title}</h3>
+                  <p className="mt-2.5 text-sm leading-relaxed text-ink-secondary">
+                    {step.description}
+                  </p>
+                </div>
+              </RevealOnScroll>
+            </li>
+          ))}
         </ol>
       </div>
     </section>
@@ -818,7 +781,6 @@ export function PortfolioSection() {
 export function WhyUsSection() {
   const { t } = useTranslation();
   const pillars = t('whyUs.pillars', { returnObjects: true }) as WhyUsPillarItem[];
-  const icons = [BoltIcon, AcademicCapIcon, GlobeIcon, ShieldCheckIcon];
 
   return (
     <section
@@ -851,24 +813,16 @@ export function WhyUsSection() {
           </RevealOnScroll>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:col-span-7">
-            {pillars.map((pillar, idx) => {
-              const IconComponent = icons[idx] ?? BoltIcon;
-              return (
-                <RevealOnScroll key={pillar.title} delayMs={idx * 90}>
-                  <article className="h-full rounded-2xl border border-line bg-surface p-6 shadow-card transition-transform duration-300 hover:-translate-y-1 hover:border-accent/35">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-accent/25 bg-accent/10 text-accent">
-                      <IconComponent className="h-6 w-6" />
-                    </div>
-                    <h3 className="mt-5 font-heading text-lg font-semibold text-ink">
-                      {pillar.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
-                      {pillar.description}
-                    </p>
-                  </article>
-                </RevealOnScroll>
-              );
-            })}
+            {pillars.map((pillar, idx) => (
+              <RevealOnScroll key={pillar.title} delayMs={idx * 90}>
+                <article className="h-full rounded-2xl border border-line bg-surface p-6 shadow-card transition-transform duration-300 hover:-translate-y-1 hover:border-accent/35">
+                  <h3 className="font-heading text-lg font-semibold text-ink">{pillar.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+                    {pillar.description}
+                  </p>
+                </article>
+              </RevealOnScroll>
+            ))}
           </div>
         </div>
       </div>

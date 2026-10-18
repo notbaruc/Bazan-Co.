@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { applyLanguageChange, type SupportedLanguage } from '../i18n/config';
 import { trackEvent } from '../utils/analytics';
+import Brand from './Brand';
 import { ArrowRightIcon, CloseIcon, GlobeIcon, MenuIcon } from './ui/Icons';
 
 const SECTION_KEYS = [
@@ -115,20 +116,7 @@ export function Navbar() {
           aria-label={t('nav.mainAria')}
           className="relative mx-auto flex h-[4.5rem] max-w-container items-center justify-between px-6"
         >
-          <a
-            href="#hero"
-            className="group inline-flex shrink-0 items-center gap-2.5 rounded-lg py-1"
-          >
-            <span
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-accent-hi to-accent-lo font-body text-sm font-extrabold text-ink-inverse shadow-sm transition-transform duration-300 group-hover:scale-105"
-              aria-hidden="true"
-            >
-              B
-            </span>
-            <span className="font-body text-lg font-semibold tracking-tight text-ink">
-              Bazan <span className="text-accent">&amp;</span> Co.
-            </span>
-          </a>
+          <Brand />
 
           <ul className="hidden items-center gap-1 xl:flex">
             {SECTION_KEYS.map((item) => {

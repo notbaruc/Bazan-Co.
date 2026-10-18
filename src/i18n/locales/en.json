@@ -260,13 +260,11 @@
     "items": [
       {
         "question": "How much does a custom website or landing page cost?",
-        "answer": "Your investment depends on project scope (high-converting landing page, multi-section corporate site, or full ES/EN bilingual deployment). Following a free discovery call, we provide a fixed-price written proposal with zero hidden fees.",
-        "pendingNote": "[PENDIENTE USUARIO: Starting price ranges per package if you wish to publish them]"
+        "answer": "Your investment depends on project scope (high-converting landing page, multi-section corporate site, or full ES/EN bilingual deployment). Following a free discovery call, we provide a fixed-price written proposal with zero hidden fees."
       },
       {
         "question": "How long will it take to launch my website?",
-        "answer": "We work in clear weekly milestones (Discovery, Design, Engineering, and Launch) so you can review tangible progress from week one.",
-        "pendingNote": "[PENDIENTE USUARIO: Estimated average delivery timeline in weeks]"
+        "answer": "We work in clear weekly milestones (Discovery, Design, Engineering, and Launch) so you can review tangible progress from week one. Total delivery time depends on project scope and complexity, but a complete corporate website is typically delivered in 7 to 14 business days."
       },
       {
         "question": "Do I need technical or coding knowledge to work with you?",
@@ -282,8 +280,7 @@
       },
       {
         "question": "Do you offer post-launch support or updates?",
-        "answer": "Your website is delivered fully documented with Google Analytics 4 and Search Console active. We also provide direct technical support whenever your business needs new sections or updates.",
-        "pendingNote": "[PENDIENTE USUARIO: Monthly maintenance or post-launch support plan details]"
+        "answer": "Your website is delivered fully documented with Google Analytics 4 and Search Console active. We also provide direct technical support whenever your business needs new sections or updates."
       }
     ]
   },
@@ -303,7 +300,7 @@
       "whatsappTitle": "Direct WhatsApp",
       "whatsappNumber": "+52 1 614 343 6765",
       "emailTitle": "Email",
-      "emailAddress": "contacto@bazanco.com",
+      "emailAddress": "barucbazan7@gmail.com",
       "locationTitle": "Location",
       "locationText": "Chihuahua, Mexico — Serving clients globally"
     },
@@ -358,7 +355,6 @@
     "closeAria": "Close privacy notice",
     "controllerLabel": "Data Controller:",
     "controllerText": "Bazan & Co. (Chihuahua, Chihuahua, Mexico · Contact email:",
-    "pendingLegal": "[PENDIENTE USUARIO: Legal entity name or full registered holder name if desired]",
     "section1Title": "1. Contact Form (Netlify Forms):",
     "section1Text": "The information you voluntarily submit through our contact form (name, email address, service of interest, and project message) is processed via Netlify Forms solely to respond to your consultation or quote request. We never sell or rent your personal data to third parties.",
     "section2Title": "2. Web Analytics (Google Analytics 4):",

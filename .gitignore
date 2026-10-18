@@ -8,3 +8,5 @@ dist-ssr
 .DS_Store
 lighthouse-*.json
 lighthouse-*.html
+dist
+.vscode
