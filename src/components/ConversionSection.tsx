@@ -304,6 +304,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                     <select
                       id="contact-service"
                       name="service"
+                      autoComplete="off"
                       required
                       value={values.service}
                       onChange={(e) => {
@@ -336,6 +337,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
                     <textarea
                       id="contact-message"
                       name="message"
+                      autoComplete="off"
                       rows={4}
                       required
                       placeholder={t('contact.form.messagePlaceholder')}

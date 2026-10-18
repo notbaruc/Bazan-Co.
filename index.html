@@ -104,13 +104,13 @@
     <!-- Formulario estático oculto para detección automática de Netlify Forms en build -->
     <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input type="hidden" name="form-name" value="contact" />
-      <input type="text" name="bot-field" />
-      <input type="text" name="name" />
-      <input type="email" name="email" />
-      <input type="tel" name="phone" />
-      <input type="text" name="service" />
-      <textarea name="message"></textarea>
-      <input type="text" name="locale" />
+      <input type="text" name="bot-field" autocomplete="off" />
+      <input type="text" name="name" autocomplete="name" />
+      <input type="email" name="email" autocomplete="email" />
+      <input type="tel" name="phone" autocomplete="tel" />
+      <input type="text" name="service" autocomplete="off" />
+      <textarea name="message" autocomplete="off"></textarea>
+      <input type="text" name="locale" autocomplete="off" />
     </form>
 
     <div id="root"></div>
