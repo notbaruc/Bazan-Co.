@@ -678,9 +678,34 @@ export function ProcessSection() {
 export function PortfolioSection() {
   const { t, i18n } = useTranslation();
   const projects = t('portfolio.projects', { returnObjects: true }) as PortfolioProjectItem[];
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || !('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        if (!entries[0]?.isIntersecting) return;
+        obs.disconnect();
+        const imgs = section.querySelectorAll<HTMLImageElement>('img');
+        imgs.forEach((img) => {
+          img.loading = 'eager';
+          if (typeof img.decode === 'function') {
+            img.decode().catch(() => {});
+          }
+        });
+      },
+      { rootMargin: '900px 0px' }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       id="portafolio"
       aria-labelledby="portafolio-heading"
       className="cv-section scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
@@ -706,102 +731,116 @@ export function PortfolioSection() {
         </RevealOnScroll>
 
         <div className="mt-14 grid gap-6 lg:grid-cols-3">
-          {projects.map((project, idx) => (
-            <RevealOnScroll key={project.id} delayMs={idx * 80} className="h-full">
-              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-transform duration-500 hover:-translate-y-1 hover:border-accent/35">
-                <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-line bg-elevated">
-                  <img
-                    src={project.image}
-                    alt={project.imageAlt}
-                    width={800}
-                    height={500}
-                    loading="lazy"
-                    decoding="async"
-                    className={`h-full w-full transition-transform duration-700 ${
-                      project.isPendingCapture
-                        ? 'object-contain p-10 opacity-40'
-                        : 'object-cover object-center group-hover:scale-[1.03]'
-                    }`}
-                  />
-                  {project.isPendingCapture && (
-                    <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-bg/90 via-bg/40 to-transparent p-4">
-                      <span className="rounded-md border border-dashed border-accent/50 bg-bg/90 px-3 py-1 font-mono text-xs text-accent-hi">
-                        {t('portfolio.labels.pendingCapture')}
-                      </span>
-                    </div>
-                  )}
-                </div>
+          {projects.map((project, idx) => {
+            const imageSrcSet = project.image.endsWith('.webp')
+              ? `${project.image.replace(/\.webp$/, '-480w.webp')} 480w, ${project.image} 800w`
+              : undefined;
 
-                <div className="flex flex-1 flex-col p-6 sm:p-7">
-                  <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
-                    {project.category}
-                  </p>
-                  <h3 className="mt-2.5 font-serif text-3xl font-normal text-ink">
-                    {project.title}
-                  </h3>
-
-                  <dl className="mt-5 flex-1 space-y-4 text-sm">
-                    <div>
-                      <dt className="font-heading font-semibold text-ink">
-                        {t('portfolio.labels.problem')}
-                      </dt>
-                      <dd className="mt-1 leading-relaxed text-ink-secondary">{project.problem}</dd>
-                    </div>
-                    <div>
-                      <dt className="font-heading font-semibold text-ink">
-                        {t('portfolio.labels.solution')}
-                      </dt>
-                      <dd className="mt-1 leading-relaxed text-ink-secondary">
-                        {project.solution}
-                      </dd>
-                    </div>
-                  </dl>
-
-                  <div className="mt-6 border-t border-line pt-5">
-                    <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted">
-                      {t('portfolio.labels.stack')}
-                    </p>
-                    <ul
-                      className="mt-2.5 flex flex-wrap gap-2"
-                      aria-label={`${t('portfolio.labels.stackAriaPrefix')} ${project.title}`}
-                    >
-                      {project.stack.map((tech) => (
-                        <li
-                          key={tech}
-                          className="rounded-full border border-line-strong bg-elevated/60 px-3 py-1 font-mono text-xs text-ink"
-                        >
-                          {tech}
-                        </li>
-                      ))}
-                    </ul>
-
-                    {project.url ? (
-                      <a
-                        href={project.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() =>
-                          trackEvent('project_click', {
-                            project_id: project.id,
-                            project_title: project.title,
-                            language: i18n.language,
-                          })
-                        }
-                        className="mt-5 inline-flex items-center gap-2 font-body text-sm font-medium text-accent hover:text-accent-hi"
-                      >
-                        <span>{t('portfolio.labels.visitSite')}</span>
-                        <ExternalLinkIcon className="h-4 w-4" />
-                      </a>
-                    ) : (
-                      <p className="mt-5 font-mono text-xs text-ink-muted">
-                        {t('portfolio.labels.pendingUrl')}
-                      </p>
+            return (
+              <RevealOnScroll key={project.id} delayMs={idx * 80} className="h-full">
+                <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-transform duration-500 hover:-translate-y-1 hover:border-accent/35">
+                  <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-line bg-elevated">
+                    <img
+                      src={project.image}
+                      srcSet={imageSrcSet}
+                      sizes={
+                        imageSrcSet
+                          ? '(min-width: 1024px) 366px, (min-width: 640px) 50vw, 92vw'
+                          : undefined
+                      }
+                      alt={project.imageAlt}
+                      width={800}
+                      height={500}
+                      loading="lazy"
+                      decoding="async"
+                      className={`h-full w-full transition-transform duration-700 ${
+                        project.isPendingCapture
+                          ? 'object-contain p-10 opacity-40'
+                          : 'object-cover object-center group-hover:scale-[1.03]'
+                      }`}
+                    />
+                    {project.isPendingCapture && (
+                      <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-bg/90 via-bg/40 to-transparent p-4">
+                        <span className="rounded-md border border-dashed border-accent/50 bg-bg/90 px-3 py-1 font-mono text-xs text-accent-hi">
+                          {t('portfolio.labels.pendingCapture')}
+                        </span>
+                      </div>
                     )}
                   </div>
-                </div>
-              </article>
-            </RevealOnScroll>
-          ))}
+
+                  <div className="flex flex-1 flex-col p-6 sm:p-7">
+                    <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
+                      {project.category}
+                    </p>
+                    <h3 className="mt-2.5 font-serif text-3xl font-normal text-ink">
+                      {project.title}
+                    </h3>
+
+                    <dl className="mt-5 flex-1 space-y-4 text-sm">
+                      <div>
+                        <dt className="font-heading font-semibold text-ink">
+                          {t('portfolio.labels.problem')}
+                        </dt>
+                        <dd className="mt-1 leading-relaxed text-ink-secondary">
+                          {project.problem}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="font-heading font-semibold text-ink">
+                          {t('portfolio.labels.solution')}
+                        </dt>
+                        <dd className="mt-1 leading-relaxed text-ink-secondary">
+                          {project.solution}
+                        </dd>
+                      </div>
+                    </dl>
+
+                    <div className="mt-6 border-t border-line pt-5">
+                      <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted">
+                        {t('portfolio.labels.stack')}
+                      </p>
+                      <ul
+                        className="mt-2.5 flex flex-wrap gap-2"
+                        aria-label={`${t('portfolio.labels.stackAriaPrefix')} ${project.title}`}
+                      >
+                        {project.stack.map((tech) => (
+                          <li
+                            key={tech}
+                            className="rounded-full border border-line-strong bg-elevated/60 px-3 py-1 font-mono text-xs text-ink"
+                          >
+                            {tech}
+                          </li>
+                        ))}
+                      </ul>
+
+                      {project.url ? (
+                        <a
+                          href={project.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() =>
+                            trackEvent('project_click', {
+                              project_id: project.id,
+                              project_title: project.title,
+                              language: i18n.language,
+                            })
+                          }
+                          className="mt-5 inline-flex items-center gap-2 font-body text-sm font-medium text-accent hover:text-accent-hi"
+                        >
+                          <span>{t('portfolio.labels.visitSite')}</span>
+                          <ExternalLinkIcon className="h-4 w-4" />
+                        </a>
+                      ) : (
+                        <p className="mt-5 font-mono text-xs text-ink-muted">
+                          {t('portfolio.labels.pendingUrl')}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              </RevealOnScroll>
+            );
+          })}
         </div>
       </div>
     </section>
