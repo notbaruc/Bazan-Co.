@@ -126,6 +126,11 @@
   contain: layout style paint;
 }
 
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+
 /* Scroll reveal escalonado estilo Apple */
 .reveal-item {
   transition:
@@ -175,7 +180,7 @@
 /* Tarjetas de portafolio aisladas con hover 100% compositor (transform + opacity) */
 .portfolio-card {
   position: relative;
-  contain: layout style paint;
+  contain: layout style;
   transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 

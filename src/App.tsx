@@ -46,6 +46,7 @@ function CustomDesktopCursor() {
     let scale = 1;
     let visible = false;
     let rafId = 0;
+    let lastTarget: EventTarget | null = null;
 
     const renderLoop = () => {
       const dx = mouseX - ringX;
@@ -53,47 +54,54 @@ function CustomDesktopCursor() {
       ringX += dx * 0.24;
       ringY += dy * 0.24;
       ring.style.transform = `translate3d(${ringX.toFixed(1)}px, ${ringY.toFixed(1)}px, 0) scale(${scale})`;
-      ring.style.opacity = visible ? '1' : '0';
 
-      if (Math.hypot(dx, dy) > 0.15) {
+      if (Math.hypot(dx, dy) > 0.25) {
         rafId = window.requestAnimationFrame(renderLoop);
       } else {
         rafId = 0;
-        ring.style.willChange = 'auto';
       }
     };
 
     const scheduleLoop = () => {
       if (rafId === 0) {
-        ring.style.willChange = 'transform, opacity';
         rafId = window.requestAnimationFrame(renderLoop);
       }
     };
 
     const onPointerMove = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
-      mouseX = e.clientX - 16;
-      mouseY = e.clientY - 16;
+      const nextX = e.clientX - 16;
+      const nextY = e.clientY - 16;
+      if (nextX === mouseX && nextY === mouseY && visible) return;
+
+      mouseX = nextX;
+      mouseY = nextY;
       if (!visible) {
         ringX = mouseX;
         ringY = mouseY;
         visible = true;
+        ring.style.opacity = '1';
       }
 
-      const target = e.target as HTMLElement | null;
-      const isInteractive = Boolean(target?.closest('a, button, summary, input, select, textarea'));
-      scale = isInteractive ? 1.45 : 1;
+      if (e.target !== lastTarget) {
+        lastTarget = e.target;
+        const target = e.target as HTMLElement | null;
+        const isInteractive = Boolean(
+          target?.closest('a, button, summary, input, select, textarea')
+        );
+        scale = isInteractive ? 1.45 : 1;
+      }
       scheduleLoop();
     };
 
     const onPointerLeave = () => {
       visible = false;
+      lastTarget = null;
       ring.style.opacity = '0';
       if (rafId !== 0) {
         window.cancelAnimationFrame(rafId);
         rafId = 0;
       }
-      ring.style.willChange = 'auto';
     };
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
@@ -110,7 +118,7 @@ function CustomDesktopCursor() {
     <div
       ref={ringRef}
       aria-hidden="true"
-      className="cursor-ring pointer-events-none fixed left-0 top-0 z-[80] hidden h-8 w-8 rounded-full opacity-0 transition-opacity duration-200 lg:block"
+      className="cursor-ring pointer-events-none fixed left-0 top-0 z-[80] hidden h-8 w-8 rounded-full opacity-0 transition-opacity duration-200 will-change-[transform,opacity] lg:block"
     />
   );
 }

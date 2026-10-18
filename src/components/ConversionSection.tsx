@@ -113,7 +113,7 @@ export function ContactSection({ onOpenPrivacy }: { onOpenPrivacy: () => void })
     <section
       id="contacto"
       aria-labelledby="contacto-heading"
-      className="cv-section scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
+      className="cv-auto scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
         <div className="grid gap-12 lg:grid-cols-12">

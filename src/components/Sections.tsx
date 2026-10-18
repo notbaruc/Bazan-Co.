@@ -1,11 +1,4 @@
-import {
-  type CSSProperties,
-  type PointerEvent,
-  type ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { type CSSProperties, type PointerEvent, type ReactNode, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { trackEvent } from '../utils/analytics';
 import {
@@ -158,12 +151,12 @@ function AnimatedCounter({
   suffix?: string;
 }) {
   const ref = useRef<HTMLElement | null>(null);
-  const [text, setText] = useState(displayValue);
 
   useEffect(() => {
-    setText(displayValue);
     const el = ref.current;
-    if (!el || numericTarget === undefined) return;
+    if (!el) return;
+    el.textContent = displayValue;
+    if (numericTarget === undefined) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     let frameId = 0;
@@ -179,11 +172,11 @@ function AnimatedCounter({
           const progress = Math.min((now - startTime) / duration, 1);
           const eased = 1 - Math.pow(1 - progress, 3);
           const current = Math.max(1, Math.round(eased * numericTarget));
-          setText(`${prefix}${current}${suffix}`);
+          el.textContent = `${prefix}${current}${suffix}`;
           if (progress < 1) {
             frameId = window.requestAnimationFrame(tick);
           } else {
-            setText(displayValue);
+            el.textContent = displayValue;
           }
         };
 
@@ -204,7 +197,7 @@ function AnimatedCounter({
       ref={ref}
       className="order-first font-serif text-4xl font-normal leading-none tabular-nums text-ink sm:text-5xl"
     >
-      {text}
+      {displayValue}
     </dd>
   );
 }
@@ -587,7 +580,7 @@ export function TechMarqueeSection() {
   return (
     <section
       aria-label={t('marquee.ariaLabel')}
-      className="overflow-hidden border-y border-line bg-bg py-5"
+      className="cv-section overflow-hidden border-y border-line bg-bg py-5"
     >
       <div className="animate-marquee flex w-max items-center">
         {[0, 1].map((copyIdx) => (
@@ -678,34 +671,9 @@ export function ProcessSection() {
 export function PortfolioSection() {
   const { t, i18n } = useTranslation();
   const projects = t('portfolio.projects', { returnObjects: true }) as PortfolioProjectItem[];
-  const sectionRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section || !('IntersectionObserver' in window)) return;
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        if (!entries[0]?.isIntersecting) return;
-        obs.disconnect();
-        const imgs = section.querySelectorAll<HTMLImageElement>('img');
-        imgs.forEach((img) => {
-          img.loading = 'eager';
-          if (typeof img.decode === 'function') {
-            img.decode().catch(() => {});
-          }
-        });
-      },
-      { rootMargin: '900px 0px' }
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <section
-      ref={sectionRef}
       id="portafolio"
       aria-labelledby="portafolio-heading"
       className="cv-section scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
@@ -856,7 +824,7 @@ export function WhyUsSection() {
     <section
       id="por-que"
       aria-labelledby="por-que-heading"
-      className="cv-section scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
+      className="cv-auto scroll-mt-20 border-t border-line bg-bg py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
@@ -916,7 +884,7 @@ export function FaqSection() {
     <section
       id="faq"
       aria-labelledby="faq-heading"
-      className="cv-section scroll-mt-20 border-t border-line bg-surface py-20 md:py-28"
+      className="cv-auto scroll-mt-20 border-t border-line bg-surface py-20 md:py-28"
     >
       <div className="mx-auto max-w-container px-6">
         <RevealOnScroll className="max-w-3xl">
@@ -967,7 +935,7 @@ export function FinalCtaSection() {
   const whatsappUrl = t('whatsapp.url');
 
   return (
-    <section aria-labelledby="final-cta-heading" className="cv-section bg-bg py-20 md:py-24">
+    <section aria-labelledby="final-cta-heading" className="cv-auto bg-bg py-20 md:py-24">
       <div className="mx-auto max-w-container px-6">
         <RevealOnScroll>
           <div className="relative overflow-hidden rounded-[2rem] border border-accent/30 bg-surface px-6 py-14 text-center shadow-card sm:px-14 sm:py-20">
