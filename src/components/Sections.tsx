@@ -738,7 +738,7 @@ export function PortfolioSection() {
 
             return (
               <RevealOnScroll key={project.id} delayMs={idx * 80} className="h-full">
-                <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-transform duration-500 hover:-translate-y-1 hover:border-accent/35">
+                <article className="portfolio-card flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
                   <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-line bg-elevated">
                     <img
                       src={project.image}
@@ -753,10 +753,10 @@ export function PortfolioSection() {
                       height={500}
                       loading="lazy"
                       decoding="async"
-                      className={`h-full w-full transition-transform duration-700 ${
+                      className={`h-full w-full ${
                         project.isPendingCapture
                           ? 'object-contain p-10 opacity-40'
-                          : 'object-cover object-center group-hover:scale-[1.03]'
+                          : 'portfolio-card__img object-cover object-center'
                       }`}
                     />
                     {project.isPendingCapture && (

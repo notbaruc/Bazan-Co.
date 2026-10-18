@@ -172,6 +172,42 @@
   transition: opacity 300ms var(--ease-out);
 }
 
+/* Tarjetas de portafolio aisladas con hover 100% compositor (transform + opacity) */
+.portfolio-card {
+  position: relative;
+  contain: layout style paint;
+  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.portfolio-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgb(var(--accent) / 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.portfolio-card:hover {
+  transform: translate3d(0, -4px, 0);
+  will-change: transform;
+}
+
+.portfolio-card:hover::after {
+  opacity: 1;
+}
+
+.portfolio-card__img {
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.portfolio-card:hover .portfolio-card__img {
+  transform: scale3d(1.03, 1.03, 1);
+  will-change: transform;
+}
+
 /* Efecto del hero ("Aurora") y capas extra */
 .aurora-blob {
   position: absolute;
