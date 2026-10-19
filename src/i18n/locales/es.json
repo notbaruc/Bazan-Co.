@@ -218,12 +218,12 @@
       {
         "id": "gech",
         "title": "GECH",
-        "category": "Proyecto Web · Chihuahua, México",
+        "category": "Gases Y Electrodos de Chihuahua · Sitio Corporativo B2B",
         "image": "/img/GECH.webp",
         "imageAlt": "Captura del sitio de GECH desarrollado por Bazan & Co.",
         "url": "https://gechmexico.com/",
-        "problem": "Organización en Chihuahua que requería estructurar y modernizar su presencia digital con una plataforma rápida, accesible en dispositivos móviles y orientada a la generación de confianza. [PENDIENTE USUARIO: Confirmar detalle específico del reto de GECH]",
-        "solution": "Desarrollo de interfaz web a medida con arquitectura limpia, navegación clara por servicios, optimización para buscadores y puntos de contacto directo. [PENDIENTE USUARIO: Confirmar alcance final entregado a GECH]",
+        "problem": "Organización en Chihuahua que requería estructurar y modernizar su presencia digital con una plataforma rápida, accesible en dispositivos móviles y orientada a la generación de confianza.",
+        "solution": "Desarrollo de interfaz web a medida con arquitectura limpia, navegación clara por servicios, optimización para buscadores y puntos de contacto directo.",
         "stack": ["HTML5 / Tailwind CSS", "JavaScript", "Diseño Responsivo", "SEO Técnico"]
       }
     ]

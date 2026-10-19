@@ -218,12 +218,12 @@
       {
         "id": "gech",
         "title": "GECH",
-        "category": "Web Project · Chihuahua, Mexico",
+        "category": "Gases Y Electrodos de Chihuahua · B2B Corporate Site",
         "image": "/img/GECH.webp",
         "imageAlt": "Screenshot of the GECH website developed by Bazan & Co.",
         "url": "https://gechmexico.com/",
-        "problem": "Organization in Chihuahua requiring a structured, modern digital platform engineered for fast mobile access and institutional trust. [PENDIENTE USUARIO: Confirm specific challenge details for GECH]",
-        "solution": "Custom web interface engineered with clean semantic architecture, streamlined service navigation, search engine optimization, and direct contact touchpoints. [PENDIENTE USUARIO: Confirm final delivered scope for GECH]",
+        "problem": "Organization in Chihuahua requiring a structured, modern digital platform engineered for fast mobile access and institutional trust.",
+        "solution": "Custom web interface engineered with clean semantic architecture, streamlined service navigation, search engine optimization, and direct contact touchpoints.",
         "stack": ["HTML5 / Tailwind CSS", "JavaScript", "Responsive Design", "Technical SEO"]
       }
     ]
